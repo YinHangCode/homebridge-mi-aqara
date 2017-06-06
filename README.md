@@ -1,5 +1,5 @@
-# homebridge-raspberrypi-temperature
-a homebridge plugin that gets raspberry pi CPU temperatures.
+# homebridge-mi-aqara
+a homebridge plugin for XiaoMi Aqara plugin.
 this program based [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara).
 
 This repository contains the Aqara plugin for homebridge.
