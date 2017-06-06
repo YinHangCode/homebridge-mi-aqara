@@ -26,21 +26,21 @@ Button(按钮)
 # Configuration
 1. Open Aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api). Please follow the steps in this thread: http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.
 2. To control the devices, put gateway's MAC address (lower case without colon) and password to ~/.homebridge/config.json.
-    {
-        "platforms": [{
-            "platform": "MiAqaraPlatform",
-            "sid": ["6409802da3b3"],
-            "password": ["02i44k56zrgg578b"]
-        }]
-    }
+        {
+            "platforms": [{
+                "platform": "MiAqaraPlatform",
+                "sid": ["6409802da3b3"],
+                "password": ["02i44k56zrgg578b"]
+            }]
+        }
 If you have more than one gateways, fill them in right order, like below.
-    {
-        "platforms": [{
-            "platform": "AqaraPlatform",
-            "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
-            "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"]
-        }]
-    }
+        {
+            "platforms": [{
+                "platform": "AqaraPlatform",
+                "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
+                "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"]
+            }]
+        }
     
 # Run it
 homebridge -D
