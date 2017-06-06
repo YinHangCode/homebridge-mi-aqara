@@ -19,13 +19,13 @@ const multicastPort = 4321;
 const serverPort = 9898;
 
 module.exports = function(homebridge) {
-	Accessory = homebridge.hap.Accessory;
-	PlatformAccessory = homebridge.platformAccessory;
+    Accessory = homebridge.hap.Accessory;
+    PlatformAccessory = homebridge.platformAccessory;
 
-	// Service and Characteristic are from hap-nodejs
-	Service = homebridge.hap.Service;
-	Characteristic = homebridge.hap.Characteristic;
-	UUIDGen = homebridge.hap.uuid;
+    // Service and Characteristic are from hap-nodejs
+    Service = homebridge.hap.Service;
+    Characteristic = homebridge.hap.Characteristic;
+    UUIDGen = homebridge.hap.uuid;
 
     // Register
     homebridge.registerPlatform("homebridge-mi-aqara", "MiAqaraPlatform", MiAqaraPlatform, true);
@@ -34,88 +34,88 @@ module.exports = function(homebridge) {
 function MiAqaraPlatform(log, config, api) {
     // Initialize
     this.log = log;
-	
-	this.Accessory = Accessory;
-	this.PlatformAccessory = PlatformAccessory;
-	this.Service = Service;
-	this.Characteristic = Characteristic;
-	this.UUIDGen = UUIDGen;
-	
-	this.parsers = {
-		/*
+    
+    this.Accessory = Accessory;
+    this.PlatformAccessory = PlatformAccessory;
+    this.Service = Service;
+    this.Characteristic = Characteristic;
+    this.UUIDGen = UUIDGen;
+    
+    this.parsers = {
+        /*
         'ctrl_neutral2' : new DuplexLightSwitchParser(this),
         '86sw1' : new EightySixSwitchParser(this),
         '86sw2' : new DuplexEightySixSwitchParser(this),
         'plug' : new PlugSwitchParser(this)
-		*/
-		
-		'ctrl_neutral1' : new SingleSwitchParser(this), // 单按钮墙壁开关
+        */
+        
+        'ctrl_neutral1' : new SingleSwitchParser(this), // 单按钮墙壁开关
         'sensor_ht' : new TemperatureAndHumidityParser(this), // 温度湿度传感器
         'motion' : new MotionParser(this), // 人体感应
         'magnet' : new ContactParser(this), // 门磁感应
-		'switch' : new ButtonParser(this) // 按钮
+        'switch' : new ButtonParser(this) // 按钮
     };
 
-	this.accessories = [];
-	
+    this.accessories = [];
+    
     // A lookup table to get cipher password from gateway/device sid.
     this.gatewayPasswords = {};
    
-	var that = this;
+    var that = this;
    
-	this.Gateways = {
-		gateways: {},
-		getGatewayBySid: function(sid) {
-			return this.gateways[sid];
-		},
-		addGateway: function(gateway) {
-			that.log.debug("add Gateway %s", gateway.sid);
-			this.gateways[gateway.sid] = gateway;
-		},
-		updateGateway: function(sid, newGateway) {
-			var gateway = this.getGatewayBySid(sid);
-			if(null != gateway) {
-				for(item in newGateway) {
-					gateway[item] = newGateway[item];
-				}
-			}
-		},
-		addOrUpdateGateway: function(sid, newGateway) {
-			var gateway = this.getGatewayBySid(sid);
-			if(null == gateway) {
-				this.addGateway(newGateway);
-			} else {
-				this.updateGateway(sid, newGateway);
-			}
-		}
-	};
-	
-	this.Devices = {
-		devices: {},
-		getDeviceBySid: function(sid) {
-			return this.devices[sid];
-		},
-		addDevice: function(device) {
-			that.log.debug("add Device %s", device.sid);
-			this.devices[device.sid] = device;
-		},
-		updateDevice: function(sid, newDevice) {
-			var device = this.getDeviceBySid(sid);
-			if(null != device) {
-				for(item in newDevice) {
-					device[item] = newDevice[item];
-				}
-			}
-		},
-		addOrUpdateDevice: function(sid, newDevice) {
-			var device = this.getDeviceBySid(sid);
-			if(null == device) {
-				this.addDevice(newDevice);
-			} else {
-				this.updateDevice(sid, newDevice);
-			}
-		}
-	};
+    this.Gateways = {
+        gateways: {},
+        getGatewayBySid: function(sid) {
+            return this.gateways[sid];
+        },
+        addGateway: function(gateway) {
+            that.log.debug("add Gateway %s", gateway.sid);
+            this.gateways[gateway.sid] = gateway;
+        },
+        updateGateway: function(sid, newGateway) {
+            var gateway = this.getGatewayBySid(sid);
+            if(null != gateway) {
+                for(item in newGateway) {
+                    gateway[item] = newGateway[item];
+                }
+            }
+        },
+        addOrUpdateGateway: function(sid, newGateway) {
+            var gateway = this.getGatewayBySid(sid);
+            if(null == gateway) {
+                this.addGateway(newGateway);
+            } else {
+                this.updateGateway(sid, newGateway);
+            }
+        }
+    };
+    
+    this.Devices = {
+        devices: {},
+        getDeviceBySid: function(sid) {
+            return this.devices[sid];
+        },
+        addDevice: function(device) {
+            that.log.debug("add Device %s", device.sid);
+            this.devices[device.sid] = device;
+        },
+        updateDevice: function(sid, newDevice) {
+            var device = this.getDeviceBySid(sid);
+            if(null != device) {
+                for(item in newDevice) {
+                    device[item] = newDevice[item];
+                }
+            }
+        },
+        addOrUpdateDevice: function(sid, newDevice) {
+            var device = this.getDeviceBySid(sid);
+            if(null == device) {
+                this.addDevice(newDevice);
+            } else {
+                this.updateDevice(sid, newDevice);
+            }
+        }
+    };
     
     // Load passwords from config.json
     this.loadConfig(config);
@@ -128,19 +128,19 @@ function MiAqaraPlatform(log, config, api) {
 }
 
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
-	// this.log(accessory.displayName, "Configure Accessory");
-	var that = this;
+    // this.log(accessory.displayName, "Configure Accessory");
+    var that = this;
 
-	// set the accessory to reachable if plugin can currently process the accessory
-	// otherwise set to false and update the reachability later by invoking
-	// accessory.updateReachability()
-	accessory.reachable = true;
-	accessory.on('identify', function(paired, callback) {
-		that.log(accessory.displayName + "* Identify!!!" );
-		callback();
-	});
+    // set the accessory to reachable if plugin can currently process the accessory
+    // otherwise set to false and update the reachability later by invoking
+    // accessory.updateReachability()
+    accessory.reachable = true;
+    accessory.on('identify', function(paired, callback) {
+        that.log(accessory.displayName + "* Identify!!!" );
+        callback();
+    });
 
-	this.accessories.push(accessory);
+    this.accessories.push(accessory);
 }
 
 MiAqaraPlatform.prototype.loadConfig = function(config) {
@@ -179,7 +179,7 @@ MiAqaraPlatform.prototype.startServer = function() {
 }
 
 MiAqaraPlatform.prototype.doRestThings = function(api) {
-	var that = this;
+    var that = this;
     if (api) {
         // Save the API object as plugin needs to register new accessory via this object.
         this.api = api;
@@ -195,69 +195,69 @@ MiAqaraPlatform.prototype.doRestThings = function(api) {
                     serverSocket.send(whoisCommand, 0, whoisCommand.length, multicastPort, multicastAddress);
                 }, 300000);
         });
-	
-		setInterval(function(){
-			that.autoRemoveAccessory();
-		}, 1800000);
+    
+        setInterval(function(){
+            that.autoRemoveAccessory();
+        }, 1800000);
     } else {
         this.log.error("Homebridge's version is too old, please upgrade!");
     }
 }
 
 MiAqaraPlatform.prototype.getAccessoryByUuid = function(uuid) {
-	for (var index in this.accessories) {
-		var accessory = this.accessories[index];
-		if (accessory.UUID === uuid) {
-			return accessory;
-		}
-	}
+    for (var index in this.accessories) {
+        var accessory = this.accessories[index];
+        if (accessory.UUID === uuid) {
+            return accessory;
+        }
+    }
 }
 
 MiAqaraPlatform.prototype.getWriteKeyByDeviceSid = function(deviceSid) {
-	var device = this.Devices.getDeviceBySid(deviceSid);
-	var gatewaySid = device.gatewaySid;
-	var cipher = crypto.createCipheriv('aes-128-cbc', this.gatewayPasswords[gatewaySid], iv);
-	var gatewayToken = this.Gateways.getGatewayBySid(gatewaySid).token;
-	var key = cipher.update(gatewayToken, "ascii", "hex");
-	cipher.final('hex'); // Useless data, don't know why yet.
-	
-	return key;
+    var device = this.Devices.getDeviceBySid(deviceSid);
+    var gatewaySid = device.gatewaySid;
+    var cipher = crypto.createCipheriv('aes-128-cbc', this.gatewayPasswords[gatewaySid], iv);
+    var gatewayToken = this.Gateways.getGatewayBySid(gatewaySid).token;
+    var key = cipher.update(gatewayToken, "ascii", "hex");
+    cipher.final('hex'); // Useless data, don't know why yet.
+    
+    return key;
 }
 
 MiAqaraPlatform.prototype.sendCommandByDeviceSid = function(deviceSid, command) {
-	var device = this.Devices.getDeviceBySid(deviceSid);
-	var gateway = this.Gateways.getGatewayBySid(device.gatewaySid);
-	
-	var remoteAddress = gateway.address;
-	var remotePort = gateway.port;
+    var device = this.Devices.getDeviceBySid(deviceSid);
+    var gateway = this.Gateways.getGatewayBySid(device.gatewaySid);
+    
+    var remoteAddress = gateway.address;
+    var remotePort = gateway.port;
 
-	serverSocket.send(command, 0, command.length, remotePort, remoteAddress);
+    serverSocket.send(command, 0, command.length, remotePort, remoteAddress);
 }
 
 const AccessoryAutoRemoveDelta = 12 * 60 * 60 * 1000;
 MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
-	var accessoriesToRemove = [];
+    var accessoriesToRemove = [];
 
-	for (var index in this.Devices.devices) {
-		var device = this.Devices.devices[index];
-		if ((Date.now() - device.lastUpdateTime) > AccessoryAutoRemoveDelta) {
-			if (device.model in this.parsers) {
-				var uuids = this.parsers[device.model].getUuidsByDeviceSid(device.sid);
-				for(var i in uuids) {
-					this.log.debug("remove accessory %s", uuids[i]);
-					var accessory = this.getAccessoryByUuid(uuids[i]);
-					accessoriesToRemove.push(accessory);
-					this.accessories.splice(this.accessories.indexOf(accessory), 1);
-				}
-			}
-			this.log.debug("remove Device %s", device.sid);
-			delete this.Devices.devices[index];
-		}
-	}
-	
-	if (accessoriesToRemove.length > 0) {
-		this.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessoriesToRemove);
-	}
+    for (var index in this.Devices.devices) {
+        var device = this.Devices.devices[index];
+        if ((Date.now() - device.lastUpdateTime) > AccessoryAutoRemoveDelta) {
+            if (device.model in this.parsers) {
+                var uuids = this.parsers[device.model].getUuidsByDeviceSid(device.sid);
+                for(var i in uuids) {
+                    this.log.debug("remove accessory %s", uuids[i]);
+                    var accessory = this.getAccessoryByUuid(uuids[i]);
+                    accessoriesToRemove.push(accessory);
+                    this.accessories.splice(this.accessories.indexOf(accessory), 1);
+                }
+            }
+            this.log.debug("remove Device %s", device.sid);
+            delete this.Devices.devices[index];
+        }
+    }
+    
+    if (accessoriesToRemove.length > 0) {
+        this.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessoriesToRemove);
+    }
 }
 
 // Parse message which is sent from Aqara gateways
@@ -280,55 +280,55 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         // platform.log.debug("send %s to %s:%d", response, address, port);
         serverSocket.send(response, 0, response.length, port, address);
     } else if (cmd === 'get_id_list_ack') {
-		var gatewaySid = json['sid'];
-	    var gateway = {
-			sid: gatewaySid,
-			address: rinfo.address,
-			port: rinfo.port,
-			token: json['token']
-	    }
-	    this.Gateways.addOrUpdateGateway(gatewaySid, gateway);
-		
-		var gatewayDevice = {
-			sid: gatewaySid,
-			gatewaySid: gatewaySid,
-			lastUpdateTime: Date.now()
-		}
-		this.Devices.addOrUpdateDevice(gatewaySid, gatewayDevice);
-		var response = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
-		serverSocket.send(response, 0, response.length, gateway.port, gateway.address);
+        var gatewaySid = json['sid'];
+        var gateway = {
+            sid: gatewaySid,
+            address: rinfo.address,
+            port: rinfo.port,
+            token: json['token']
+        }
+        this.Gateways.addOrUpdateGateway(gatewaySid, gateway);
+        
+        var gatewayDevice = {
+            sid: gatewaySid,
+            gatewaySid: gatewaySid,
+            lastUpdateTime: Date.now()
+        }
+        this.Devices.addOrUpdateDevice(gatewaySid, gatewayDevice);
+        var response = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
+        serverSocket.send(response, 0, response.length, gateway.port, gateway.address);
 
-		var data = JSON.parse(json['data']);
-		for(var index in data) {
-			var deviceSid = data[index];
-			var device = {
-				sid: deviceSid,
-				gatewaySid: gatewaySid,
-				lastUpdateTime: Date.now()
-			}
-			this.Devices.addOrUpdateDevice(deviceSid, device);
+        var data = JSON.parse(json['data']);
+        for(var index in data) {
+            var deviceSid = data[index];
+            var device = {
+                sid: deviceSid,
+                gatewaySid: gatewaySid,
+                lastUpdateTime: Date.now()
+            }
+            this.Devices.addOrUpdateDevice(deviceSid, device);
 
-			var response = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-			serverSocket.send(response, 0, response.length, gateway.port, gateway.address);
-		}
+            var response = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+            serverSocket.send(response, 0, response.length, gateway.port, gateway.address);
+        }
     } else if (cmd === 'heartbeat') {
         var model = json['model'];
         if (model === 'gateway') {
             this.Gateways.updateGateway(json['sid'], {token: json['token']});
         }
-		
-		this.Devices.updateDevice(json['sid'], {lastUpdateTime: Date.now()});
+        
+        this.Devices.updateDevice(json['sid'], {lastUpdateTime: Date.now()});
     } else if (cmd === 'write_ack') {
     } else {
-		var deviceSid = json['sid'];
+        var deviceSid = json['sid'];
         var model = json['model'];
-		var device = {
-			model: model
-		}
-		this.Devices.updateDevice(deviceSid, device);
-			
+        var device = {
+            model: model
+        }
+        this.Devices.updateDevice(deviceSid, device);
+            
         if (model in this.parsers) {
            this.parsers[model].parse(json, rinfo);
-        }		
+        }        
     }
 }
