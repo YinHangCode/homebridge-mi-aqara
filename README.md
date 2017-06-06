@@ -28,19 +28,19 @@ Button(按钮)
 2. To control the devices, put gateway's MAC address (lower case without colon) and password to ~/.homebridge/config.json.
     {
         "platforms": [{
-			"platform": "MiAqaraPlatform",
-			"sid": ["6409802da3b3"],
-			"password": ["02i44k56zrgg578b"]
+            "platform": "MiAqaraPlatform",
+            "sid": ["6409802da3b3"],
+            "password": ["02i44k56zrgg578b"]
         }]
-	}
+    }
 If you have more than one gateways, fill them in right order, like below.
     {
-		"platforms": [{
-			"platform": "AqaraPlatform",
-			"sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
-			"password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"]
-		}]
+        "platforms": [{
+            "platform": "AqaraPlatform",
+            "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
+            "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"]
+        }]
     }
-	
+    
 # Run it
 homebridge -D
