@@ -55,7 +55,7 @@ If you have more than one gateways, fill them in right order, like below.
 ```
 {
 	"platforms": [{
-		"platform": "AqaraPlatform",
+		"platform": "MiAqaraPlatform",
 		"sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
 		"password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"]
 	}]
