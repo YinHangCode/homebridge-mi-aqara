@@ -1,8 +1,8 @@
-require('./Equipments/TemperatureAndHumidityParser');
-require('./Equipments/MotionParser');
-require('./Equipments/ContactParser');
-require('./Equipments/ButtonParser');
-require('./Equipments/SingleSwitchParser');
+require('./DeviceParsers/TemperatureAndHumidityParser');
+require('./DeviceParsers/MotionParser');
+require('./DeviceParsers/ContactParser');
+require('./DeviceParsers/ButtonParser');
+require('./DeviceParsers/SingleSwitchParser');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
@@ -90,29 +90,29 @@ function MiAqaraPlatform(log, config, api) {
 		}
 	};
 	
-	this.Equipments = {
-		equipments: {},
-		getEquipmentBySid: function(sid) {
-			return this.equipments[sid];
+	this.Devices = {
+		devices: {},
+		getDeviceBySid: function(sid) {
+			return this.devices[sid];
 		},
-		addEquipment: function(equipment) {
-			that.log.debug("add Equipment %s", equipment.sid);
-			this.equipments[equipment.sid] = equipment;
+		addDevice: function(device) {
+			that.log.debug("add Device %s", device.sid);
+			this.devices[device.sid] = device;
 		},
-		updateEquipment: function(sid, newEquipment) {
-			var equipment = this.getEquipmentBySid(sid);
-			if(null != equipment) {
-				for(item in newEquipment) {
-					equipment[item] = newEquipment[item];
+		updateDevice: function(sid, newDevice) {
+			var device = this.getDeviceBySid(sid);
+			if(null != device) {
+				for(item in newDevice) {
+					device[item] = newDevice[item];
 				}
 			}
 		},
-		addOrUpdateEquipment: function(sid, newEquipment) {
-			var equipment = this.getEquipmentBySid(sid);
-			if(null == equipment) {
-				this.addEquipment(newEquipment);
+		addOrUpdateDevice: function(sid, newDevice) {
+			var device = this.getDeviceBySid(sid);
+			if(null == device) {
+				this.addDevice(newDevice);
 			} else {
-				this.updateEquipment(sid, newEquipment);
+				this.updateDevice(sid, newDevice);
 			}
 		}
 	};
@@ -213,9 +213,9 @@ MiAqaraPlatform.prototype.getAccessoryByUuid = function(uuid) {
 	}
 }
 
-MiAqaraPlatform.prototype.getWriteKeyByEquipmentSid = function(equipmentSid) {
-	var equipment = this.Equipments.getEquipmentBySid(equipmentSid);
-	var gatewaySid = equipment.gatewaySid;
+MiAqaraPlatform.prototype.getWriteKeyByDeviceSid = function(deviceSid) {
+	var device = this.Devices.getDeviceBySid(deviceSid);
+	var gatewaySid = device.gatewaySid;
 	var cipher = crypto.createCipheriv('aes-128-cbc', this.gatewayPasswords[gatewaySid], iv);
 	var gatewayToken = this.Gateways.getGatewayBySid(gatewaySid).token;
 	var key = cipher.update(gatewayToken, "ascii", "hex");
@@ -224,9 +224,9 @@ MiAqaraPlatform.prototype.getWriteKeyByEquipmentSid = function(equipmentSid) {
 	return key;
 }
 
-MiAqaraPlatform.prototype.sendCommandByEquipmentSid = function(equipmentSid, command) {
-	var equipment = this.Equipments.getEquipmentBySid(equipmentSid);
-	var gateway = this.Gateways.getGatewayBySid(equipment.gatewaySid);
+MiAqaraPlatform.prototype.sendCommandByDeviceSid = function(deviceSid, command) {
+	var device = this.Devices.getDeviceBySid(deviceSid);
+	var gateway = this.Gateways.getGatewayBySid(device.gatewaySid);
 	
 	var remoteAddress = gateway.address;
 	var remotePort = gateway.port;
@@ -238,11 +238,11 @@ const AccessoryAutoRemoveDelta = 12 * 60 * 60 * 1000;
 MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
 	var accessoriesToRemove = [];
 
-	for (var index in this.Equipments.equipments) {
-		var equipment = this.Equipments.equipments[index];
-		if ((Date.now() - equipment.lastUpdateTime) > AccessoryAutoRemoveDelta) {
-			if (equipment.model in this.parsers) {
-				var uuids = this.parsers[equipment.model].getUuidsByEquipmentSid(equipment.sid);
+	for (var index in this.Devices.devices) {
+		var device = this.Devices.devices[index];
+		if ((Date.now() - device.lastUpdateTime) > AccessoryAutoRemoveDelta) {
+			if (device.model in this.parsers) {
+				var uuids = this.parsers[device.model].getUuidsByDeviceSid(device.sid);
 				for(var i in uuids) {
 					this.log.debug("remove accessory %s", uuids[i]);
 					var accessory = this.getAccessoryByUuid(uuids[i]);
@@ -250,8 +250,8 @@ MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
 					this.accessories.splice(this.accessories.indexOf(accessory), 1);
 				}
 			}
-			this.log.debug("remove Equipment %s", equipment.sid);
-			delete this.Equipments.equipments[index];
+			this.log.debug("remove Device %s", device.sid);
+			delete this.Devices.devices[index];
 		}
 	}
 	
@@ -289,26 +289,26 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
 	    }
 	    this.Gateways.addOrUpdateGateway(gatewaySid, gateway);
 		
-		var gatewayEquipment = {
+		var gatewayDevice = {
 			sid: gatewaySid,
 			gatewaySid: gatewaySid,
 			lastUpdateTime: Date.now()
 		}
-		this.Equipments.addOrUpdateEquipment(gatewaySid, gatewayEquipment);
+		this.Devices.addOrUpdateDevice(gatewaySid, gatewayDevice);
 		var response = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
 		serverSocket.send(response, 0, response.length, gateway.port, gateway.address);
 
 		var data = JSON.parse(json['data']);
 		for(var index in data) {
-			var equipmentSid = data[index];
-			var equipment = {
-				sid: equipmentSid,
+			var deviceSid = data[index];
+			var device = {
+				sid: deviceSid,
 				gatewaySid: gatewaySid,
 				lastUpdateTime: Date.now()
 			}
-			this.Equipments.addOrUpdateEquipment(equipmentSid, equipment);
+			this.Devices.addOrUpdateDevice(deviceSid, device);
 
-			var response = '{"cmd":"read", "sid":"' + equipmentSid + '"}';
+			var response = '{"cmd":"read", "sid":"' + deviceSid + '"}';
 			serverSocket.send(response, 0, response.length, gateway.port, gateway.address);
 		}
     } else if (cmd === 'heartbeat') {
@@ -317,15 +317,15 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             this.Gateways.updateGateway(json['sid'], {token: json['token']});
         }
 		
-		this.Equipments.updateEquipment(json['sid'], {lastUpdateTime: Date.now()});
+		this.Devices.updateDevice(json['sid'], {lastUpdateTime: Date.now()});
     } else if (cmd === 'write_ack') {
     } else {
-		var equipmentSid = json['sid'];
+		var deviceSid = json['sid'];
         var model = json['model'];
-		var equipment = {
+		var device = {
 			model: model
 		}
-		this.Equipments.updateEquipment(equipmentSid, equipment);
+		this.Devices.updateDevice(deviceSid, device);
 			
         if (model in this.parsers) {
            this.parsers[model].parse(json, rinfo);

@@ -3,7 +3,7 @@ const inherits = require('util').inherits;
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
-Gateway2Parser = function(platform) {
+MotionParser = function(platform) {
 	this.init(platform);
 	
 	Accessory = platform.Accessory;
@@ -12,9 +12,9 @@ Gateway2Parser = function(platform) {
 	Characteristic = platform.Characteristic;
 	UUIDGen = platform.UUIDGen;
 }
-inherits(Gateway2Parser, BaseParser);
+inherits(MotionParser, BaseParser);
 
-Gateway2Parser.prototype.parse = function(json, rinfo) {
+MotionParser.prototype.parse = function(json, rinfo) {
 	this.platform.log.debug(JSON.stringify(json).trim());
 	
 	var data = JSON.parse(json['data']);
@@ -23,26 +23,26 @@ Gateway2Parser.prototype.parse = function(json, rinfo) {
 	var lowBattery = this.getLowBatteryByVoltage(voltage);
 	var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
-	var equipmentSid = json['sid'];
-	this.setMotionAccessory(equipmentSid, motionDetected, lowBattery, batteryLevel);
+	var deviceSid = json['sid'];
+	this.setMotionAccessory(deviceSid, motionDetected, lowBattery, batteryLevel);
 }
 
-Gateway2Parser.prototype.getUuidsByEquipmentSid = function(equipmentSid) {
-	return [UUIDGen.generate('gateway2' + equipmentSid)];
+MotionParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
+	return [UUIDGen.generate('Mot' + deviceSid)];
 }
 
-Gateway2Parser.prototype.setMotionAccessory = function(equipmentSid, motionDetected, lowBattery, batteryLevel) {
-	var uuid = UUIDGen.generate('gateway2' + equipmentSid);
+MotionParser.prototype.setMotionAccessory = function(deviceSid, motionDetected, lowBattery, batteryLevel) {
+	var uuid = UUIDGen.generate('Mot' + deviceSid);
 	var accessory = this.platform.getAccessoryByUuid(uuid);
 	if(null == accessory) {
-		var accessoryName = equipmentSid.substring(equipmentSid.length - 4);
+		var accessoryName = deviceSid.substring(deviceSid.length - 4);
 		accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
 		accessory.reachable = true;
 
 		accessory.getService(Service.AccessoryInformation)
 			.setCharacteristic(Characteristic.Manufacturer, "Aqara")
 			.setCharacteristic(Characteristic.Model, "Motion Sensor")
-			.setCharacteristic(Characteristic.SerialNumber, equipmentSid);
+			.setCharacteristic(Characteristic.SerialNumber, deviceSid);
 
 		accessory.addService(Service.MotionSensor, accessoryName);
 		accessory.addService(Service.BatteryService, accessoryName);
@@ -53,7 +53,7 @@ Gateway2Parser.prototype.setMotionAccessory = function(equipmentSid, motionDetec
 		});
 		
 		this.platform.accessories.push(accessory);
-		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Motion Sensor, equipmentSid: " + equipmentSid);
+		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Motion Sensor, deviceSid: " + deviceSid);
 	}
 	var motService = accessory.getService(Service.MotionSensor);
 	var motCharacteristic = motService.getCharacteristic(Characteristic.MotionDetected);

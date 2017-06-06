@@ -24,31 +24,31 @@ TemperatureAndHumidityParser.prototype.parse = function(json, rinfo) {
 	var lowBattery = this.getLowBatteryByVoltage(voltage);
 	var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
-	var equipmentSid = json['sid'];
+	var deviceSid = json['sid'];
 	if(!isNaN(temperature)) {
-		this.setTemperatureAccessory(equipmentSid, temperature, lowBattery, batteryLevel);
+		this.setTemperatureAccessory(deviceSid, temperature, lowBattery, batteryLevel);
 	}
 	if(!isNaN(humidity)) {
-		this.setHumidityAccessory(equipmentSid, humidity, lowBattery, batteryLevel);
+		this.setHumidityAccessory(deviceSid, humidity, lowBattery, batteryLevel);
 	}
 }
 
-TemperatureAndHumidityParser.prototype.getUuidsByEquipmentSid = function(equipmentSid) {
-	return [UUIDGen.generate('Tem' + equipmentSid), UUIDGen.generate('Hum' + equipmentSid)];
+TemperatureAndHumidityParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
+	return [UUIDGen.generate('Tem' + deviceSid), UUIDGen.generate('Hum' + deviceSid)];
 }
 
-TemperatureAndHumidityParser.prototype.setTemperatureAccessory = function(equipmentSid, temperature, lowBattery, batteryLevel) {
-	var uuid = UUIDGen.generate('Tem' + equipmentSid);
+TemperatureAndHumidityParser.prototype.setTemperatureAccessory = function(deviceSid, temperature, lowBattery, batteryLevel) {
+	var uuid = UUIDGen.generate('Tem' + deviceSid);
 	var accessory = this.platform.getAccessoryByUuid(uuid);
 	if(null == accessory) {
-		var accessoryName = equipmentSid.substring(equipmentSid.length - 4);
+		var accessoryName = deviceSid.substring(deviceSid.length - 4);
 		accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
 		accessory.reachable = true;
 
 		accessory.getService(Service.AccessoryInformation)
 			.setCharacteristic(Characteristic.Manufacturer, "Aqara")
 			.setCharacteristic(Characteristic.Model, "Temperature Sensor")
-			.setCharacteristic(Characteristic.SerialNumber, equipmentSid);
+			.setCharacteristic(Characteristic.SerialNumber, deviceSid);
 
 		accessory.addService(Service.TemperatureSensor, accessoryName);
 		accessory.addService(Service.BatteryService, accessoryName);
@@ -59,7 +59,7 @@ TemperatureAndHumidityParser.prototype.setTemperatureAccessory = function(equipm
 		});
 		
 		this.platform.accessories.push(accessory);
-		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Temperature Sensor, equipmentSid: " + equipmentSid);
+		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Temperature Sensor, deviceSid: " + deviceSid);
 	}
 	var temService = accessory.getService(Service.TemperatureSensor);
 	var temCharacteristic = temService.getCharacteristic(Characteristic.CurrentTemperature);
@@ -74,18 +74,18 @@ TemperatureAndHumidityParser.prototype.setTemperatureAccessory = function(equipm
 	}
 }
 
-TemperatureAndHumidityParser.prototype.setHumidityAccessory = function(equipmentSid, humidity, lowBattery, batteryLevel) {
-	var uuid = UUIDGen.generate('Hum' + equipmentSid);
+TemperatureAndHumidityParser.prototype.setHumidityAccessory = function(deviceSid, humidity, lowBattery, batteryLevel) {
+	var uuid = UUIDGen.generate('Hum' + deviceSid);
 	var accessory = this.platform.getAccessoryByUuid(uuid);
 	if(null == accessory) {
-		var accessoryName = equipmentSid.substring(equipmentSid.length - 4);
+		var accessoryName = deviceSid.substring(deviceSid.length - 4);
 		accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
 		accessory.reachable = true;
 
 		accessory.getService(Service.AccessoryInformation)
 			.setCharacteristic(Characteristic.Manufacturer, "Aqara")
 			.setCharacteristic(Characteristic.Model, "Humidity Sensor")
-			.setCharacteristic(Characteristic.SerialNumber, equipmentSid);
+			.setCharacteristic(Characteristic.SerialNumber, deviceSid);
 
 		accessory.addService(Service.HumiditySensor, accessoryName);
 		accessory.addService(Service.BatteryService, accessoryName);
@@ -96,7 +96,7 @@ TemperatureAndHumidityParser.prototype.setHumidityAccessory = function(equipment
 		});
 		
 		this.platform.accessories.push(accessory);
-		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Humidity Sensor, equipmentSid: " + equipmentSid);
+		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Humidity Sensor, deviceSid: " + deviceSid);
 	}
 	var humService = accessory.getService(Service.HumiditySensor);
 	var humCharacteristic = humService.getCharacteristic(Characteristic.CurrentRelativeHumidity);

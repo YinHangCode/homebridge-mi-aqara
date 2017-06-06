@@ -23,26 +23,26 @@ SingleSwitchParser.prototype.parse = function(json, rinfo) {
 	var lowBattery = this.getLowBatteryByVoltage(voltage);
 	var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
-	var equipmentSid = json['sid'];
-	this.setSwitchAccessory(equipmentSid, state0, lowBattery, batteryLevel);
+	var deviceSid = json['sid'];
+	this.setSwitchAccessory(deviceSid, state0, lowBattery, batteryLevel);
 }
 
-SingleSwitchParser.prototype.getUuidsByEquipmentSid = function(equipmentSid) {
-	return [UUIDGen.generate('SingleSwitch' + equipmentSid)];
+SingleSwitchParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
+	return [UUIDGen.generate('SingleSwitch' + deviceSid)];
 }
 
-SingleSwitchParser.prototype.setSwitchAccessory = function(equipmentSid, state0, lowBattery, batteryLevel) {
-	var uuid = UUIDGen.generate('SingleSwitch' + equipmentSid);
+SingleSwitchParser.prototype.setSwitchAccessory = function(deviceSid, state0, lowBattery, batteryLevel) {
+	var uuid = UUIDGen.generate('SingleSwitch' + deviceSid);
 	var accessory = this.platform.getAccessoryByUuid(uuid);
 	if(null == accessory) {
-		var accessoryName = equipmentSid.substring(equipmentSid.length - 4);
+		var accessoryName = deviceSid.substring(deviceSid.length - 4);
 		accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SWITCH);
 		accessory.reachable = true;
 
 		accessory.getService(Service.AccessoryInformation)
 			.setCharacteristic(Characteristic.Manufacturer, "Aqara")
 			.setCharacteristic(Characteristic.Model, "Single Switch")
-			.setCharacteristic(Characteristic.SerialNumber, equipmentSid);
+			.setCharacteristic(Characteristic.SerialNumber, deviceSid);
 
 		accessory.addService(Service.Switch, accessoryName);
 		accessory.addService(Service.BatteryService, accessoryName);
@@ -53,7 +53,7 @@ SingleSwitchParser.prototype.setSwitchAccessory = function(equipmentSid, state0,
 		});
 		
 		this.platform.accessories.push(accessory);
-		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Single Switch, equipmentSid: " + equipmentSid);
+		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Single Switch, deviceSid: " + deviceSid);
 	}
 	var switchService = accessory.getService(Service.Switch);
 	var switchCharacteristic = switchService.getCharacteristic(Characteristic.On);
@@ -67,9 +67,9 @@ SingleSwitchParser.prototype.setSwitchAccessory = function(equipmentSid, state0,
 	if (switchCharacteristic.listeners('set').length == 0) {
 		var that = this;
 		switchCharacteristic.on("set", function(value, callback) {
-			var key = that.platform.getWriteKeyByEquipmentSid(equipmentSid);
-			var command = '{"cmd":"write","model":"ctrl_neutral1","sid":"' + equipmentSid + '","data":"{\\"channel_0\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"' + key + '\\"}"}';
-			that.platform.sendCommandByEquipmentSid(equipmentSid, command);
+			var key = that.platform.getWriteKeyByDeviceSid(deviceSid);
+			var command = '{"cmd":"write","model":"ctrl_neutral1","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"' + key + '\\"}"}';
+			that.platform.sendCommandByDeviceSid(deviceSid, command);
 			
 			callback();
 		});

@@ -3,7 +3,7 @@ const inherits = require('util').inherits;
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
-ButtonParser = function(platform) {
+Gateway2Parser = function(platform) {
 	this.init(platform);
 	
 	Accessory = platform.Accessory;
@@ -12,39 +12,39 @@ ButtonParser = function(platform) {
 	Characteristic = platform.Characteristic;
 	UUIDGen = platform.UUIDGen;
 }
-inherits(ButtonParser, BaseParser);
+inherits(Gateway2Parser, BaseParser);
 
-ButtonParser.prototype.parse = function(json, rinfo) {
+Gateway2Parser.prototype.parse = function(json, rinfo) {
 	this.platform.log.debug(JSON.stringify(json).trim());
 	
 	var data = JSON.parse(json['data']);
-	var clickWay = data['status'];
+	var motionDetected = (data['status'] === 'motion');
 	var voltage = data['voltage'] / 1.0;
 	var lowBattery = this.getLowBatteryByVoltage(voltage);
 	var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
-	var equipmentSid = json['sid'];
-	this.setButtonAccessory(equipmentSid, clickWay, lowBattery, batteryLevel);
+	var deviceSid = json['sid'];
+	this.setMotionAccessory(deviceSid, motionDetected, lowBattery, batteryLevel);
 }
 
-ButtonParser.prototype.getUuidsByEquipmentSid = function(equipmentSid) {
-	return [UUIDGen.generate('Button' + equipmentSid)];
+Gateway2Parser.prototype.getUuidsByDeviceSid = function(deviceSid) {
+	return [UUIDGen.generate('gateway2' + deviceSid)];
 }
 
-ButtonParser.prototype.setButtonAccessory = function(equipmentSid, clickWay, lowBattery, batteryLevel) {
-	var uuid = UUIDGen.generate('Button' + equipmentSid);
+Gateway2Parser.prototype.setMotionAccessory = function(deviceSid, motionDetected, lowBattery, batteryLevel) {
+	var uuid = UUIDGen.generate('gateway2' + deviceSid);
 	var accessory = this.platform.getAccessoryByUuid(uuid);
 	if(null == accessory) {
-		var accessoryName = equipmentSid.substring(equipmentSid.length - 4);
-		accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
+		var accessoryName = deviceSid.substring(deviceSid.length - 4);
+		accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
 		accessory.reachable = true;
 
 		accessory.getService(Service.AccessoryInformation)
 			.setCharacteristic(Characteristic.Manufacturer, "Aqara")
-			.setCharacteristic(Characteristic.Model, "Button")
-			.setCharacteristic(Characteristic.SerialNumber, equipmentSid);
+			.setCharacteristic(Characteristic.Model, "Motion Sensor")
+			.setCharacteristic(Characteristic.SerialNumber, deviceSid);
 
-		accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
+		accessory.addService(Service.MotionSensor, accessoryName);
 		accessory.addService(Service.BatteryService, accessoryName);
 		this.platform.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
 		accessory.on('identify', function(paired, callback) {
@@ -53,19 +53,11 @@ ButtonParser.prototype.setButtonAccessory = function(equipmentSid, clickWay, low
 		});
 		
 		this.platform.accessories.push(accessory);
-		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Button, equipmentSid: " + equipmentSid);
+		this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Motion Sensor, deviceSid: " + deviceSid);
 	}
-	var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
-	var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
-	if(clickWay === 'click') {
-		buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
-	} else if(clickWay === 'double_click') {
-		buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
-	} else if(clickWay === 'long_click_release') {
-		/* 'long_click_press' */
-		buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.LONG_PRESS);
-	} else {
-	}
+	var motService = accessory.getService(Service.MotionSensor);
+	var motCharacteristic = motService.getCharacteristic(Characteristic.MotionDetected);
+	motCharacteristic.updateValue(motionDetected);
 	
 	if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
 		var batService = accessory.getService(Service.BatteryService);
