@@ -6,13 +6,13 @@ This repository contains the Aqara plugin for homebridge.
 Aqara is a ZigBee gateway with a few sensors. Please see the pictures below.
 
 # supported devices
-SingleSwitch(单按钮墙壁开关)
-DuplexSwitch(双按钮墙壁开关) --- coming soon
-Gateway2(网关灯光控制) --- coming soon
-TemperatureAndHumidity(温度湿度传感器)
-Motion(人体感应)
-Contact(门磁感应)
-Button(按钮)
+SingleSwitch(单按钮墙壁开关).
+DuplexSwitch(双按钮墙壁开关). --- coming soon.
+Gateway2(网关灯光控制). --- coming soon.
+TemperatureAndHumidity(温度湿度传感器).
+Motion(人体感应).
+Contact(门磁感应).
+Button(按钮).
 
 # Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.
