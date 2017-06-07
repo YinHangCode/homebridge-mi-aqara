@@ -16,7 +16,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/mofang.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/yanwu.jpg)
 
-## Supported Devices And Povide HomeKit Accessory
+## Supported Devices
 Gateway v2(第二代网关) --- coming soon   
 ContactSensor(门磁感应)   
 MotionSensor(人体感应)   
