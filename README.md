@@ -6,26 +6,26 @@ This repository contains the Aqara plugin for homebridge.
 Aqara is a ZigBee gateway with a few sensors.  
 
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/gateway2.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/magnet.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/motion.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/switch.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/sensor_ht.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/1switch.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/2switch.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/chazuo.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/magnet.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/mofang.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/motion.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/sensor_ht.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/switch.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/yanwu.jpg)
 
 ## supported devices
 Gateway2(网关灯光控制) --- coming soon  
+Contact(门磁感应)  
+Motion(人体感应)  
+Button(按钮)  
+TemperatureAndHumidity(温度湿度传感器)  
 SingleSwitch(单按钮墙壁开关)  
 DuplexSwitch(双按钮墙壁开关) --- coming soon  
 (插座) --- coming soon  
-Contact(门磁感应)  
 (魔方) --- coming soon  
-Motion(人体感应)  
-TemperatureAndHumidity(温度湿度传感器)  
-Button(按钮)  
 (烟雾报警器) --- coming soon  
 
 ## Pre-Requirements
