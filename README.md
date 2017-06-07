@@ -17,16 +17,16 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/yanwu.jpg)
 
 ## Supported Devices And Povide HomeKit Accessory
-Gateway v2(第二代网关) --- coming soon  
-ContactSensor(门磁感应)  
-MotionSensor(人体感应)  
-Button(按钮)  
-TemperatureAndHumiditySensor(温度湿度传感器)  
-SingleSwitch(单按钮墙壁开关)  
-DuplexSwitch(双按钮墙壁开关) --- coming soon  
-PlugBase(插座) --- coming soon  
-MagicSquare(魔方) --- coming soon  
-SmokeDetector(烟雾报警器) --- coming soon  
+Gateway v2(第二代网关) --- coming soon   
+ContactSensor(门磁感应)   
+MotionSensor(人体感应)   
+Button(按钮)   
+TemperatureAndHumiditySensor(温度湿度传感器)   
+SingleSwitch(单按钮墙壁开关)   
+DuplexSwitch(双按钮墙壁开关) --- coming soon   
+PlugBase(插座) --- coming soon   
+MagicSquare(魔方) --- coming soon   
+SmokeDetector(烟雾报警器) --- coming soon   
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
