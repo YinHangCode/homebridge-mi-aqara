@@ -1,6 +1,6 @@
 # homebridge-mi-aqara
 homebridge plugin for XiaoMi Aqara plugin.  
-this program based [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara).  
+This repository based [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara).  
 
 This repository contains the Aqara plugin for homebridge.  
 Aqara is a ZigBee gateway with a few sensors.  
