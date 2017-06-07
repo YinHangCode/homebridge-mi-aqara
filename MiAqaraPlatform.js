@@ -1,7 +1,8 @@
-require('./DeviceParsers/TemperatureAndHumidityParser');
-require('./DeviceParsers/MotionParser');
+require('./DeviceParsers/GatewayParser');
 require('./DeviceParsers/ContactParser');
+require('./DeviceParsers/MotionParser');
 require('./DeviceParsers/ButtonParser');
+require('./DeviceParsers/TemperatureAndHumidityParser');
 require('./DeviceParsers/SingleSwitchParser');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
@@ -42,20 +43,21 @@ function MiAqaraPlatform(log, config, api) {
     this.UUIDGen = UUIDGen;
     
     this.parsers = {
-        /*
+        'gateway' : new GatewayParser(this), // 网关
+        'magnet' : new ContactParser(this), // 门磁感应
+        'motion' : new MotionParser(this), // 人体感应
+        'switch' : new ButtonParser(this), // 按钮
+        'sensor_ht' : new TemperatureAndHumidityParser(this), // 温度湿度传感器
+        'ctrl_neutral1' : new SingleSwitchParser(this) // 单按钮墙壁开关
+    };
+
+    /*
         'ctrl_neutral2' : new DuplexLightSwitchParser(this),
         '86sw1' : new EightySixSwitchParser(this),
         '86sw2' : new DuplexEightySixSwitchParser(this),
         'plug' : new PlugSwitchParser(this)
-        */
+    */
         
-        'ctrl_neutral1' : new SingleSwitchParser(this), // 单按钮墙壁开关
-        'sensor_ht' : new TemperatureAndHumidityParser(this), // 温度湿度传感器
-        'motion' : new MotionParser(this), // 人体感应
-        'magnet' : new ContactParser(this), // 门磁感应
-        'switch' : new ButtonParser(this) // 按钮
-    };
-
     this.accessories = [];
     
     // A lookup table to get cipher password from gateway/device sid.
