@@ -1,4 +1,6 @@
 # homebridge-mi-aqara
+[![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
+
 homebridge plugin for XiaoMi Aqara plugin.  
 This repository based [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara).  
 
