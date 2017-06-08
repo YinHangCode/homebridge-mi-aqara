@@ -38,6 +38,8 @@ TemperatureAndHumidityParser.prototype.getUuidsByDeviceSid = function(deviceSid)
 }
 
 TemperatureAndHumidityParser.prototype.setTemperatureAccessory = function(deviceSid, temperature, lowBattery, batteryLevel) {
+	var that = this;
+	
     var uuid = UUIDGen.generate('Tem' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -75,6 +77,8 @@ TemperatureAndHumidityParser.prototype.setTemperatureAccessory = function(device
 }
 
 TemperatureAndHumidityParser.prototype.setHumidityAccessory = function(deviceSid, humidity, lowBattery, batteryLevel) {
+	var that = this;
+	
     var uuid = UUIDGen.generate('Hum' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

@@ -35,6 +35,8 @@ GatewayParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illumination) {
+	var that = this;
+	
     var uuid = UUIDGen.generate('GW_LS' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -63,6 +65,8 @@ GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illuminat
 }
 
 GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
+	var that = this;
+	
     var uuid = UUIDGen.generate('GW_Light' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -103,7 +107,6 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     var switchCharacteristic = ligthService.getCharacteristic(Characteristic.On);
     switchCharacteristic.updateValue(!(rawRgb == 0));
     if (switchCharacteristic.listeners('set').length == 0) {
-        var that = this;
         switchCharacteristic.on("set", function(value, callback) {
             if(value == 1 || value == true) { // set by home is 0/1, set by siri is true/false
 //              that.platform.log.debug("on - " + value);
@@ -118,7 +121,6 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     var brightnessCharacteristic = ligthService.getCharacteristic(Characteristic.Brightness);
     brightnessCharacteristic.updateValue((rawRgb == 0) ? 0 : accessory.yh_value_brightness);
     if (brightnessCharacteristic.listeners('set').length == 0) {
-        var that = this;
         brightnessCharacteristic.on("set", function(value, callback) {
             accessory.yh_value_brightness = value;
 //          that.platform.log.debug("brightness - " + value);
@@ -132,7 +134,6 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     var hueCharacteristic = ligthService.getCharacteristic(Characteristic.Hue);
     hueCharacteristic.updateValue((rawRgb == 0) ? 0 : accessory.yh_value_hue);
     if (hueCharacteristic.listeners('set').length == 0) {
-        var that = this;
         hueCharacteristic.on("set", function(value, callback) {
             accessory.yh_value_hue = value;
 //          that.platform.log.debug("hue - " + value);
@@ -144,7 +145,6 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     var saturationCharacteristic = ligthService.getCharacteristic(Characteristic.Saturation);
     saturationCharacteristic.updateValue((rawRgb == 0) ? 0 : accessory.yh_value_saturation);
     if (saturationCharacteristic.listeners('set').length == 0) {
-        var that = this;
         saturationCharacteristic.on("set", function(value, callback) {
             accessory.yh_value_saturation = value;
 //          that.platform.log.debug("saturation - " + value);

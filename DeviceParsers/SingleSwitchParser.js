@@ -32,6 +32,8 @@ SingleSwitchParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 SingleSwitchParser.prototype.setSwitchAccessory = function(deviceSid, state0, lowBattery, batteryLevel) {
+	var that = this;
+	
     var uuid = UUIDGen.generate('SingleSwitch' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
