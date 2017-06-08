@@ -52,7 +52,7 @@ GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illuminat
         accessory.addService(Service.LightSensor, accessoryName);
         this.platform.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
         accessory.on('identify', function(paired, callback) {
-            that.log(accessory.displayName, "Identify!!!");
+            that.platform.log(accessory.displayName, "Identify!!!");
             callback();
         });
         
@@ -86,7 +86,7 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
         service.addCharacteristic(Characteristic.Brightness);
         this.platform.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
         accessory.on('identify', function(paired, callback) {
-            that.log(accessory.displayName, "Identify!!!");
+            that.platform.log(accessory.displayName, "Identify!!!");
             callback();
         });
         

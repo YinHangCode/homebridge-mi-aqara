@@ -50,7 +50,7 @@ ContactParser.prototype.setContactAccessory = function(deviceSid, contacted, low
         accessory.addService(Service.BatteryService, accessoryName);
         this.platform.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
         accessory.on('identify', function(paired, callback) {
-            that.log(accessory.displayName, "Identify!!!");
+            that.platform.log(accessory.displayName, "Identify!!!");
             callback();
         });
         
