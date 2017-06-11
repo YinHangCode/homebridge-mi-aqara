@@ -197,7 +197,7 @@ MiAqaraPlatform.prototype.doRestThings = function(api) {
                     serverSocket.send(whoisCommand, 0, whoisCommand.length, multicastPort, multicastAddress);
                 }, 300000);
         });
-    
+        
         setInterval(function(){
             that.autoRemoveAccessory();
         }, 1800000);
@@ -240,9 +240,11 @@ const AccessoryAutoRemoveDelta = 12 * 60 * 60 * 1000;
 MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
     var accessoriesToRemove = [];
 
+    var nowTime = Date.now();
     for (var index in this.Devices.devices) {
         var device = this.Devices.devices[index];
-        if ((Date.now() - device.lastUpdateTime) > AccessoryAutoRemoveDelta) {
+        if ((nowTime - device.lastUpdateTime) > AccessoryAutoRemoveDelta) {
+            this.log.debug("remove Device " + device.sid + ", nowTime:" + nowTime + ", lastUpdateTime: " + device.lastUpdateTime + ", Delta: " + (nowTime - device.lastUpdateTime));
             if (device.model in this.parsers) {
                 var uuids = this.parsers[device.model].getUuidsByDeviceSid(device.sid);
                 for(var i in uuids) {
@@ -252,7 +254,6 @@ MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
                     this.accessories.splice(this.accessories.indexOf(accessory), 1);
                 }
             }
-            this.log.debug("remove Device %s", device.sid);
             delete this.Devices.devices[index];
         }
     }
@@ -319,7 +320,13 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             this.Gateways.updateGateway(json['sid'], {token: json['token']});
         }
         
-        this.Devices.updateDevice(json['sid'], {lastUpdateTime: Date.now()});
+        var sid = json['sid'];
+        var device = this.Devices.getDeviceBySid(sid);
+        if(null != device) {
+            var newLastUpdateTime = Date.now();
+            this.log.debug("update " + sid + " lastUpdateTime: " + device.lastUpdateTime + " to " + newLastUpdateTime);
+            this.Devices.updateDevice(sid, {lastUpdateTime: newLastUpdateTime});
+        }
     } else if (cmd === 'write_ack') {
     } else {
         var deviceSid = json['sid'];
