@@ -71,17 +71,9 @@ homebridge -D
 
 ## Version Logs
 ### 0.0.6
-1.add some logs.
+add some logs.
 ### 0.0.5
-1.fixed bug.
 ### 0.0.4
-1.fixed bug.
 ### 0.0.3
-1.add gateway accessory: light sensor, hue light.
 ### 0.0.2
-1.add single switch accessory   
 ### 0.0.1
-1.supported contact sensor accessory   
-2.supported motion sensor accessory   
-3.supported button accessory   
-4.supported temperature and humidity sensor accessory   
