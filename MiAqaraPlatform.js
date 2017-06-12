@@ -4,6 +4,8 @@ require('./DeviceParsers/MotionParser');
 require('./DeviceParsers/ButtonParser');
 require('./DeviceParsers/TemperatureAndHumidityParser');
 require('./DeviceParsers/SingleSwitchParser');
+require('./DeviceParsers/PlugBaseParser');
+require('./DeviceParsers/MagicSquareParser');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
@@ -48,7 +50,9 @@ function MiAqaraPlatform(log, config, api) {
         'motion' : new MotionParser(this), // 人体感应
         'switch' : new ButtonParser(this), // 按钮
         'sensor_ht' : new TemperatureAndHumidityParser(this), // 温度湿度传感器
-        'ctrl_neutral1' : new SingleSwitchParser(this) // 单按钮墙壁开关
+        'ctrl_neutral1' : new SingleSwitchParser(this), // 单按钮墙壁开关
+		'plug' : new PlugBaseParser(this), // 插座
+		'cube' : new MagicSquareParser(this) // 魔方
     };
 
     /*
@@ -141,7 +145,7 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
         that.log(accessory.displayName + "* Identify!!!" );
         callback();
     });
-
+	
     this.accessories.push(accessory);
 }
 

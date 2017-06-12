@@ -30,8 +30,8 @@ SingleSwitch(单按钮墙壁开关)
 DuplexSwitch(双按钮墙壁开关) --- coming soon   
 WirelessSingleSwitch(86型无线单按钮开关) --- coming soon   
 WirelessDuplexSwitch(86型无线双按钮开关) --- coming soon   
-PlugBase(插座) --- coming soon   
-MagicSquare(魔方) --- coming soon   
+PlugBase(插座)   
+MagicSquare(魔方)   
 SmokeDetector(烟雾报警器) --- coming soon   
 
 ## Pre-Requirements
@@ -72,6 +72,9 @@ If you have more than one gateways, fill them in right order, like below.
 homebridge -D  
 
 ## Version Logs
+### 0.1.0
+1.add plug base accessory   
+2.add magic square accessory   
 ### 0.0.6
 1.add some logs.
 ### 0.0.5
@@ -81,9 +84,9 @@ homebridge -D
 ### 0.0.3
 1.add gateway accessory: light sensor, hue light.
 ### 0.0.2
-1.add single switch accessory   
+1.add single switch accessory.   
 ### 0.0.1
-1.supported contact sensor accessory   
-2.supported motion sensor accessory   
-3.supported button accessory   
-4.supported temperature and humidity sensor accessory   
+1.supported contact sensor accessory.   
+2.supported motion sensor accessory.   
+3.supported button accessory.   
+4.supported temperature and humidity sensor accessory.   
