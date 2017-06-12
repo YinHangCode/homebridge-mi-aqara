@@ -7,13 +7,15 @@ This repository based [homebridge-aqara](https://github.com/snOOrz/homebridge-aq
 This repository contains the Aqara plugin for homebridge.  
 Aqara is a ZigBee gateway with a few sensors.  
 
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/gateway2.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/magnet.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/motion.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/switch.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/sensor_ht.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Gateway.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ContactSensor.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MotionSensor.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Button.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/TemperatureAndHumiditySensor.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleSwitch.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexSwitch.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/WirelessSingleSwitch.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/WirelessDuplexSwitch.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/PlugBase.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MagicSquare.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SmokeDetector.jpg)
