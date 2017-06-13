@@ -14,8 +14,8 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/TemperatureAndHumiditySensor.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleSwitch.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexSwitch.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/WirelessSingleSwitch.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/WirelessDuplexSwitch.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleButton86.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexButton86.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/PlugBase.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MagicSquare.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SmokeDetector.jpg)
@@ -27,9 +27,9 @@ MotionSensor(人体感应)
 Button(按钮)   
 TemperatureAndHumiditySensor(温度湿度传感器)   
 SingleSwitch(单按钮墙壁开关)   
-DuplexSwitch(双按钮墙壁开关) --- coming soon   
-WirelessSingleSwitch(86型无线单按钮开关) --- coming soon   
-WirelessDuplexSwitch(86型无线双按钮开关) --- coming soon   
+DuplexSwitch(双按钮墙壁开关)   
+SingleButton86(86型无线单按钮开关)   
+DuplexButton86(86型无线双按钮开关)   
 PlugBase(插座)   
 MagicSquare(魔方)   
 SmokeDetector(烟雾报警器) --- coming soon   
@@ -72,6 +72,10 @@ If you have more than one gateways, fill them in right order, like below.
 homebridge -D  
 
 ## Version Logs
+### 0.2.0
+1.add duplex switch accessory   
+2.add single button 86 accessory   
+3.add duplex button 86 accessory   
 ### 0.1.0
 1.add plug base accessory   
 2.add magic square accessory   

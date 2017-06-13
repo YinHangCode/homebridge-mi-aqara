@@ -4,6 +4,9 @@ require('./DeviceParsers/MotionParser');
 require('./DeviceParsers/ButtonParser');
 require('./DeviceParsers/TemperatureAndHumidityParser');
 require('./DeviceParsers/SingleSwitchParser');
+require('./DeviceParsers/DuplexSwitchParser');
+require('./DeviceParsers/SingleButton86Parser');
+require('./DeviceParsers/DuplexButton86Parser');
 require('./DeviceParsers/PlugBaseParser');
 require('./DeviceParsers/MagicSquareParser');
 
@@ -51,16 +54,12 @@ function MiAqaraPlatform(log, config, api) {
         'switch' : new ButtonParser(this), // 按钮
         'sensor_ht' : new TemperatureAndHumidityParser(this), // 温度湿度传感器
         'ctrl_neutral1' : new SingleSwitchParser(this), // 单按钮墙壁开关
-		'plug' : new PlugBaseParser(this), // 插座
-		'cube' : new MagicSquareParser(this) // 魔方
+        'ctrl_neutral2' : new DuplexSwitchParser(this), // 双按钮墙壁开关
+        '86sw1' : new SingleButton86Parser(this), // 86型无线单按钮开关
+        '86sw2' : new DuplexButton86Parser(this), // 86型无线双按钮开关
+        'plug' : new PlugBaseParser(this), // 插座
+        'cube' : new MagicSquareParser(this) // 魔方
     };
-
-    /*
-        'ctrl_neutral2' : new DuplexLightSwitchParser(this),
-        '86sw1' : new EightySixSwitchParser(this),
-        '86sw2' : new DuplexEightySixSwitchParser(this),
-        'plug' : new PlugSwitchParser(this)
-    */
         
     this.accessories = [];
     
@@ -145,7 +144,16 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
         that.log(accessory.displayName + "* Identify!!!" );
         callback();
     });
-	
+    
+/*    
+//  delete accessory
+    if(accessory.displayName == 'fc8a') {
+        this.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
+        this.log.debug("remove accessory");
+        return;
+    }
+*/    
+
     this.accessories.push(accessory);
 }
 
