@@ -62,6 +62,7 @@ function MiAqaraPlatform(log, config, api) {
     };
         
     this.accessories = [];
+    this.readyRegisterAccessories = [];
     
     // A lookup table to get cipher password from gateway/device sid.
     this.gatewayPasswords = {};
@@ -147,12 +148,12 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     
 /*    
 //  delete accessory
-    if(accessory.displayName == 'fc8a') {
+    if(accessory.displayName == 'dfb5') {
         this.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
         this.log.debug("remove accessory");
         return;
     }
-*/    
+*/   
 
     this.accessories.push(accessory);
 }
@@ -192,6 +193,18 @@ MiAqaraPlatform.prototype.startServer = function() {
     serverSocket.bind(serverPort);
 }
 
+MiAqaraPlatform.prototype.registerAccessory = function(accessory) {
+    this.readyRegisterAccessories.push(accessory);
+    this.sendWhoisCommand();
+}
+
+MiAqaraPlatform.prototype.sendWhoisCommand = function() {
+    // Send whois to discovery Aqara gateways and resend every 300 seconds
+    var whoisCommand = '{"cmd": "whois"}';
+    // this.log.debug("send %s to %s:%d", whoisCommand, multicastAddress, multicastPort);
+    serverSocket.send(whoisCommand, 0, whoisCommand.length, multicastPort, multicastAddress);
+}
+
 MiAqaraPlatform.prototype.doRestThings = function(api) {
     var that = this;
     if (api) {
@@ -199,15 +212,11 @@ MiAqaraPlatform.prototype.doRestThings = function(api) {
         this.api = api;
 
         this.api.on('didFinishLaunching', function() {
-                // Send whois to discovery Aqara gateways and resend every 300 seconds
-                var whoisCommand = '{"cmd": "whois"}';
-                // log.debug("send %s to %s:%d", whoisCommand, multicastAddress, multicastPort);
-                serverSocket.send(whoisCommand, 0, whoisCommand.length, multicastPort, multicastAddress);
+            that.sendWhoisCommand();
 
-                setInterval(function() {
-                    // log.debug("send %s to %s:%d", whoisCommand, multicastAddress, multicastPort);
-                    serverSocket.send(whoisCommand, 0, whoisCommand.length, multicastPort, multicastAddress);
-                }, 300000);
+            setInterval(function() {
+                that.sendWhoisCommand();
+            }, 300000);
         });
         
         setInterval(function(){
@@ -325,6 +334,12 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
 
             var response = '{"cmd":"read", "sid":"' + deviceSid + '"}';
             serverSocket.send(response, 0, response.length, gateway.port, gateway.address);
+        }
+        
+        if(this.readyRegisterAccessories.length > 0) {
+            this.accessories.push.apply(this.accessories, this.readyRegisterAccessories);
+            this.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", this.readyRegisterAccessories);
+            this.readyRegisterAccessories = [];
         }
     } else if (cmd === 'heartbeat') {
         var model = json['model'];

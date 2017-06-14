@@ -35,28 +35,25 @@ GatewayParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illumination) {
-	var that = this;
-	
+    var that = this;
+    
     var uuid = UUIDGen.generate('GW_LS' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
         var accessoryName = deviceSid.substring(deviceSid.length - 4);
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
-
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
             .setCharacteristic(Characteristic.Model, "Light Sensor")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-
         accessory.addService(Service.LightSensor, accessoryName);
-        this.platform.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
         accessory.on('identify', function(paired, callback) {
             that.platform.log(accessory.displayName, "Identify!!!");
             callback();
         });
         
-        this.platform.accessories.push(accessory);
+        this.platform.registerAccessory(accessory);
         this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Light Sensor, deviceSid: " + deviceSid);
     }
     var illService = accessory.getService(Service.LightSensor);
@@ -65,32 +62,29 @@ GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illuminat
 }
 
 GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
-	var that = this;
-	
+    var that = this;
+    
     var uuid = UUIDGen.generate('GW_Light' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
         var accessoryName = deviceSid.substring(deviceSid.length - 4);
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.LIGHTBULB);
         accessory.reachable = true;
-
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
             .setCharacteristic(Characteristic.Model, "Gateway Light")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-
         accessory.addService(Service.Lightbulb, accessoryName);
         var service = accessory.getService(Service.Lightbulb);
         service.addCharacteristic(Characteristic.Hue);
         service.addCharacteristic(Characteristic.Saturation);
         service.addCharacteristic(Characteristic.Brightness);
-        this.platform.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
         accessory.on('identify', function(paired, callback) {
             that.platform.log(accessory.displayName, "Identify!!!");
             callback();
         });
         
-        this.platform.accessories.push(accessory);
+        this.platform.registerAccessory(accessory);
         this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Gateway Light, deviceSid: " + deviceSid);
     }
 

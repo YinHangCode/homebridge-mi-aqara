@@ -32,29 +32,26 @@ MotionParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 MotionParser.prototype.setMotionAccessory = function(deviceSid, motionDetected, lowBattery, batteryLevel) {
-	var that = this;
-	
+    var that = this;
+    
     var uuid = UUIDGen.generate('Mot' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
         var accessoryName = deviceSid.substring(deviceSid.length - 4);
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
-
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
             .setCharacteristic(Characteristic.Model, "Motion Sensor")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-
         accessory.addService(Service.MotionSensor, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
-        this.platform.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
         accessory.on('identify', function(paired, callback) {
             that.platform.log(accessory.displayName, "Identify!!!");
             callback();
         });
         
-        this.platform.accessories.push(accessory);
+        this.platform.registerAccessory(accessory);
         this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Motion Sensor, deviceSid: " + deviceSid);
     }
     var motService = accessory.getService(Service.MotionSensor);
