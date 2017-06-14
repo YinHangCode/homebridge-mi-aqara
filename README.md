@@ -14,11 +14,15 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/TemperatureAndHumiditySensor.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleSwitch.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexSwitch.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleSwitchLN.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexSwitchLN.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleButton86.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexButton86.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/PlugBase.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/PlugBase86.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MagicSquare.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SmokeDetector.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/GasDetector.jpg)
 
 ## Supported Devices
 Gateway(网关)   
@@ -28,11 +32,15 @@ Button(按钮)
 TemperatureAndHumiditySensor(温度湿度传感器)   
 SingleSwitch(单按钮墙壁开关)   
 DuplexSwitch(双按钮墙壁开关)   
+SingleSwitchLN(单按钮墙壁开关零火版) --- coming soon   
+DuplexSwitchLN(双按钮墙壁开关零火版) --- coming soon   
 SingleButton86(86型无线单按钮开关)   
 DuplexButton86(86型无线双按钮开关)   
 PlugBase(插座)   
+PlugBase86(86型墙壁插座) --- coming soon   
 MagicSquare(魔方)   
 SmokeDetector(烟雾报警器) --- coming soon   
+GasDetector(天然气报警器) --- coming soon   
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
