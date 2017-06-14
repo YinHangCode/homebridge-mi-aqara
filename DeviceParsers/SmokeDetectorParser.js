@@ -3,7 +3,7 @@ const inherits = require('util').inherits;
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
-SingleButton86Parser = function(platform) {
+SmokeDetectorParser = function(platform) {
     this.init(platform);
     
     Accessory = platform.Accessory;
@@ -12,39 +12,39 @@ SingleButton86Parser = function(platform) {
     Characteristic = platform.Characteristic;
     UUIDGen = platform.UUIDGen;
 }
-inherits(SingleButton86Parser, BaseParser);
+inherits(SmokeDetectorParser, BaseParser);
 
-SingleButton86Parser.prototype.parse = function(json, rinfo) {
+SmokeDetectorParser.prototype.parse = function(json, rinfo) {
     this.platform.log.debug(JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
-    var clickWay = data['channel_0'];
+    var SmokeDetected = ((data['alarm']/1.0) >= 1 );
     var voltage = data['voltage'] / 1.0;
     var lowBattery = this.getLowBatteryByVoltage(voltage);
     var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
     var deviceSid = json['sid'];
-    this.setButtonAccessory(deviceSid, clickWay, lowBattery, batteryLevel);
+    this.setSmokeAccessory(deviceSid, SmokeDetected, lowBattery, batteryLevel);
 }
 
-SingleButton86Parser.prototype.getUuidsByDeviceSid = function(deviceSid) {
-    return [UUIDGen.generate('SingleButton86' + deviceSid)];
+SmokeDetectorParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
+    return [UUIDGen.generate('smoke' + deviceSid)];
 }
 
-SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay, lowBattery, batteryLevel) {
-    var that = this;
-    
-    var uuid = UUIDGen.generate('SingleButton86' + deviceSid);
+SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetected, lowBattery, batteryLevel) {
+	var that = this;
+	
+    var uuid = UUIDGen.generate('smoke' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
         var accessoryName = deviceSid.substring(deviceSid.length - 4);
-        accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
+        accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
-            .setCharacteristic(Characteristic.Model, "Single Button 86")
+            .setCharacteristic(Characteristic.Model, "Smoke Sensor")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-        accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
+        accessory.addService(Service.SmokeSensor, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
             that.platform.log(accessory.displayName, "Identify!!!");
@@ -52,17 +52,12 @@ SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Single Button 86, deviceSid: " + deviceSid);
+        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Smoke Sensor, deviceSid: " + deviceSid);
     }
-    var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
-    var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
-    if(clickWay === 'click') {
-        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
-    } else if(clickWay === 'double_click') {
-        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
-    } else {
-    }
-        
+    var motService = accessory.getService(Service.SmokeSensor);
+    var motCharacteristic = motService.getCharacteristic(Characteristic.SmokeDetected);
+    motCharacteristic.updateValue(SmokeDetected);
+    
     if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
         var batService = accessory.getService(Service.BatteryService);
         var lowBatCharacteristic = batService.getCharacteristic(Characteristic.StatusLowBattery);
@@ -70,7 +65,6 @@ SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay
         var chargingStateCharacteristic = batService.getCharacteristic(Characteristic.ChargingState);
         lowBatCharacteristic.updateValue(lowBattery);
         batLevelCharacteristic.updateValue(batteryLevel);
-        chargingStateCharacteristic.updateValue(true);
+        chargingStateCharacteristic.updateValue(false);
     }
 }
-

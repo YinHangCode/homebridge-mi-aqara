@@ -5,10 +5,15 @@ require('./DeviceParsers/ButtonParser');
 require('./DeviceParsers/TemperatureAndHumidityParser');
 require('./DeviceParsers/SingleSwitchParser');
 require('./DeviceParsers/DuplexSwitchParser');
+require('./DeviceParsers/SingleSwitchLNParser');
+require('./DeviceParsers/DuplexSwitchLNParser');
 require('./DeviceParsers/SingleButton86Parser');
 require('./DeviceParsers/DuplexButton86Parser');
 require('./DeviceParsers/PlugBaseParser');
+require('./DeviceParsers/PlugBase86Parser');
 require('./DeviceParsers/MagicSquareParser');
+require('./DeviceParsers/SmokeDetectorParser');
+require('./DeviceParsers/NatgasDetectorParser');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
@@ -55,12 +60,17 @@ function MiAqaraPlatform(log, config, api) {
         'sensor_ht' : new TemperatureAndHumidityParser(this), // 温度湿度传感器
         'ctrl_neutral1' : new SingleSwitchParser(this), // 单按钮墙壁开关
         'ctrl_neutral2' : new DuplexSwitchParser(this), // 双按钮墙壁开关
+        'ctrl_ln1' : new SingleSwitchLNParser(this), // 单按钮墙壁开关零火版
+        'ctrl_ln2' : new DuplexSwitchLNParser(this), // 双按钮墙壁开关零火版
         '86sw1' : new SingleButton86Parser(this), // 86型无线单按钮开关
         '86sw2' : new DuplexButton86Parser(this), // 86型无线双按钮开关
         'plug' : new PlugBaseParser(this), // 插座
-        'cube' : new MagicSquareParser(this) // 魔方
+        '86plug' : new PlugBase86Parser(this), // 86型墙壁插座
+        'cube' : new MagicSquareParser(this), // 魔方
+        'smoke' : new SmokeDetectorParser(this), // 烟雾警报器
+        'natgas' : new NatgasDetectorParser(this) // 天然气警报器
     };
-        
+    
     this.accessories = [];
     this.readyRegisterAccessories = [];
     

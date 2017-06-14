@@ -2,7 +2,9 @@
 [![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
 
 homebridge plugin for XiaoMi Aqara plugin.  
-This repository based [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara).  
+Thanks for [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), [licuhui](https://github.com/licuhui), all other developer and testers.   
+
+**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues).**
 
 This repository contains the Aqara plugin for homebridge.  
 Aqara is a ZigBee gateway with a few sensors.  
@@ -22,7 +24,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/PlugBase86.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MagicSquare.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SmokeDetector.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/GasDetector.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/NatgasDetector.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ElectricCurtain.jpg)
 
 ## Supported Devices
@@ -33,15 +35,15 @@ Button(按钮)
 TemperatureAndHumiditySensor(温度湿度传感器)   
 SingleSwitch(单按钮墙壁开关)   
 DuplexSwitch(双按钮墙壁开关)   
-SingleSwitchLN(单按钮墙壁开关零火版) --- coming soon   
-DuplexSwitchLN(双按钮墙壁开关零火版) --- coming soon   
+SingleSwitchLN(单按钮墙壁开关零火版)   
+DuplexSwitchLN(双按钮墙壁开关零火版)   
 SingleButton86(86型无线单按钮开关)   
-DuplexButton86(86型无线双按钮开关)   
 PlugBase(插座)   
-PlugBase86(86型墙壁插座) --- coming soon   
+DuplexButton86(86型无线双按钮开关)   
+PlugBase86(86型墙壁插座)   
 MagicSquare(魔方)   
-SmokeDetector(烟雾报警器) --- coming soon   
-GasDetector(天然气报警器) --- coming soon   
+SmokeDetector(烟雾报警器)   
+NatgasDetector(天然气报警器)   
 ElectricCurtain(电动窗帘) --- coming soon   
 
 ## Pre-Requirements
@@ -82,15 +84,21 @@ If you have more than one gateways, fill them in right order, like below.
 homebridge -D  
 
 ## Version Logs
+### 0.3.0
+1.add single switch LN accessory.   
+2.add duplex switch LN accessory.   
+3.add plug base 86 accessory.   
+4.add smoke detector accessory.   
+5.add natgas detector accessory.   
 ### 0.2.1
-1.change accessory registration mechanism, fixed bug that new accessory is not associated with gateway.
+1.change accessory registration mechanism, fixed bug that new accessory can't correlate associated with gateway.   
 ### 0.2.0
-1.add duplex switch accessory   
-2.add single button 86 accessory   
-3.add duplex button 86 accessory   
+1.add duplex switch accessory.   
+2.add single button 86 accessory.   
+3.add duplex button 86 accessory.   
 ### 0.1.0
-1.add plug base accessory   
-2.add magic square accessory   
+1.add plug base accessory.   
+2.add magic square accessory.   
 ### 0.0.6
 1.add some logs.
 ### 0.0.5
