@@ -296,13 +296,13 @@ MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
 
 // Parse message which is sent from Aqara gateways
 MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
-    var platform = this;
-    // platform.log.debug('recv %s(%d bytes) from client %s:%d\n', msg, msg.length, rinfo.address, rinfo.port);
+    var that = this;
+    // that.log.debug('recv %s(%d bytes) from client %s:%d\n', msg, msg.length, rinfo.address, rinfo.port);
     var json;
     try {
         json = JSON.parse(msg);
     } catch (ex) {
-        platform.log.error("Bad json %s", msg);
+        that.log.error("Bad json %s", msg);
         return;
     }
 
@@ -311,7 +311,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var address = json['ip'];
         var port = json['port'];
         var response = '{"cmd":"get_id_list"}';
-        // platform.log.debug("send %s to %s:%d", response, address, port);
+        // that.log.debug("send %s to %s:%d", response, address, port);
         serverSocket.send(response, 0, response.length, port, address);
     } else if (cmd === 'get_id_list_ack') {
         var gatewaySid = json['sid'];

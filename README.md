@@ -84,6 +84,8 @@ If you have more than one gateways, fill them in right order, like below.
 homebridge -D  
 
 ## Version Logs
+### 0.3.1
+1.code collation.   
 ### 0.3.0
 1.add single switch LN accessory.   
 2.add duplex switch LN accessory.   
