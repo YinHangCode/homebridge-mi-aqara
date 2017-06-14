@@ -82,6 +82,8 @@ If you have more than one gateways, fill them in right order, like below.
 homebridge -D  
 
 ## Version Logs
+### 0.2.1
+1.change accessory registration mechanism, fixed bug that new accessory is not associated with gateway.
 ### 0.2.0
 1.add duplex switch accessory   
 2.add single button 86 accessory   
