@@ -23,6 +23,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MagicSquare.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SmokeDetector.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/GasDetector.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ElectricCurtain.jpg)
 
 ## Supported Devices
 Gateway(网关)   
@@ -41,6 +42,7 @@ PlugBase86(86型墙壁插座) --- coming soon
 MagicSquare(魔方)   
 SmokeDetector(烟雾报警器) --- coming soon   
 GasDetector(天然气报警器) --- coming soon   
+ElectricCurtain(电动窗帘) --- coming soon   
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
