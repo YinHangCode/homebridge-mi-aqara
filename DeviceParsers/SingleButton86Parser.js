@@ -57,10 +57,13 @@ SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
     if(clickWay === 'click') {
-//      buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
-        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.CLICK);
+        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+//      buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.CLICK);
     } else if(clickWay === 'double_click') {
         buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
+    } else if(clickWay === 'long_click_release') {
+        /* 'long_click_press' */
+        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.LONG_PRESS);
     } else {
     }
         

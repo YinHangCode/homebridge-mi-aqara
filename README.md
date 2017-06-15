@@ -84,6 +84,12 @@ If you have more than one gateways, fill them in right order, like below.
 homebridge -D  
 
 ## Version Logs
+### 0.3.3
+1.add single button 86 long press event.   
+2.add duplex button 86 long press event.   
+3.changed button click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+4.changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+5.changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
 ### 0.3.2
 1.fixed bug that duplex switch LN charging state.   
 2.fixed bug that single switch LN charging state.   
