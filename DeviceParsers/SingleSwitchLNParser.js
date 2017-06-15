@@ -81,6 +81,6 @@ SingleSwitchLNParser.prototype.setSwitchAccessory = function(deviceSid, state0, 
         var chargingStateCharacteristic = batService.getCharacteristic(Characteristic.ChargingState);
         lowBatCharacteristic.updateValue(lowBattery);
         batLevelCharacteristic.updateValue(batteryLevel);
-        chargingStateCharacteristic.updateValue(false);
+        chargingStateCharacteristic.updateValue(true);
     }
 }

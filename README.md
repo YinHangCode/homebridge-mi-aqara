@@ -84,6 +84,15 @@ If you have more than one gateways, fill them in right order, like below.
 homebridge -D  
 
 ## Version Logs
+### 0.3.2
+1.fixed bug that duplex switch LN charging state.   
+2.fixed bug that single switch LN charging state.   
+3.fixed bug that single button 86 charging state.   
+4.changed button click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+5.changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+6.changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+7.fixed bug that natgas detector is not alarm.   
+8.fixed bug that smoke detector is not alarm.   
 ### 0.3.1
 1.code collation.   
 ### 0.3.0

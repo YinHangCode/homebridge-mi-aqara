@@ -57,7 +57,8 @@ SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
     if(clickWay === 'click') {
-        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+//      buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.CLICK);
     } else if(clickWay === 'double_click') {
         buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
     } else {
@@ -70,7 +71,7 @@ SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay
         var chargingStateCharacteristic = batService.getCharacteristic(Characteristic.ChargingState);
         lowBatCharacteristic.updateValue(lowBattery);
         batLevelCharacteristic.updateValue(batteryLevel);
-        chargingStateCharacteristic.updateValue(true);
+        chargingStateCharacteristic.updateValue(false);
     }
 }
 

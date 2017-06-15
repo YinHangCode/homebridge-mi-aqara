@@ -56,7 +56,7 @@ SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetec
     }
     var motService = accessory.getService(Service.SmokeSensor);
     var motCharacteristic = motService.getCharacteristic(Characteristic.SmokeDetected);
-    motCharacteristic.updateValue(SmokeDetected);
+    motCharacteristic.updateValue(SmokeDetected ? Characteristic.ContactSensorState.SMOKE_DETECTED : Characteristic.ContactSensorState.SMOKE_NOT_DETECTED);
     
     if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
         var batService = accessory.getService(Service.BatteryService);

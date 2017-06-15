@@ -59,7 +59,8 @@ DuplexButton86Parser.prototype.setButton0Accessory = function(deviceSid, clickWa
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
     if(clickWay === 'click') {
-        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+//      buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.CLICK);
     } else if(clickWay === 'double_click') {
         buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
     } else {
@@ -102,7 +103,8 @@ DuplexButton86Parser.prototype.setButton1Accessory = function(deviceSid, clickWa
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
     if(clickWay === 'click') {
-        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+//      buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS);
+        buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.CLICK);
     } else if(clickWay === 'double_click') {
         buttonCharacteristic.updateValue(Characteristic.ProgrammableSwitchEvent.DOUBLE_PRESS);
     } else {
