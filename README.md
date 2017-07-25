@@ -154,7 +154,7 @@ homebridge -D
 
 ## Clear register accessories
 cd ~/.homebridge/accessories/   
-mv cachedAccessories cachedAccessories_`date '+%Y%m%d_%H%M%S'`.bak   
+mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak   
 echo [] > cachedAccessories   
 
 ## Version Logs
