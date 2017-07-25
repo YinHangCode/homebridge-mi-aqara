@@ -158,6 +158,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.4.1
+1.code collation.   
 ### 0.4.0
 1.add electric curtain accessory.   
 2.add contact sensor version 2 accessory.   
