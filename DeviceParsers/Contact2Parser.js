@@ -3,7 +3,7 @@ const inherits = require('util').inherits;
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
-SmokeDetectorParser = function(platform) {
+Contact2Parser = function(platform) {
     this.init(platform);
     
     Accessory = platform.Accessory;
@@ -12,39 +12,39 @@ SmokeDetectorParser = function(platform) {
     Characteristic = platform.Characteristic;
     UUIDGen = platform.UUIDGen;
 }
-inherits(SmokeDetectorParser, BaseParser);
+inherits(Contact2Parser, BaseParser);
 
-SmokeDetectorParser.prototype.parse = function(json, rinfo) {
+Contact2Parser.prototype.parse = function(json, rinfo) {
     this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
-    var SmokeDetected = ((data['alarm']/1.0) >= 1 );
+    var contacted = (data['status'] === 'close');
     var voltage = data['voltage'] / 1.0;
     var lowBattery = this.getLowBatteryByVoltage(voltage);
     var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
     var deviceSid = json['sid'];
-    this.setSmokeAccessory(deviceSid, SmokeDetected, lowBattery, batteryLevel);
+    this.setContactAccessory(deviceSid, contacted, lowBattery, batteryLevel);
 }
 
-SmokeDetectorParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
-    return [UUIDGen.generate('smoke' + deviceSid)];
+Contact2Parser.prototype.getUuidsByDeviceSid = function(deviceSid) {
+    return [UUIDGen.generate('Mag2' + deviceSid)];
 }
 
-SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetected, lowBattery, batteryLevel) {
+Contact2Parser.prototype.setContactAccessory = function(deviceSid, contacted, lowBattery, batteryLevel) {
     var that = this;
     
-    var uuid = UUIDGen.generate('smoke' + deviceSid);
+    var uuid = UUIDGen.generate('Mag2' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'smoke');
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'Mag2');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
-            .setCharacteristic(Characteristic.Model, "Smoke Sensor")
+            .setCharacteristic(Characteristic.Model, "Contact Sensor v2")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-        accessory.addService(Service.SmokeSensor, accessoryName);
+        accessory.addService(Service.ContactSensor, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
             that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
@@ -52,11 +52,11 @@ SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetec
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("[MiAqaraPlatform][DEBUG]create new accessories - UUID: " + uuid + ", type: Smoke Sensor, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Contact Sensor v2, deviceSid: " + deviceSid);
     }
-    var motService = accessory.getService(Service.SmokeSensor);
-    var motCharacteristic = motService.getCharacteristic(Characteristic.SmokeDetected);
-    motCharacteristic.updateValue(SmokeDetected ? Characteristic.ContactSensorState.SMOKE_DETECTED : Characteristic.ContactSensorState.SMOKE_NOT_DETECTED);
+    var magService = accessory.getService(Service.ContactSensor);
+    var magCharacteristic = magService.getCharacteristic(Characteristic.ContactSensorState);
+    magCharacteristic.updateValue(contacted ? Characteristic.ContactSensorState.CONTACT_DETECTED : Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
     
     if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
         var batService = accessory.getService(Service.BatteryService);
@@ -68,3 +68,4 @@ SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetec
         chargingStateCharacteristic.updateValue(false);
     }
 }
+

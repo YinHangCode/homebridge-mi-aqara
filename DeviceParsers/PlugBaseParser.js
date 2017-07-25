@@ -15,7 +15,7 @@ PlugBaseParser = function(platform) {
 inherits(PlugBaseParser, BaseParser);
 
 PlugBaseParser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var state = data['status'];
@@ -37,7 +37,7 @@ PlugBaseParser.prototype.setPlugAccessory = function(deviceSid, state, inuse) {
     var uuid = UUIDGen.generate('Plug' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'Plug');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.OUTLET);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -47,12 +47,12 @@ PlugBaseParser.prototype.setPlugAccessory = function(deviceSid, state, inuse) {
         accessory.addService(Service.Outlet, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Plug Base, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Plug Base, deviceSid: " + deviceSid);
     }
     var plugService = accessory.getService(Service.Outlet);
     var plugCharacteristic = plugService.getCharacteristic(Characteristic.On);

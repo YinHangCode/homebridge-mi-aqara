@@ -15,7 +15,7 @@ MagicSquareParser = function(platform) {
 inherits(MagicSquareParser, BaseParser);
 
 MagicSquareParser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var state = data['status'];
@@ -48,7 +48,7 @@ MagicSquareParser.prototype.setFlip90Accessory = function(deviceSid, state, rota
     var uuid = UUIDGen.generate('MS_Flip90' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + '_flip90';
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'MS_Flip90');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -58,12 +58,12 @@ MagicSquareParser.prototype.setFlip90Accessory = function(deviceSid, state, rota
         accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Magic Square Flip90, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Magic Square Flip90, deviceSid: " + deviceSid);
     }
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
@@ -88,7 +88,7 @@ MagicSquareParser.prototype.setFlip180Accessory = function(deviceSid, state, rot
     var uuid = UUIDGen.generate('MS_Flip180' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + '_flip180';
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'MS_Flip180');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -98,12 +98,12 @@ MagicSquareParser.prototype.setFlip180Accessory = function(deviceSid, state, rot
         accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Magic Square Flip180, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Magic Square Flip180, deviceSid: " + deviceSid);
     }
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
@@ -127,7 +127,7 @@ MagicSquareParser.prototype.setMoveAccessory = function(deviceSid, state, rotate
     var uuid = UUIDGen.generate('MS_Move' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + '_move';
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'MS_Move');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -137,12 +137,12 @@ MagicSquareParser.prototype.setMoveAccessory = function(deviceSid, state, rotate
         accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Magic Square Move, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Magic Square Move, deviceSid: " + deviceSid);
     }
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
@@ -166,7 +166,7 @@ MagicSquareParser.prototype.setTapTwiceAccessory = function(deviceSid, state, ro
     var uuid = UUIDGen.generate('MS_TapTwice' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + '_tapTwice';
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'MS_TapTwice');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -176,12 +176,12 @@ MagicSquareParser.prototype.setTapTwiceAccessory = function(deviceSid, state, ro
         accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Magic Square Tap Twice, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Magic Square Tap Twice, deviceSid: " + deviceSid);
     }
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
@@ -205,7 +205,7 @@ MagicSquareParser.prototype.setShakeAirAccessory = function(deviceSid, state, ro
     var uuid = UUIDGen.generate('MS_ShakeAir' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + '_shakeAir';
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'MS_ShakeAir');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -215,12 +215,12 @@ MagicSquareParser.prototype.setShakeAirAccessory = function(deviceSid, state, ro
         accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Magic Square Shake Air, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Magic Square Shake Air, deviceSid: " + deviceSid);
     }
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);
@@ -244,7 +244,7 @@ MagicSquareParser.prototype.setRotateAccessory = function(deviceSid, state, rota
     var uuid = UUIDGen.generate('MS_Rotate' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + '_rotate';
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'MS_Rotate');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -254,12 +254,12 @@ MagicSquareParser.prototype.setRotateAccessory = function(deviceSid, state, rota
         accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Magic Square Rotate, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Magic Square Rotate, deviceSid: " + deviceSid);
     }
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);

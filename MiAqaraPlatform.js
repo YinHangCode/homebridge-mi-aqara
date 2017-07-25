@@ -14,6 +14,11 @@ require('./DeviceParsers/PlugBase86Parser');
 require('./DeviceParsers/MagicSquareParser');
 require('./DeviceParsers/SmokeDetectorParser');
 require('./DeviceParsers/NatgasDetectorParser');
+require('./DeviceParsers/ElectricCurtainParser');
+require('./DeviceParsers/Contact2Parser');
+require('./DeviceParsers/Motion2Parser');
+require('./DeviceParsers/Button2Parser');
+require('./DeviceParsers/TemperatureAndHumidity2Parser');
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
@@ -45,6 +50,7 @@ module.exports = function(homebridge) {
 function MiAqaraPlatform(log, config, api) {
     // Initialize
     this.log = log;
+    this.config = config;
     
     this.Accessory = Accessory;
     this.PlatformAccessory = PlatformAccessory;
@@ -68,7 +74,12 @@ function MiAqaraPlatform(log, config, api) {
         '86plug' : new PlugBase86Parser(this), // 86型墙壁插座
         'cube' : new MagicSquareParser(this), // 魔方
         'smoke' : new SmokeDetectorParser(this), // 烟雾警报器
-        'natgas' : new NatgasDetectorParser(this) // 天然气警报器
+        'natgas' : new NatgasDetectorParser(this), // 天然气警报器
+        'curtain' : new ElectricCurtainParser(this), // 电动窗帘
+        'sensor_magnet.aq2' : new Contact2Parser(this), // 门磁感应 第二代
+        'sensor_motion.aq2' : new Motion2Parser(this), // 人体感应 第二代
+        'sensor_switch.aq2' : new Button2Parser(this), // 按钮 第二代
+        'weather.v1' : new TemperatureAndHumidity2Parser(this) // 温度湿度传感器 第二代
     };
     
     this.accessories = [];
@@ -85,7 +96,7 @@ function MiAqaraPlatform(log, config, api) {
             return this.gateways[sid];
         },
         addGateway: function(gateway) {
-            that.log.debug("add Gateway %s", gateway.sid);
+            that.log.debug("[MiAqaraPlatform][DEBUG]add Gateway %s", gateway.sid);
             this.gateways[gateway.sid] = gateway;
         },
         updateGateway: function(sid, newGateway) {
@@ -112,7 +123,7 @@ function MiAqaraPlatform(log, config, api) {
             return this.devices[sid];
         },
         addDevice: function(device) {
-            that.log.debug("add Device %s", device.sid);
+            that.log.debug("[MiAqaraPlatform][DEBUG]add Device %s", device.sid);
             this.devices[device.sid] = device;
         },
         updateDevice: function(sid, newDevice) {
@@ -141,10 +152,16 @@ function MiAqaraPlatform(log, config, api) {
 
     // Something else to do
     this.doRestThings(api);
+    
+    this.log.info("[MiAqaraPlatform][INFO]**************************************************************");
+    this.log.info("[MiAqaraPlatform][INFO]*                 MiAqaraPlatform By YinHang                 *");
+    this.log.info("[MiAqaraPlatform][INFO]* github: https://github.com/YinHangCode/homebridge-mi-aqara *");
+    this.log.info("[MiAqaraPlatform][INFO]*                                        QQ Group: 107927710 *");
+    this.log.info("[MiAqaraPlatform][INFO]**************************************************************");
+    this.log.info("[MiAqaraPlatform][INFO]start success...");
 }
 
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
-    // this.log(accessory.displayName, "Configure Accessory");
     var that = this;
 
     // set the accessory to reachable if plugin can currently process the accessory
@@ -152,19 +169,20 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     // accessory.updateReachability()
     accessory.reachable = true;
     accessory.on('identify', function(paired, callback) {
-        that.log(accessory.displayName + "* Identify!!!" );
+        that.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!" );
         callback();
     });
     
-/*    
+
+//    this.log.debug("[MiAqaraPlatform][DEBUG]configureAccessory: " + accessory.displayName);
 //  delete accessory
-    if(accessory.displayName == 'dfb5') {
+    if(accessory.displayName == 'fee8' || accessory.displayName == 'ff17' || accessory.displayName == 'ff77') {
         this.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
-        this.log.debug("remove accessory");
+        this.log.debug("[MiAqaraPlatform][DEBUG]remove accessory");
         return;
     }
-*/   
 
+    
     this.accessories.push(accessory);
 }
 
@@ -177,7 +195,7 @@ MiAqaraPlatform.prototype.loadConfig = function(config) {
     }
     this.gatewayPasswords = password.reduce(function (gatewayPasswords, password, index) {
         gatewayPasswords[sid[index]] = password;
-        // log.debug("Load password %s:%s from config.json file", sid[index], password);
+        // log.debug("[MiAqaraPlatform][DEBUG]Load password %s:%s from config.json file", sid[index], password);
         return gatewayPasswords;
     }, {});
 }
@@ -190,12 +208,12 @@ MiAqaraPlatform.prototype.startServer = function() {
 
     // err - Error object, https://nodejs.org/api/errors.html
     serverSocket.on('error', function(err){
-        that.log.error('error, msg - %s, stack - %s\n', err.message, err.stack);
+        that.log.error('[MiAqaraPlatform][ERROR]error, msg - %s, stack - %s\n', err.message, err.stack);
     });
 
     // Show some message
     serverSocket.on('listening', function(){
-        that.log.debug("Aqara server is listening on port 9898.");
+        that.log.debug("[MiAqaraPlatform][DEBUG]Aqara server is listening on port 9898.");
         serverSocket.addMembership(multicastAddress);
     });
 
@@ -211,7 +229,7 @@ MiAqaraPlatform.prototype.registerAccessory = function(accessory) {
 MiAqaraPlatform.prototype.sendWhoisCommand = function() {
     // Send whois to discovery Aqara gateways and resend every 300 seconds
     var whoisCommand = '{"cmd": "whois"}';
-    // this.log.debug("send %s to %s:%d", whoisCommand, multicastAddress, multicastPort);
+    // this.log.debug("[MiAqaraPlatform][DEBUG]send %s to %s:%d", whoisCommand, multicastAddress, multicastPort);
     serverSocket.send(whoisCommand, 0, whoisCommand.length, multicastPort, multicastAddress);
 }
 
@@ -233,7 +251,7 @@ MiAqaraPlatform.prototype.doRestThings = function(api) {
             that.autoRemoveAccessory();
         }, 1800000);
     } else {
-        this.log.error("Homebridge's version is too old, please upgrade!");
+        this.log.error("[MiAqaraPlatform][ERROR]Homebridge's version is too old, please upgrade!");
     }
 }
 
@@ -257,6 +275,36 @@ MiAqaraPlatform.prototype.getWriteKeyByDeviceSid = function(deviceSid) {
     return key;
 }
 
+MiAqaraPlatform.prototype.getAccessoryNameFrConfig = function(deviceSid, uuidType) {
+    var defaultValueCfg = this.config['defaultValue'];
+    if(null != defaultValueCfg) {
+        if(null != defaultValueCfg[deviceSid]) {
+            if(null != defaultValueCfg[deviceSid][uuidType]) {
+                if(null != defaultValueCfg[deviceSid][uuidType]['name']) {
+                    return defaultValueCfg[deviceSid][uuidType]['name'];
+                }
+            }
+        }
+    }
+    
+    return deviceSid.substring(deviceSid.length - 4) + "_" + uuidType;
+}
+
+MiAqaraPlatform.prototype.getAccessoryServiceTypeFrConfig = function(deviceSid, uuidType) {
+    var defaultValueCfg = this.config['defaultValue'];
+    if(null != defaultValueCfg) {
+        if(null != defaultValueCfg[deviceSid]) {
+            if(null != defaultValueCfg[deviceSid][uuidType]) {
+                if(null != defaultValueCfg[deviceSid][uuidType]['serviceType']) {
+                    return defaultValueCfg[deviceSid][uuidType]['serviceType'];
+                }
+            }
+        }
+    }
+    
+    return deviceSid.substring(deviceSid.length - 4) + "_" + uuidType;
+}
+
 MiAqaraPlatform.prototype.sendCommandByDeviceSid = function(deviceSid, command) {
     var device = this.Devices.getDeviceBySid(deviceSid);
     var gateway = this.Gateways.getGatewayBySid(device.gatewaySid);
@@ -275,11 +323,11 @@ MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
     for (var index in this.Devices.devices) {
         var device = this.Devices.devices[index];
         if ((nowTime - device.lastUpdateTime) > AccessoryAutoRemoveDelta) {
-            this.log.debug("remove Device " + device.sid + ", nowTime:" + nowTime + ", lastUpdateTime: " + device.lastUpdateTime + ", Delta: " + (nowTime - device.lastUpdateTime));
+            this.log.debug("[MiAqaraPlatform][DEBUG]remove device: " + device.sid + ", nowTime:" + nowTime + ", lastUpdateTime: " + device.lastUpdateTime + ", delta: " + (nowTime - device.lastUpdateTime));
             if (device.model in this.parsers) {
                 var uuids = this.parsers[device.model].getUuidsByDeviceSid(device.sid);
                 for(var i in uuids) {
-                    this.log.debug("remove accessory %s", uuids[i]);
+                    this.log.info("[MiAqaraPlatform][INFO]remove accessory - UUID: " + uuids[i] + ", deviceSid: " + device.sid);
                     var accessory = this.getAccessoryByUuid(uuids[i]);
                     accessoriesToRemove.push(accessory);
                     this.accessories.splice(this.accessories.indexOf(accessory), 1);
@@ -297,12 +345,12 @@ MiAqaraPlatform.prototype.autoRemoveAccessory = function(uuid) {
 // Parse message which is sent from Aqara gateways
 MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
     var that = this;
-    // that.log.debug('recv %s(%d bytes) from client %s:%d\n', msg, msg.length, rinfo.address, rinfo.port);
+    // that.log.debug('[MiAqaraPlatform][DEBUG]recv %s(%d bytes) from client %s:%d\n', msg, msg.length, rinfo.address, rinfo.port);
     var json;
     try {
         json = JSON.parse(msg);
     } catch (ex) {
-        that.log.error("Bad json %s", msg);
+        that.log.error("[MiAqaraPlatform][ERROR]Bad json %s", msg);
         return;
     }
 
@@ -311,7 +359,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var address = json['ip'];
         var port = json['port'];
         var response = '{"cmd":"get_id_list"}';
-        // that.log.debug("send %s to %s:%d", response, address, port);
+        // that.log.debug("[MiAqaraPlatform][DEBUG]send %s to %s:%d", response, address, port);
         serverSocket.send(response, 0, response.length, port, address);
     } else if (cmd === 'get_id_list_ack') {
         var gatewaySid = json['sid'];
@@ -361,7 +409,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var device = this.Devices.getDeviceBySid(sid);
         if(null != device) {
             var newLastUpdateTime = Date.now();
-            this.log.debug("update " + sid + " lastUpdateTime: " + device.lastUpdateTime + " to " + newLastUpdateTime);
+            this.log.debug("[MiAqaraPlatform][DEBUG]update " + sid + " lastUpdateTime: " + device.lastUpdateTime + " to " + newLastUpdateTime);
             this.Devices.updateDevice(sid, {lastUpdateTime: newLastUpdateTime});
         }
     } else if (cmd === 'write_ack') {

@@ -15,7 +15,7 @@ DuplexSwitchLNParser = function(platform) {
 inherits(DuplexSwitchLNParser, BaseParser);
 
 DuplexSwitchLNParser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var state0 = data['channel_0'];
@@ -26,7 +26,7 @@ DuplexSwitchLNParser.prototype.parse = function(json, rinfo) {
 
     var deviceSid = json['sid'];
     this.setSwitch1Accessory(deviceSid, state0, lowBattery, batteryLevel);
-	this.setSwitch2Accessory(deviceSid, state1, lowBattery, batteryLevel);
+    this.setSwitch2Accessory(deviceSid, state1, lowBattery, batteryLevel);
 }
 
 DuplexSwitchLNParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
@@ -34,29 +34,37 @@ DuplexSwitchLNParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 DuplexSwitchLNParser.prototype.setSwitch1Accessory = function(deviceSid, state0, lowBattery, batteryLevel) {
-	var that = this;
-	
+    var that = this;
+    
+    var aAccessoryCategories = Accessory.Categories.SWITCH;
+    var aServiceType = Service.Switch;
+    var serviceType = that.platform.getAccessoryServiceTypeFrConfig(deviceSid, 'DuplexSwitchLN_1');
+    if(serviceType == 'Lightbulb') {
+        var aAccessoryCategories = Accessory.Categories.LIGHTBULB;
+        var aServiceType = Service.Lightbulb;
+    }
+    
     var uuid = UUIDGen.generate('DuplexSwitchLN_1' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + "_L";
-        accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SWITCH);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'DuplexSwitchLN_1');
+        accessory = new PlatformAccessory(accessoryName, uuid, aAccessoryCategories);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
             .setCharacteristic(Characteristic.Model, "Duplex Switch LN")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-        accessory.addService(Service.Switch, accessoryName);
+        accessory.addService(aServiceType, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Duplex Switch LN, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Duplex Switch LN, deviceSid: " + deviceSid);
     }
-    var switchService = accessory.getService(Service.Switch);
+    var switchService = accessory.getService(aServiceType);
     var switchCharacteristic = switchService.getCharacteristic(Characteristic.On);
     if(state0 === 'on') {
         switchCharacteristic.updateValue(true);
@@ -88,29 +96,37 @@ DuplexSwitchLNParser.prototype.setSwitch1Accessory = function(deviceSid, state0,
 }
 
 DuplexSwitchLNParser.prototype.setSwitch2Accessory = function(deviceSid, state1, lowBattery, batteryLevel) {
-	var that = this;
-	
+    var that = this;
+
+    var aAccessoryCategories = Accessory.Categories.SWITCH;
+    var aServiceType = Service.Switch;
+    var serviceType = that.platform.getAccessoryServiceTypeFrConfig(deviceSid, 'DuplexSwitchLN_2');
+    if(serviceType == 'Lightbulb') {
+        var aAccessoryCategories = Accessory.Categories.LIGHTBULB;
+        var aServiceType = Service.Lightbulb;
+    }
+    
     var uuid = UUIDGen.generate('DuplexSwitchLN_2' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4) + "_R";
-        accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SWITCH);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'DuplexSwitchLN_2');
+        accessory = new PlatformAccessory(accessoryName, uuid, aAccessoryCategories);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
             .setCharacteristic(Characteristic.Model, "Duplex Switch LN")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-        accessory.addService(Service.Switch, accessoryName);
+        accessory.addService(aServiceType, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Duplex Switch LN, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Duplex Switch LN, deviceSid: " + deviceSid);
     }
-    var switchService = accessory.getService(Service.Switch);
+    var switchService = accessory.getService(aServiceType);
     var switchCharacteristic = switchService.getCharacteristic(Characteristic.On);
     if(state1 === 'on') {
         switchCharacteristic.updateValue(true);

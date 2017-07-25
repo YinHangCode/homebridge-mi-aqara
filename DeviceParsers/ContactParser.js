@@ -15,7 +15,7 @@ ContactParser = function(platform) {
 inherits(ContactParser, BaseParser);
 
 ContactParser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var contacted = (data['status'] === 'close');
@@ -32,12 +32,12 @@ ContactParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 ContactParser.prototype.setContactAccessory = function(deviceSid, contacted, lowBattery, batteryLevel) {
-	var that = this;
-	
+    var that = this;
+    
     var uuid = UUIDGen.generate('Mag' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'Mag');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -47,12 +47,12 @@ ContactParser.prototype.setContactAccessory = function(deviceSid, contacted, low
         accessory.addService(Service.ContactSensor, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Contact Sensor, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Contact Sensor, deviceSid: " + deviceSid);
     }
     var magService = accessory.getService(Service.ContactSensor);
     var magCharacteristic = magService.getCharacteristic(Characteristic.ContactSensorState);

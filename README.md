@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
 
 homebridge plugin for XiaoMi Aqara plugin.  
-Thanks for [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), [licuhui](https://github.com/licuhui), all other developer and testers.   
+Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), [licuhui](https://github.com/licuhui), all other developer and testers.   
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues).**
 
@@ -26,6 +26,10 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SmokeDetector.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/NatgasDetector.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ElectricCurtain.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ContactSensor2.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MotionSensor2.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Button2.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/TemperatureAndHumiditySensor2.jpg)
 
 ## Supported Devices
 Gateway(网关)   
@@ -44,7 +48,11 @@ PlugBase86(86型墙壁插座)
 MagicSquare(魔方)   
 SmokeDetector(烟雾报警器)   
 NatgasDetector(天然气报警器)   
-ElectricCurtain(电动窗帘) --- coming soon   
+ElectricCurtain(电动窗帘)   
+ContactSensor2(门磁感应第二代)   
+MotionSensor2(人体感应第二代)   
+Button2(按钮第二代)   
+TemperatureAndHumiditySensor2(温度湿度传感器第二代)   
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
@@ -59,7 +67,7 @@ If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi
 ## Configuration
 1. Open Aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
 Please follow the steps in this thread: http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
-2. To control the devices, put gateway's MAC address (lower case without colon) and password to ~/.homebridge/config.json.  
+2. To control the devices, put gateway's MAC address (`lower case without colon`) and password to ~/.homebridge/config.json.   
 ```
 {
     "platforms": [{
@@ -79,11 +87,88 @@ If you have more than one gateways, fill them in right order, like below.
     }]
 }
 ```
+If you want to specify the default name of the device, add a mapping table to your config.json like this.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
+        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "defaultValue": {
+            "158d0001000001": {
+                "Mag": {
+                    "name": "entrance door"
+                }
+            },
+            "158d0001000002": {
+                "Mot": {
+                    "name": "living room motion sensor"
+                }
+            },
+            "158d0001000004": {
+                "Tem": {
+                    "name": "living room temperature"
+                },
+                "Hum": {
+                    "name": "living room humidity"
+                }
+            }
+        }
+    }]
+}
+```
+If you like to use Light Bulb type for Light Switch to make grandma Siri happy, like snOOrz, you can set the following in the config.   
+Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
+        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "defaultValue": {
+            "158d0001000007": {
+                "SingleSwitch": {
+                    "name": "living room light",
+                    "serviceType": "Lightbulb"
+                }
+            },
+            "158d0001000008": {
+                "DuplexSwitch_1": {
+                    "name": "master bedroom room light",
+                    "serviceType": "Lightbulb"
+                },
+                "DuplexSwitch_2": {
+                    "name": "study room light",
+                    "serviceType": "Lightbulb"
+                }
+            }
+        }
+    }]
+}
+```
+For more information, Please refer to file `sampleConfig.json`.   
+**If you changed serviceType config, Please [clear register accessories](#clear-register-accessories).**   
     
 ## Run it
-homebridge -D  
+homebridge -D   
+
+## Clear register accessories
+cd ~/.homebridge/accessories/   
+mv cachedAccessories cachedAccessories_`date '+%Y%m%d_%H%M%S'`.bak   
+echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.4.0
+1.add electric curtain accessory.   
+2.add contact sensor version 2 accessory.   
+3.add motion sensor version 2 accessory.   
+4.add button version 2 accessory.   
+5.add temperature and humidity sensor version 2 accessory.   
+6.optimize log content.   
+7.add setting default name feature.   
+8.add setting default service type feature.   
+9.fixed motion sensor bug that wrong trigger when homebridge start.   
+10.adjustment gateway light sensor value(subtract 300).   
 ### 0.3.3
 1.add single button 86 long press event.   
 2.add duplex button 86 long press event.   

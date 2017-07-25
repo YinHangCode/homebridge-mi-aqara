@@ -15,7 +15,7 @@ SingleSwitchLNParser = function(platform) {
 inherits(SingleSwitchLNParser, BaseParser);
 
 SingleSwitchLNParser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var state0 = data['channel_0'];
@@ -32,29 +32,37 @@ SingleSwitchLNParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 SingleSwitchLNParser.prototype.setSwitchAccessory = function(deviceSid, state0, lowBattery, batteryLevel) {
-	var that = this;
-	
+    var that = this;
+    
+    var aAccessoryCategories = Accessory.Categories.SWITCH;
+    var aServiceType = Service.Switch;
+    var serviceType = that.platform.getAccessoryServiceTypeFrConfig(deviceSid, 'SingleSwitchLN');
+    if(serviceType == 'Lightbulb') {
+        var aAccessoryCategories = Accessory.Categories.LIGHTBULB;
+        var aServiceType = Service.Lightbulb;
+    }
+    
     var uuid = UUIDGen.generate('SingleSwitchLN' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4);
-        accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SWITCH);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'SingleSwitchLN');
+        accessory = new PlatformAccessory(accessoryName, uuid, aAccessoryCategories);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
             .setCharacteristic(Characteristic.Model, "Single Switch LN")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
-        accessory.addService(Service.Switch, accessoryName);
+        accessory.addService(aServiceType, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Single Switch LN, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Single Switch LN, deviceSid: " + deviceSid);
     }
-    var switchService = accessory.getService(Service.Switch);
+    var switchService = accessory.getService(aServiceType);
     var switchCharacteristic = switchService.getCharacteristic(Characteristic.On);
     if(state0 === 'on') {
         switchCharacteristic.updateValue(true);

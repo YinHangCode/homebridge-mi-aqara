@@ -15,7 +15,7 @@ SingleButton86Parser = function(platform) {
 inherits(SingleButton86Parser, BaseParser);
 
 SingleButton86Parser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var clickWay = data['channel_0'];
@@ -37,7 +37,7 @@ SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay
     var uuid = UUIDGen.generate('SingleButton86' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'SingleButton86');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.PROGRAMMABLE_SWITCH);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -47,12 +47,12 @@ SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay
         accessory.addService(Service.StatelessProgrammableSwitch, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Single Button 86, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Single Button 86, deviceSid: " + deviceSid);
     }
     var buttonService = accessory.getService(Service.StatelessProgrammableSwitch);
     var buttonCharacteristic = buttonService.getCharacteristic(Characteristic.ProgrammableSwitchEvent);

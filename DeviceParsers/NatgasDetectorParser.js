@@ -15,7 +15,7 @@ NatgasDetectorParser = function(platform) {
 inherits(NatgasDetectorParser, BaseParser);
 
 NatgasDetectorParser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var NatgasDetected = ((data['alarm']/1.0) >= 1 );
@@ -32,12 +32,12 @@ NatgasDetectorParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 }
 
 NatgasDetectorParser.prototype.setNatgasAccessory = function(deviceSid, NatgasDetected, lowBattery, batteryLevel) {
-	var that = this;
-	
+    var that = this;
+    
     var uuid = UUIDGen.generate('natgas' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'natgas');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -47,12 +47,12 @@ NatgasDetectorParser.prototype.setNatgasAccessory = function(deviceSid, NatgasDe
         accessory.addService(Service.SmokeSensor, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Natgas Sensor, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Natgas Sensor, deviceSid: " + deviceSid);
     }
     var motService = accessory.getService(Service.SmokeSensor);
     var motCharacteristic = motService.getCharacteristic(Characteristic.SmokeDetected);

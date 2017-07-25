@@ -1,0 +1,175 @@
+{
+    "bridge": {
+        "name": "HomeBridge",
+        "username": "B8:27:EB:EE:AF:1B",
+        "port": 51888,
+        "pin": "011-12-399"
+    },
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
+        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "defaultValue": {
+            "6409802da3b3": {
+                "GW_LS": {
+                    "name": "living room brightness"
+                },
+                "GW_Light": {
+                    "name": "gateway light"
+                }
+            },
+            "158d0001000001": {
+                "Mag": {
+                    "name": "entrance door"
+                }
+            },
+            "158d0001000002": {
+                "Mot": {
+                    "name": "living room motion sensor"
+                }
+            },
+            "158d0001000003": {
+                "Button": {
+                    "name": "living room button"
+                }
+            },
+            "158d0001000004": {
+                "Tem": {
+                    "name": "living room temperature"
+                },
+                "Hum": {
+                    "name": "living room humidity"
+                }
+            },
+            "158d0001000005": {
+                "Tem": {
+                    "name": "master bedroom room temperature"
+                },
+                "Hum": {
+                    "name": "master bedroom room humidity"
+                }
+            },
+            "158d0001000006": {
+                "Tem": {
+                    "name": "study room temperature"
+                },
+                "Hum": {
+                    "name": "study room humidity"
+                }
+            },
+            "158d0001000007": {
+                "SingleSwitch": {
+                    "name": "living room light",
+                    "serviceType": "Lightbulb"
+                }
+            },
+            "158d0001000008": {
+                "DuplexSwitch_1": {
+                    "name": "master bedroom room light",
+                    "serviceType": "Lightbulb"
+                },
+                "DuplexSwitch_2": {
+                    "name": "study room light",
+                    "serviceType": "Lightbulb"
+                }
+            },
+            "158d0001000009": {
+                "SingleSwitchLN": {
+                    "name": "kitchen room light"
+                }
+            },
+            "158d0001000010": {
+                "DuplexSwitchLN_1": {
+                    "name": "dining room left light"
+                },
+                "DuplexSwitchLN_2": {
+                    "name": "dining room right light"
+                }
+            },
+            "158d0001000011": {
+                "SingleButton86": {
+                    "name": "living room 86 button"
+                }
+            },
+            "158d0001000012": {
+                "DuplexButton86_1": {
+                    "name": "dining room 86 button"
+                },
+                "DuplexButton86_2": {
+                    "name": "study room 86 button"
+                }
+            },
+            "158d0001000013": {
+                "Plug": {
+                    "name": "living room fan"
+                }
+            },
+            "158d0001000014": {
+                "Plug86": {
+                    "name": "study room fan"
+                }
+            },
+            "158d0001000015": {
+                "MS_Flip90": {
+                    "name": "study room magic square flip90"
+                },
+                "MS_Flip180": {
+                    "name": "study room magic square flip180"
+                },
+                "MS_Move": {
+                    "name": "study room magic square move"
+                },
+                "MS_TapTwice": {
+                    "name": "study room magic square tapTwice"
+                },
+                "MS_ShakeAir": {
+                    "name": "study room magic square shakeAir"
+                },
+                "MS_Rotate": {
+                    "name": "study room magic square rotate"
+                }
+            },
+            "158d0001000016": {
+                "natgas": {
+                    "name": "kitchen room natgas"
+                }
+            },
+            "158d0001000017": {
+                "smoke": {
+                    "name": "kitchen room smoke"
+                }
+            },
+            "158d0001000018": {
+                "Curtain": {
+                    "name": "living room curtain"
+                }
+            },
+            "158d0001000019": {
+                "Mag2": {
+                    "name": "living room window"
+                }
+            },
+            "158d0001000020": {
+                "Mot2": {
+                    "name": "study room motion sensor"
+                },
+                "Mot2LS": {
+                    "name": "study room light sensor"
+                }
+            },
+            "158d0001000021": {
+                "Button2": {
+                    "name": "study room button"
+                }
+            },
+            "158d0001000022": {
+                "Tem2": {
+                    "name": "dining room temperature"
+                },
+                "Hum2": {
+                    "name": "dining room humidity"
+                }
+            }
+        }
+    }]
+}

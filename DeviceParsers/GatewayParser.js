@@ -15,7 +15,7 @@ GatewayParser = function(platform) {
 inherits(GatewayParser, BaseParser);
 
 GatewayParser.prototype.parse = function(json, rinfo) {
-    this.platform.log.debug(JSON.stringify(json).trim());
+    this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
     var rgb = data['rgb'];
@@ -24,7 +24,7 @@ GatewayParser.prototype.parse = function(json, rinfo) {
     var mid = data['mid'];
 
     var deviceSid = json['sid'];
-    if(null != illumination) {
+    if(!isNaN(illumination)) {
         this.setIlluminationAccessory(deviceSid, illumination);
     }
     this.setLightAccessory(deviceSid, rgb);
@@ -40,7 +40,7 @@ GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illuminat
     var uuid = UUIDGen.generate('GW_LS' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'GW_LS');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -49,16 +49,16 @@ GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illuminat
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
         accessory.addService(Service.LightSensor, accessoryName);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Light Sensor, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Light Sensor, deviceSid: " + deviceSid);
     }
     var illService = accessory.getService(Service.LightSensor);
     var illCharacteristic = illService.getCharacteristic(Characteristic.CurrentAmbientLightLevel);
-    illCharacteristic.updateValue(illumination);
+    illCharacteristic.updateValue(illumination / 1.0 - 300);
 }
 
 GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
@@ -67,7 +67,7 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     var uuid = UUIDGen.generate('GW_Light' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = deviceSid.substring(deviceSid.length - 4);
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'GW_Light');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.LIGHTBULB);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
@@ -80,12 +80,12 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
         service.addCharacteristic(Characteristic.Saturation);
         service.addCharacteristic(Characteristic.Brightness);
         accessory.on('identify', function(paired, callback) {
-            that.platform.log(accessory.displayName, "Identify!!!");
+            that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("create new accessories - UUID: " + uuid + ", type: Gateway Light, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Gateway Light, deviceSid: " + deviceSid);
     }
 
     if(0 != rawRgb) {
@@ -103,7 +103,7 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     if (switchCharacteristic.listeners('set').length == 0) {
         switchCharacteristic.on("set", function(value, callback) {
             if(value == 1 || value == true) { // set by home is 0/1, set by siri is true/false
-//              that.platform.log.debug("on - " + value);
+//              that.platform.log.debug("[MiAqaraPlatform][DEBUG]on - " + value);
                 that.controlLight(deviceSid, true, accessory.yh_value_hue, accessory.yh_value_saturation, accessory.yh_value_brightness);
             } else {
                 that.controlLight(deviceSid, false, null, null, null);
@@ -117,7 +117,7 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     if (brightnessCharacteristic.listeners('set').length == 0) {
         brightnessCharacteristic.on("set", function(value, callback) {
             accessory.yh_value_brightness = value;
-//          that.platform.log.debug("brightness - " + value);
+//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]brightness - " + value);
             if(value > 0) {
                 that.controlLight(deviceSid, true, accessory.yh_value_hue, accessory.yh_value_saturation, accessory.yh_value_brightness);
             }
@@ -130,7 +130,7 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     if (hueCharacteristic.listeners('set').length == 0) {
         hueCharacteristic.on("set", function(value, callback) {
             accessory.yh_value_hue = value;
-//          that.platform.log.debug("hue - " + value);
+//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]hue - " + value);
             that.controlLight(deviceSid, true, accessory.yh_value_hue, accessory.yh_value_saturation, accessory.yh_value_brightness);
             callback();
         });
@@ -141,7 +141,7 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     if (saturationCharacteristic.listeners('set').length == 0) {
         saturationCharacteristic.on("set", function(value, callback) {
             accessory.yh_value_saturation = value;
-//          that.platform.log.debug("saturation - " + value);
+//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]saturation - " + value);
             callback();
         });
     }
@@ -165,7 +165,7 @@ GatewayParser.prototype.controlLight = function(deviceSid, power, hue, saturatio
     
     var key = this.platform.getWriteKeyByDeviceSid(deviceSid);
     var command = '{"cmd":"write","model":"gateway","sid":"' + deviceSid + '","data":"{\\"rgb\\":' + prepValue + ', \\"key\\": \\"' + key + '\\"}"}';
-//  this.platform.log.debug("command: " + command);
+//  this.platform.log.debug("[MiAqaraPlatform][DEBUG]command: " + command);
     this.platform.sendCommandByDeviceSid(deviceSid, command);
 }
 
