@@ -202,7 +202,7 @@ echo [] > cachedAccessories
 2.delete PlugBase, PlugBase86, SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN battery information.   
 3.add motion sensor version 2 light sensor battery information.   
 4.add setting accessory disable feature.   
-5.fixed bug that electric curtain can't work, but there is no status information now.   
+5.fixed bug that electric curtain can't work, but there is no current operation state information now.   
 ### 0.4.1
 1.code collation.   
 ### 0.4.0
