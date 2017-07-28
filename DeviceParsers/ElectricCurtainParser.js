@@ -32,6 +32,10 @@ ElectricCurtainParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 ElectricCurtainParser.prototype.setCurtainAccessory = function(deviceSid, state, curtainLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Curtain')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('Curtain' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -53,35 +57,29 @@ ElectricCurtainParser.prototype.setCurtainAccessory = function(deviceSid, state,
     }
     var curtainService = accessory.getService(Service.WindowCovering);
     var stateCharacteristic = curtainService.getCharacteristic(Characteristic.PositionState);
-    var curtainLevelCharacteristic = curtainService.getCharacteristic(Characteristic.CurrentPosition);
-    if(state === 'open') {
-        stateCharacteristic.updateValue(Characteristic.PositionState.INCREASING);
-    } else if(state === 'close') {
-        stateCharacteristic.updateValue(Characteristic.PositionState.DECREASING);
-    } else if(state === 'stop') {
-        stateCharacteristic.updateValue(Characteristic.PositionState.STOPPED);
-    } else if(state === 'auto') {
-//      stateCharacteristic.updateValue();
-    } else {
-    }
-    curtainLevelCharacteristic.updateValue(curtainLevel);
+    var currentPositionCharacteristic = curtainService.getCharacteristic(Characteristic.CurrentPosition);
+    var targetPositionCharacteristic = curtainService.getCharacteristic(Characteristic.TargetPosition);
     
-    if (stateCharacteristic.listeners('set').length == 0) {
-        var that = this;
-        stateCharacteristic.on("set", function(value, callback) {
-            var key = that.platform.getWriteKeyByDeviceSid(deviceSid);
-            var command = '{"cmd":"write","model":"curtain","sid":"' + deviceSid + '","data":"{\\"status\\":\\"' + (value == Characteristic.PositionState.INCREASING ? 'open' : 'close') + '\\", \\"key\\": \\"' + key + '\\"}"}';
-            that.platform.sendCommandByDeviceSid(deviceSid, command);
-            
-            callback();
-        });
+    if(curtainLevel > 100) {
+        return;
     }
 
-    if (curtainLevelCharacteristic.listeners('set').length == 0) {
+    stateCharacteristic.updateValue(Characteristic.PositionState.STOPPED);
+    currentPositionCharacteristic.updateValue(curtainLevel);
+    targetPositionCharacteristic.updateValue(curtainLevel);
+
+/*    
+    Characteristic.PositionState.INCREASING
+    Characteristic.PositionState.DECREASING
+    Characteristic.PositionState.STOPPED
+*/
+
+    if (targetPositionCharacteristic.listeners('set').length == 0) {
         var that = this;
-        curtainLevelCharacteristic.on("set", function(value, callback) {
+        targetPositionCharacteristic.on("set", function(value, callback) {
+            that.platform.log.info("[MiAqaraPlatform][INFO]chuanglian" + value);
             var key = that.platform.getWriteKeyByDeviceSid(deviceSid);
-            var command = '{"cmd":"write","model":"curtain","sid":"' + deviceSid + '","data":"{\\"curtain_level\\":\\"' + curtain_level + '\\", \\"key\\": \\"' + key + '\\"}"}';
+            var command = '{"cmd":"write","model":"curtain","sid":"' + deviceSid + '","data":"{\\"curtain_level\\":\\"' + value + '\\", \\"key\\": \\"' + key + '\\"}"}';
             that.platform.sendCommandByDeviceSid(deviceSid, command);
             
             callback();

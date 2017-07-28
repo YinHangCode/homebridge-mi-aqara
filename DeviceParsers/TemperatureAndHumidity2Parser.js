@@ -44,6 +44,10 @@ TemperatureAndHumidity2Parser.prototype.getUuidsByDeviceSid = function(deviceSid
 TemperatureAndHumidity2Parser.prototype.setTemperatureAccessory = function(deviceSid, temperature, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Tem2')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('Tem2' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -79,6 +83,10 @@ TemperatureAndHumidity2Parser.prototype.setTemperatureAccessory = function(devic
 
 TemperatureAndHumidity2Parser.prototype.setHumidityAccessory = function(deviceSid, humidity, lowBattery, batteryLevel) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Hum2')) {
+        return;
+    }
     
     var uuid = UUIDGen.generate('Hum2' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);

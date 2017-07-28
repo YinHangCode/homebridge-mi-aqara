@@ -34,6 +34,10 @@ SmokeDetectorParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetected, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'smoke')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('smoke' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

@@ -34,6 +34,10 @@ NatgasDetectorParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 NatgasDetectorParser.prototype.setNatgasAccessory = function(deviceSid, NatgasDetected, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'natgas')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('natgas' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

@@ -45,6 +45,10 @@ MagicSquareParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 MagicSquareParser.prototype.setFlip90Accessory = function(deviceSid, state, rotate, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'MS_Flip90')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('MS_Flip90' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -85,6 +89,10 @@ MagicSquareParser.prototype.setFlip90Accessory = function(deviceSid, state, rota
 MagicSquareParser.prototype.setFlip180Accessory = function(deviceSid, state, rotate, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'MS_Flip180')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('MS_Flip180' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -123,6 +131,10 @@ MagicSquareParser.prototype.setFlip180Accessory = function(deviceSid, state, rot
 }
 MagicSquareParser.prototype.setMoveAccessory = function(deviceSid, state, rotate, lowBattery, batteryLevel) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'MS_Move')) {
+        return;
+    }
     
     var uuid = UUIDGen.generate('MS_Move' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
@@ -163,6 +175,10 @@ MagicSquareParser.prototype.setMoveAccessory = function(deviceSid, state, rotate
 MagicSquareParser.prototype.setTapTwiceAccessory = function(deviceSid, state, rotate, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'MS_TapTwice')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('MS_TapTwice' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -202,6 +218,10 @@ MagicSquareParser.prototype.setTapTwiceAccessory = function(deviceSid, state, ro
 MagicSquareParser.prototype.setShakeAirAccessory = function(deviceSid, state, rotate, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'MS_ShakeAir')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('MS_ShakeAir' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -240,6 +260,10 @@ MagicSquareParser.prototype.setShakeAirAccessory = function(deviceSid, state, ro
 }
 MagicSquareParser.prototype.setRotateAccessory = function(deviceSid, state, rotate, lowBattery, batteryLevel) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'MS_Rotate')) {
+        return;
+    }
     
     var uuid = UUIDGen.generate('MS_Rotate' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);

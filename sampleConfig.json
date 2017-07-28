@@ -117,7 +117,8 @@
                     "name": "study room magic square flip180"
                 },
                 "MS_Move": {
-                    "name": "study room magic square move"
+                    "name": "study room magic square move",
+                    "disable": true
                 },
                 "MS_TapTwice": {
                     "name": "study room magic square tapTwice"

@@ -19,7 +19,7 @@ GatewayParser.prototype.parse = function(json, rinfo) {
     
     var data = JSON.parse(json['data']);
     var rgb = data['rgb'];
-    var illumination = data['illumination'];
+    var illumination = data['illumination'] / 1.0 - 279;
     var proto_version = data['proto_version'];
     var mid = data['mid'];
 
@@ -36,6 +36,10 @@ GatewayParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 
 GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illumination) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'GW_LS')) {
+        return;
+    }
     
     var uuid = UUIDGen.generate('GW_LS' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
@@ -58,11 +62,15 @@ GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illuminat
     }
     var illService = accessory.getService(Service.LightSensor);
     var illCharacteristic = illService.getCharacteristic(Characteristic.CurrentAmbientLightLevel);
-    illCharacteristic.updateValue(illumination / 1.0 - 300);
+    illCharacteristic.updateValue(illumination > 0 ? illumination : 0);
 }
 
 GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'GW_Light')) {
+        return;
+    }
     
     var uuid = UUIDGen.generate('GW_Light' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);

@@ -34,6 +34,10 @@ MotionParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 MotionParser.prototype.setMotionAccessory = function(deviceSid, motionDetected, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Mot')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('Mot' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

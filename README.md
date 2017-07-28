@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
 
 homebridge plugin for XiaoMi Aqara plugin.  
-Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), [licuhui](https://github.com/licuhui), all other developer and testers.   
+Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), [licuhui](https://github.com/licuhui), [攀旺智能](https://pwzn.taobao.com/), [瀚思彼岸论坛](https://bbs.hassbian.com/), all other developer and testers.   
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues).**
 
@@ -56,7 +56,7 @@ TemperatureAndHumiditySensor2(温度湿度传感器第二代)
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
-2. Update gateway firmware to 1.4.1_141.0141 or later. You can contact [@babymoney666](https://github.com/babymoney666) if your firmware is not up to date.  
+2. Update gateway firmware to **1.4.1_148.0143** or later. You can contact [@babymoney666](https://github.com/babymoney666) if your firmware is not up to date.  
 
 ## Installation
 1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).  
@@ -88,6 +88,7 @@ If you have more than one gateways, fill them in right order, like below.
 }
 ```
 If you want to specify the default name of the device, add a mapping table to your config.json like this.   
+For more information about default name, Please refer to file `sampleConfig.json`.   
 ```
 {
     "platforms": [{
@@ -119,6 +120,7 @@ If you want to specify the default name of the device, add a mapping table to yo
 ```
 If you like to use Light Bulb type for Light Switch to make grandma Siri happy, like snOOrz, you can set the following in the config.   
 Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.   
+**If you changed serviceType config, Please [clear register accessories](#clear-register-accessories).**   
 ```
 {
     "platforms": [{
@@ -146,8 +148,45 @@ Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwit
     }]
 }
 ```
-For more information, Please refer to file `sampleConfig.json`.   
-**If you changed serviceType config, Please [clear register accessories](#clear-register-accessories).**   
+If you want to disable accessories, you can add disable attribute to config.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
+        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "defaultValue": {
+            "158d0001000007": {
+                "SingleSwitch": {
+                    "name": "living room light",
+                    "serviceType": "Lightbulb",
+                    "disable": true
+                }
+            },
+            "158d0001000008": {
+                "DuplexSwitch_1": {
+                    "name": "master bedroom room light",
+                    "serviceType": "Lightbulb"
+                },
+                "DuplexSwitch_2": {
+                    "name": "study room light",
+                    "serviceType": "Lightbulb",
+                    "disable": true
+                }
+            },
+            "158d0001000004": {
+                "Tem": {
+                    "name": "living room temperature",
+                    "disable": true
+                },
+                "Hum": {
+                    "name": "living room humidity"
+                }
+            }
+        }
+    }]
+}
+```
     
 ## Run it
 homebridge -D   
@@ -158,6 +197,12 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.4.2
+1.adjustment gateway light sensor value(subtract 279).   
+2.delete PlugBase, PlugBase86, SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN battery service.
+3.add motion sensor version 2 light sensor battery service.
+4.add setting accessory disable feature.   
+5.fixed bug that electric curtain can works(there is no status information now).   
 ### 0.4.1
 1.code collation.   
 ### 0.4.0

@@ -36,6 +36,10 @@ DuplexButton86Parser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 DuplexButton86Parser.prototype.setButton0Accessory = function(deviceSid, clickWay, lowBattery, batteryLevel) {
     var that = this;
 
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'DuplexButton86_1')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('DuplexButton86_1' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
@@ -83,6 +87,10 @@ DuplexButton86Parser.prototype.setButton0Accessory = function(deviceSid, clickWa
 DuplexButton86Parser.prototype.setButton1Accessory = function(deviceSid, clickWay, lowBattery, batteryLevel) {
     var that = this;
 
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'DuplexButton86_2')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('DuplexButton86_2' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

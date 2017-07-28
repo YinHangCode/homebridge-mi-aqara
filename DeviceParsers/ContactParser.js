@@ -34,6 +34,10 @@ ContactParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 ContactParser.prototype.setContactAccessory = function(deviceSid, contacted, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Mag')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('Mag' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

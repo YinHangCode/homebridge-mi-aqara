@@ -155,7 +155,7 @@ function MiAqaraPlatform(log, config, api) {
     
     this.log.info("[MiAqaraPlatform][INFO]**************************************************************");
     this.log.info("[MiAqaraPlatform][INFO]*                 MiAqaraPlatform By YinHang                 *");
-    this.log.info("[MiAqaraPlatform][INFO]* github: https://github.com/YinHangCode/homebridge-mi-aqara *");
+    this.log.info("[MiAqaraPlatform][INFO]* GitHub: https://github.com/YinHangCode/homebridge-mi-aqara *");
     this.log.info("[MiAqaraPlatform][INFO]*                                        QQ Group: 107927710 *");
     this.log.info("[MiAqaraPlatform][INFO]**************************************************************");
     this.log.info("[MiAqaraPlatform][INFO]start success...");
@@ -172,17 +172,7 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
         that.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!" );
         callback();
     });
-    
-
-//    this.log.debug("[MiAqaraPlatform][DEBUG]configureAccessory: " + accessory.displayName);
-//  delete accessory
-    if(accessory.displayName == 'fee8' || accessory.displayName == 'ff17' || accessory.displayName == 'ff77') {
-        this.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", [accessory]);
-        this.log.debug("[MiAqaraPlatform][DEBUG]remove accessory");
-        return;
-    }
-
-    
+   
     this.accessories.push(accessory);
 }
 
@@ -240,16 +230,17 @@ MiAqaraPlatform.prototype.doRestThings = function(api) {
         this.api = api;
 
         this.api.on('didFinishLaunching', function() {
+            that.deleteDisableAccessories();
             that.sendWhoisCommand();
 
             setInterval(function() {
                 that.sendWhoisCommand();
             }, 300000);
+            
+            setInterval(function(){
+                that.autoRemoveAccessory();
+            }, 1800000);
         });
-        
-        setInterval(function(){
-            that.autoRemoveAccessory();
-        }, 1800000);
     } else {
         this.log.error("[MiAqaraPlatform][ERROR]Homebridge's version is too old, please upgrade!");
     }
@@ -302,7 +293,53 @@ MiAqaraPlatform.prototype.getAccessoryServiceTypeFrConfig = function(deviceSid, 
         }
     }
     
-    return deviceSid.substring(deviceSid.length - 4) + "_" + uuidType;
+    return null;
+}
+
+MiAqaraPlatform.prototype.getAccessoryDisableFrConfig = function(deviceSid, uuidType) {
+    var defaultValueCfg = this.config['defaultValue'];
+    if(null != defaultValueCfg) {
+        if(null != defaultValueCfg[deviceSid]) {
+            if(null != defaultValueCfg[deviceSid][uuidType]) {
+                if(null != defaultValueCfg[deviceSid][uuidType]['disable']) {
+                    return defaultValueCfg[deviceSid][uuidType]['disable'];
+                }
+            }
+        }
+    }
+    
+    return false;
+}
+
+MiAqaraPlatform.prototype.deleteDisableAccessories = function() {
+    var defaultValueCfg = this.config['defaultValue'];
+    if(null != defaultValueCfg) {
+        var accessoriesToRemove = [];
+        
+        for (var index in this.accessories) {
+            var accessory = this.accessories[index];
+            var accessoryInformationService = accessory.getService(Service.AccessoryInformation);
+            var serialNumberCharacteristic = accessoryInformationService.getCharacteristic(Characteristic.SerialNumber);
+            var deviceSid = serialNumberCharacteristic.value;
+            if(null != defaultValueCfg[deviceSid]) {
+                for(var uuidType in defaultValueCfg[deviceSid]) {
+                    if(UUIDGen.generate(uuidType + deviceSid) === accessory.UUID) {
+                        if(defaultValueCfg[deviceSid][uuidType]['disable']) {
+                            var delAccessory = this.getAccessoryByUuid(UUIDGen.generate(uuidType + deviceSid));
+                            accessoriesToRemove.push(delAccessory);
+                            this.accessories.splice(this.accessories.indexOf(delAccessory), 1);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (accessoriesToRemove.length > 0) {
+            this.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessoriesToRemove);
+        }
+    }
+    
+    return false;
 }
 
 MiAqaraPlatform.prototype.sendCommandByDeviceSid = function(deviceSid, command) {

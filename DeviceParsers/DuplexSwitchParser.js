@@ -20,21 +20,22 @@ DuplexSwitchParser.prototype.parse = function(json, rinfo) {
     var data = JSON.parse(json['data']);
     var state0 = data['channel_0'];
     var state1 = data['channel_1'];
-    var voltage = data['voltage'] / 1.0;
-    var lowBattery = this.getLowBatteryByVoltage(voltage);
-    var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
     var deviceSid = json['sid'];
-    this.setSwitch1Accessory(deviceSid, state0, lowBattery, batteryLevel);
-    this.setSwitch2Accessory(deviceSid, state1, lowBattery, batteryLevel);
+    this.setSwitch1Accessory(deviceSid, state0);
+    this.setSwitch2Accessory(deviceSid, state1);
 }
 
 DuplexSwitchParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
     return [UUIDGen.generate('DuplexSwitch_1' + deviceSid), UUIDGen.generate('DuplexSwitch_2' + deviceSid)];
 }
 
-DuplexSwitchParser.prototype.setSwitch1Accessory = function(deviceSid, state0, lowBattery, batteryLevel) {
+DuplexSwitchParser.prototype.setSwitch1Accessory = function(deviceSid, state0) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'DuplexSwitch_1')) {
+        return;
+    }
     
     var aAccessoryCategories = Accessory.Categories.SWITCH;
     var aServiceType = Service.Switch;
@@ -55,7 +56,6 @@ DuplexSwitchParser.prototype.setSwitch1Accessory = function(deviceSid, state0, l
             .setCharacteristic(Characteristic.Model, "Duplex Switch")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
         accessory.addService(aServiceType, accessoryName);
-        accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
             that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
@@ -83,20 +83,14 @@ DuplexSwitchParser.prototype.setSwitch1Accessory = function(deviceSid, state0, l
             callback();
         });
     }
-    
-    if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
-        var batService = accessory.getService(Service.BatteryService);
-        var lowBatCharacteristic = batService.getCharacteristic(Characteristic.StatusLowBattery);
-        var batLevelCharacteristic = batService.getCharacteristic(Characteristic.BatteryLevel);
-        var chargingStateCharacteristic = batService.getCharacteristic(Characteristic.ChargingState);
-        lowBatCharacteristic.updateValue(lowBattery);
-        batLevelCharacteristic.updateValue(batteryLevel);
-        chargingStateCharacteristic.updateValue(true);
-    }
 }
 
-DuplexSwitchParser.prototype.setSwitch2Accessory = function(deviceSid, state1, lowBattery, batteryLevel) {
+DuplexSwitchParser.prototype.setSwitch2Accessory = function(deviceSid, state1) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'DuplexSwitch_2')) {
+        return;
+    }
     
     var aAccessoryCategories = Accessory.Categories.SWITCH;
     var aServiceType = Service.Switch;
@@ -117,7 +111,6 @@ DuplexSwitchParser.prototype.setSwitch2Accessory = function(deviceSid, state1, l
             .setCharacteristic(Characteristic.Model, "Duplex Switch")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
         accessory.addService(aServiceType, accessoryName);
-        accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
             that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
@@ -144,15 +137,5 @@ DuplexSwitchParser.prototype.setSwitch2Accessory = function(deviceSid, state1, l
             
             callback();
         });
-    }
-    
-    if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
-        var batService = accessory.getService(Service.BatteryService);
-        var lowBatCharacteristic = batService.getCharacteristic(Characteristic.StatusLowBattery);
-        var batLevelCharacteristic = batService.getCharacteristic(Characteristic.BatteryLevel);
-        var chargingStateCharacteristic = batService.getCharacteristic(Characteristic.ChargingState);
-        lowBatCharacteristic.updateValue(lowBattery);
-        batLevelCharacteristic.updateValue(batteryLevel);
-        chargingStateCharacteristic.updateValue(true);
     }
 }

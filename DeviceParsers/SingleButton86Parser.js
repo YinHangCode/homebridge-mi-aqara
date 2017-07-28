@@ -34,6 +34,10 @@ SingleButton86Parser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 SingleButton86Parser.prototype.setButtonAccessory = function(deviceSid, clickWay, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'SingleButton86')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('SingleButton86' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

@@ -34,6 +34,10 @@ ButtonParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 ButtonParser.prototype.setButtonAccessory = function(deviceSid, clickWay, lowBattery, batteryLevel) {
     var that = this;
     
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Button')) {
+        return;
+    }
+    
     var uuid = UUIDGen.generate('Button' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {

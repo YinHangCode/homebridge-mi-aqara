@@ -27,7 +27,7 @@ Motion2Parser.prototype.parse = function(json, rinfo) {
     var deviceSid = json['sid'];
     this.setMotionAccessory(deviceSid, motionDetected, lowBattery, batteryLevel);
     if(!isNaN(lux)) {
-        this.setLuxAccessory(deviceSid, lux);
+        this.setLuxAccessory(deviceSid, lux, lowBattery, batteryLevel);
     }
 }
 
@@ -37,6 +37,10 @@ Motion2Parser.prototype.getUuidsByDeviceSid = function(deviceSid) {
 
 Motion2Parser.prototype.setMotionAccessory = function(deviceSid, motionDetected, lowBattery, batteryLevel) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Mot2')) {
+        return;
+    }
     
     var uuid = UUIDGen.generate('Mot2' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
@@ -73,8 +77,12 @@ Motion2Parser.prototype.setMotionAccessory = function(deviceSid, motionDetected,
     }
 }
 
-Motion2Parser.prototype.setLuxAccessory = function(deviceSid, lux) {
+Motion2Parser.prototype.setLuxAccessory = function(deviceSid, lux, lowBattery, batteryLevel) {
     var that = this;
+    
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'Mot2LS')) {
+        return;
+    }
     
     var uuid = UUIDGen.generate('Mot2LS' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
@@ -87,6 +95,7 @@ Motion2Parser.prototype.setLuxAccessory = function(deviceSid, lux) {
             .setCharacteristic(Characteristic.Model, "Motion v2 Light Sensor")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
         accessory.addService(Service.LightSensor, accessoryName);
+        accessory.addService(Service.BatteryService, accessoryName);
         accessory.on('identify', function(paired, callback) {
             that.platform.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!");
             callback();
@@ -98,5 +107,15 @@ Motion2Parser.prototype.setLuxAccessory = function(deviceSid, lux) {
     var luxService = accessory.getService(Service.LightSensor);
     var luxCharacteristic = luxService.getCharacteristic(Characteristic.CurrentAmbientLightLevel);
     luxCharacteristic.updateValue(lux / 1.0);
+    
+    if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
+        var batService = accessory.getService(Service.BatteryService);
+        var lowBatCharacteristic = batService.getCharacteristic(Characteristic.StatusLowBattery);
+        var batLevelCharacteristic = batService.getCharacteristic(Characteristic.BatteryLevel);
+        var chargingStateCharacteristic = batService.getCharacteristic(Characteristic.ChargingState);
+        lowBatCharacteristic.updateValue(lowBattery);
+        batLevelCharacteristic.updateValue(batteryLevel);
+        chargingStateCharacteristic.updateValue(false);
+    }
 }
 
