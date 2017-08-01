@@ -106,7 +106,7 @@ Motion2Parser.prototype.setLuxAccessory = function(deviceSid, lux, lowBattery, b
     }
     var luxService = accessory.getService(Service.LightSensor);
     var luxCharacteristic = luxService.getCharacteristic(Characteristic.CurrentAmbientLightLevel);
-    luxCharacteristic.updateValue(lux / 1.0);
+    luxCharacteristic.updateValue(lux > 0 ? lux : 0.0001);
     
     if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
         var batService = accessory.getService(Service.BatteryService);

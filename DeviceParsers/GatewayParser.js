@@ -62,7 +62,7 @@ GatewayParser.prototype.setIlluminationAccessory = function(deviceSid, illuminat
     }
     var illService = accessory.getService(Service.LightSensor);
     var illCharacteristic = illService.getCharacteristic(Characteristic.CurrentAmbientLightLevel);
-    illCharacteristic.updateValue(illumination > 0 ? illumination : 0);
+    illCharacteristic.updateValue(illumination > 0 ? illumination : 0.0001);
 }
 
 GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {

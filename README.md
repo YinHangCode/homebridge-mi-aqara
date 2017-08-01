@@ -30,6 +30,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MotionSensor2.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Button2.jpg)
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/TemperatureAndHumiditySensor2.jpg)
+![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/WaterDetector.jpg)
 
 ## Supported Devices
 Gateway(网关)   
@@ -53,6 +54,7 @@ ContactSensor2(门磁感应第二代)
 MotionSensor2(人体感应第二代)   
 Button2(按钮第二代)   
 TemperatureAndHumiditySensor2(温度湿度传感器第二代)   
+WaterDetector(水浸传感器) --- coming soon   
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
@@ -197,6 +199,9 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.4.3
+1.fixed bug that gateway light sensor not support when value is 0;   
+2.fixed bug that motion sensor version 2 light sensor not support when value is 0;   
 ### 0.4.2
 1.adjustment gateway light sensor value(subtract 279).   
 2.delete PlugBase, PlugBase86, SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN battery information.   
