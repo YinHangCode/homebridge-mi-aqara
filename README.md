@@ -4,7 +4,7 @@
 homebridge plugin for XiaoMi Aqara plugin.  
 Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), [licuhui](https://github.com/licuhui), [攀旺智能](https://pwzn.taobao.com/), [瀚思彼岸论坛](https://bbs.hassbian.com/), all other developer and testers.   
 
-**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues).**
+**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
 
 This repository contains the Aqara plugin for homebridge.  
 Aqara is a ZigBee gateway with a few sensors.  
@@ -199,6 +199,9 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.4.4
+1.add log content that show plugin version when homebridge started.   
+2.fixed bug that run homebridge error there is no MiAqaraPlatform in config.json file.   
 ### 0.4.3
 1.fixed bug that gateway light sensor not support when value is 0;   
 2.fixed bug that motion sensor version 2 light sensor not support when value is 0;   

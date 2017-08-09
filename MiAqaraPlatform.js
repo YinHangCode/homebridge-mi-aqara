@@ -20,6 +20,7 @@ require('./DeviceParsers/Motion2Parser');
 require('./DeviceParsers/Button2Parser');
 require('./DeviceParsers/TemperatureAndHumidity2Parser');
 
+var packageFile = require("./package.json");
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
 const dgram = require('dgram');
@@ -48,6 +49,10 @@ module.exports = function(homebridge) {
 }
 
 function MiAqaraPlatform(log, config, api) {
+    if(null == config) {
+        return;
+    }
+
     // Initialize
     this.log = log;
     this.config = config;
@@ -154,9 +159,9 @@ function MiAqaraPlatform(log, config, api) {
     this.doRestThings(api);
     
     this.log.info("[MiAqaraPlatform][INFO]**************************************************************");
-    this.log.info("[MiAqaraPlatform][INFO]*                 MiAqaraPlatform By YinHang                 *");
-    this.log.info("[MiAqaraPlatform][INFO]* GitHub: https://github.com/YinHangCode/homebridge-mi-aqara *");
-    this.log.info("[MiAqaraPlatform][INFO]*                                        QQ Group: 107927710 *");
+    this.log.info("[MiAqaraPlatform][INFO]           MiAqaraPlatform v%s By YinHang", packageFile.version);
+    this.log.info("[MiAqaraPlatform][INFO]  GitHub: https://github.com/YinHangCode/homebridge-mi-aqara  ");
+    this.log.info("[MiAqaraPlatform][INFO]                                         QQ Group: 107927710  ");
     this.log.info("[MiAqaraPlatform][INFO]**************************************************************");
     this.log.info("[MiAqaraPlatform][INFO]start success...");
 }
