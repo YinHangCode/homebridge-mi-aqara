@@ -46,7 +46,7 @@ NatgasDetectorParser.prototype.setNatgasAccessory = function(deviceSid, NatgasDe
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
-            .setCharacteristic(Characteristic.Model, "Natgas Sensor")
+            .setCharacteristic(Characteristic.Model, "Natgas Detector")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
         accessory.addService(Service.SmokeSensor, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
@@ -56,11 +56,11 @@ NatgasDetectorParser.prototype.setNatgasAccessory = function(deviceSid, NatgasDe
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Natgas Sensor, deviceSid: " + deviceSid);
+        this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Natgas Detector, deviceSid: " + deviceSid);
     }
     var motService = accessory.getService(Service.SmokeSensor);
     var motCharacteristic = motService.getCharacteristic(Characteristic.SmokeDetected);
-    motCharacteristic.updateValue(NatgasDetected ? Characteristic.ContactSensorState.SMOKE_DETECTED : Characteristic.ContactSensorState.SMOKE_NOT_DETECTED);
+    motCharacteristic.updateValue(SmokeDetected ? true : false);
     
     if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
         var batService = accessory.getService(Service.BatteryService);

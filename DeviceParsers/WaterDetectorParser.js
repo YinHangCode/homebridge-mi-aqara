@@ -3,7 +3,7 @@ const inherits = require('util').inherits;
 
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
 
-SmokeDetectorParser = function(platform) {
+WaterDetectorParser = function(platform) {
     this.init(platform);
     
     Accessory = platform.Accessory;
@@ -12,41 +12,41 @@ SmokeDetectorParser = function(platform) {
     Characteristic = platform.Characteristic;
     UUIDGen = platform.UUIDGen;
 }
-inherits(SmokeDetectorParser, BaseParser);
+inherits(WaterDetectorParser, BaseParser);
 
-SmokeDetectorParser.prototype.parse = function(json, rinfo) {
+WaterDetectorParser.prototype.parse = function(json, rinfo) {
     this.platform.log.debug("[MiAqaraPlatform][DEBUG]" + JSON.stringify(json).trim());
     
     var data = JSON.parse(json['data']);
-    var SmokeDetected = ((data['alarm']/1.0) >= 1 );
+    var waterStatus = data['status'];
     var voltage = data['voltage'] / 1.0;
     var lowBattery = this.getLowBatteryByVoltage(voltage);
     var batteryLevel = this.getBatteryLevelByVoltage(voltage);
 
     var deviceSid = json['sid'];
-    this.setSmokeAccessory(deviceSid, SmokeDetected, lowBattery, batteryLevel);
+    this.setWaterAccessory(deviceSid, waterStatus, lowBattery, batteryLevel);
 }
 
-SmokeDetectorParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
-    return [UUIDGen.generate('smoke' + deviceSid)];
+WaterDetectorParser.prototype.getUuidsByDeviceSid = function(deviceSid) {
+    return [UUIDGen.generate('WaterDetector' + deviceSid)];
 }
 
-SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetected, lowBattery, batteryLevel) {
+WaterDetectorParser.prototype.setWaterAccessory = function(deviceSid, waterStatus, lowBattery, batteryLevel) {
     var that = this;
     
-    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'smoke')) {
+    if(that.platform.getAccessoryDisableFrConfig(deviceSid, 'WaterDetector')) {
         return;
     }
     
-    var uuid = UUIDGen.generate('smoke' + deviceSid);
+    var uuid = UUIDGen.generate('WaterDetector' + deviceSid);
     var accessory = this.platform.getAccessoryByUuid(uuid);
     if(null == accessory) {
-        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'smoke');
+        var accessoryName = that.platform.getAccessoryNameFrConfig(deviceSid, 'WaterDetector');
         accessory = new PlatformAccessory(accessoryName, uuid, Accessory.Categories.SENSOR);
         accessory.reachable = true;
         accessory.getService(Service.AccessoryInformation)
             .setCharacteristic(Characteristic.Manufacturer, "Aqara")
-            .setCharacteristic(Characteristic.Model, "Smoke Detector")
+            .setCharacteristic(Characteristic.Model, "Water Detector")
             .setCharacteristic(Characteristic.SerialNumber, deviceSid);
         accessory.addService(Service.SmokeSensor, accessoryName);
         accessory.addService(Service.BatteryService, accessoryName);
@@ -56,11 +56,16 @@ SmokeDetectorParser.prototype.setSmokeAccessory = function(deviceSid, SmokeDetec
         });
         
         this.platform.registerAccessory(accessory);
-        this.platform.log.debug("[MiAqaraPlatform][DEBUG]create new accessories - UUID: " + uuid + ", type: Smoke Detector, deviceSid: " + deviceSid);
+        this.platform.log.debug("[MiAqaraPlatform][DEBUG]create new accessories - UUID: " + uuid + ", type: Water Detector, deviceSid: " + deviceSid);
     }
     var motService = accessory.getService(Service.SmokeSensor);
     var motCharacteristic = motService.getCharacteristic(Characteristic.SmokeDetected);
-    motCharacteristic.updateValue(SmokeDetected ? true : false);
+    if('leak' === waterStatus) {
+        motCharacteristic.updateValue(true);
+    } else if ('no_leak' === waterStatus) {
+        motCharacteristic.updateValue(false);
+    } else {
+    }
     
     if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
         var batService = accessory.getService(Service.BatteryService);

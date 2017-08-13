@@ -33,28 +33,28 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/WaterDetector.jpg)
 
 ## Supported Devices
-Gateway(网关)   
-ContactSensor(门磁感应)   
-MotionSensor(人体感应)   
-Button(按钮)   
-TemperatureAndHumiditySensor(温度湿度传感器)   
-SingleSwitch(单按钮墙壁开关)   
-DuplexSwitch(双按钮墙壁开关)   
-SingleSwitchLN(单按钮墙壁开关零火版)   
-DuplexSwitchLN(双按钮墙壁开关零火版)   
-SingleButton86(86型无线单按钮开关)   
-DuplexButton86(86型无线双按钮开关)   
-PlugBase(插座)   
-PlugBase86(86型墙壁插座)   
-MagicSquare(魔方)   
-SmokeDetector(烟雾报警器)   
-NatgasDetector(天然气报警器)   
-ElectricCurtain(电动窗帘)   
-ContactSensor2(门磁感应第二代)   
-MotionSensor2(人体感应第二代)   
-Button2(按钮第二代)   
-TemperatureAndHumiditySensor2(温度湿度传感器第二代)   
-WaterDetector(水浸传感器) --- coming soon   
+1.Gateway(网关)   
+2.ContactSensor(门磁感应)   
+3.MotionSensor(人体感应)   
+4.Button(按钮)   
+5.TemperatureAndHumiditySensor(温度湿度传感器)   
+6.SingleSwitch(单按钮墙壁开关)   
+7.DuplexSwitch(双按钮墙壁开关)   
+8.SingleSwitchLN(单按钮墙壁开关零火版)   
+9.DuplexSwitchLN(双按钮墙壁开关零火版)   
+10.SingleButton86(86型无线单按钮开关)   
+11.DuplexButton86(86型无线双按钮开关)   
+12.PlugBase(插座)   
+13.PlugBase86(86型墙壁插座)   
+14.MagicSquare(魔方)   
+15.SmokeDetector(烟雾报警器)   
+16.NatgasDetector(天然气报警器)   
+17.ElectricCurtain(电动窗帘)   
+18.ContactSensor2(门磁感应第二代)   
+19.MotionSensor2(人体感应第二代)   
+20.Button2(按钮第二代)   
+21.TemperatureAndHumiditySensor2(温度湿度传感器第二代)   
+22.WaterDetector(水浸传感器)   
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
@@ -199,6 +199,10 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.5.0
+1.add support for water detector accessory.   
+2.fixed bug that natgas detector is not alarm.   
+3.fixed bug that smoke detector is not alarm.   
 ### 0.4.4
 1.add log content that show plugin version when homebridge started.   
 2.fixed bug that run homebridge error there is no MiAqaraPlatform in config.json file.   
@@ -214,11 +218,11 @@ echo [] > cachedAccessories
 ### 0.4.1
 1.code collation.   
 ### 0.4.0
-1.add electric curtain accessory.   
-2.add contact sensor version 2 accessory.   
-3.add motion sensor version 2 accessory.   
-4.add button version 2 accessory.   
-5.add temperature and humidity sensor version 2 accessory.   
+1.add support for electric curtain accessory.   
+2.add support for contact sensor version 2 accessory.   
+3.add support for motion sensor version 2 accessory.   
+4.add support for button version 2 accessory.   
+5.add support for temperature and humidity sensor version 2 accessory.   
 6.optimize log content.   
 7.add setting default name feature.   
 8.add setting default service type feature.   
@@ -242,20 +246,20 @@ echo [] > cachedAccessories
 ### 0.3.1
 1.code collation.   
 ### 0.3.0
-1.add single switch LN accessory.   
-2.add duplex switch LN accessory.   
-3.add plug base 86 accessory.   
-4.add smoke detector accessory.   
-5.add natgas detector accessory.   
+1.add support for single switch LN accessory.   
+2.add support for duplex switch LN accessory.   
+3.add support for plug base 86 accessory.   
+4.add support for smoke detector accessory.   
+5.add support for natgas detector accessory.   
 ### 0.2.1
 1.change accessory registration mechanism, fixed bug that new accessory can't correlate associated with gateway.   
 ### 0.2.0
-1.add duplex switch accessory.   
-2.add single button 86 accessory.   
-3.add duplex button 86 accessory.   
+1.add support for duplex switch accessory.   
+2.add support for single button 86 accessory.   
+3.add support for duplex button 86 accessory.   
 ### 0.1.0
-1.add plug base accessory.   
-2.add magic square accessory.   
+1.add support for plug base accessory.   
+2.add support for magic square accessory.   
 ### 0.0.6
 1.add some logs.
 ### 0.0.5
@@ -263,9 +267,9 @@ echo [] > cachedAccessories
 ### 0.0.4
 1.fixed bug.
 ### 0.0.3
-1.add gateway accessory: light sensor, hue light.
+1.add support for gateway accessory: light sensor, hue light.
 ### 0.0.2
-1.add single switch accessory.   
+1.add support for single switch accessory.   
 ### 0.0.1
 1.supported contact sensor accessory.   
 2.supported motion sensor accessory.   

@@ -19,6 +19,7 @@ require('./DeviceParsers/Contact2Parser');
 require('./DeviceParsers/Motion2Parser');
 require('./DeviceParsers/Button2Parser');
 require('./DeviceParsers/TemperatureAndHumidity2Parser');
+require('./DeviceParsers/WaterDetectorParser');
 
 var packageFile = require("./package.json");
 var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
@@ -84,7 +85,8 @@ function MiAqaraPlatform(log, config, api) {
         'sensor_magnet.aq2' : new Contact2Parser(this), // 门磁感应 第二代
         'sensor_motion.aq2' : new Motion2Parser(this), // 人体感应 第二代
         'sensor_switch.aq2' : new Button2Parser(this), // 按钮 第二代
-        'weather.v1' : new TemperatureAndHumidity2Parser(this) // 温度湿度传感器 第二代
+        'weather.v1' : new TemperatureAndHumidity2Parser(this), // 温度湿度传感器 第二代
+        'sensor_wleak.aq1': new WaterDetectorParser(this) // 水浸传感器
     };
     
     this.accessories = [];
