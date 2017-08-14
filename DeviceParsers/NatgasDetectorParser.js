@@ -60,7 +60,7 @@ NatgasDetectorParser.prototype.setNatgasAccessory = function(deviceSid, NatgasDe
     }
     var motService = accessory.getService(Service.SmokeSensor);
     var motCharacteristic = motService.getCharacteristic(Characteristic.SmokeDetected);
-    motCharacteristic.updateValue(SmokeDetected ? true : false);
+    motCharacteristic.updateValue(NatgasDetected ? true : false);
     
     if(!isNaN(lowBattery) && !isNaN(batteryLevel)) {
         var batService = accessory.getService(Service.BatteryService);

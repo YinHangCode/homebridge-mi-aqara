@@ -199,6 +199,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.5.1
+1.fixed bug that natgas detector is not alarm.   
 ### 0.5.0
 1.add support for water detector accessory.   
 2.fixed bug that natgas detector is not alarm.   
