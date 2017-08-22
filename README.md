@@ -199,6 +199,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.5.2
+1.fixed bug that gateway light brightness is 100 when it light up.   
 ### 0.5.1
 1.fixed bug that natgas detector is not alarm.   
 ### 0.5.0

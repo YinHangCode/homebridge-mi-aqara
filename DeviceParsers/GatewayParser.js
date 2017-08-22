@@ -96,23 +96,30 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
         this.platform.log.info("[MiAqaraPlatform][INFO]create new accessory - UUID: " + uuid + ", type: Gateway Light, deviceSid: " + deviceSid);
     }
 
+    var ligthService = accessory.getService(Service.Lightbulb);
+    var switchCharacteristic = ligthService.getCharacteristic(Characteristic.On);
+    var brightnessCharacteristic = ligthService.getCharacteristic(Characteristic.Brightness);
+    var hueCharacteristic = ligthService.getCharacteristic(Characteristic.Hue);
+    var saturationCharacteristic = ligthService.getCharacteristic(Characteristic.Saturation);
+        
     if(0 != rawRgb) {
         var hexRawRgb = rawRgb.toString(16).length == 8 ? rawRgb.toString(16) : "0" + rawRgb.toString(16);
         var hexRgb = hexRawRgb.substring(2,8);
         var hsb = rgb2hsb([parseInt(hexRgb.substring(0,2), 16), parseInt(hexRgb.substring(2,4), 16), parseInt(hexRgb.substring(4,6), 16)]);
-        accessory.yh_value_hue = hsb[0];
-        accessory.yh_value_saturation = hsb[1] * 100;
-        accessory.yh_value_brightness = parseInt(hexRawRgb.substring(0,2), 16);
+        
+        switchCharacteristic.updateValue(true);
+        brightnessCharacteristic.updateValue(parseInt(hexRawRgb.substring(0,2), 16));
+        hueCharacteristic.updateValue(hsb[0]);
+        saturationCharacteristic.updateValue(hsb[1] * 100);
+    } else {
+        switchCharacteristic.updateValue(false);
     }
     
-    var ligthService = accessory.getService(Service.Lightbulb);
-    var switchCharacteristic = ligthService.getCharacteristic(Characteristic.On);
-    switchCharacteristic.updateValue(!(rawRgb == 0));
     if (switchCharacteristic.listeners('set').length == 0) {
         switchCharacteristic.on("set", function(value, callback) {
+//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]switch: " + value);
             if(value == 1 || value == true) { // set by home is 0/1, set by siri is true/false
-//              that.platform.log.debug("[MiAqaraPlatform][DEBUG]on - " + value);
-                that.controlLight(deviceSid, true, accessory.yh_value_hue, accessory.yh_value_saturation, accessory.yh_value_brightness);
+                that.controlLight(deviceSid, true, hueCharacteristic.value, saturationCharacteristic.value, brightnessCharacteristic.value);
             } else {
                 that.controlLight(deviceSid, false, null, null, null);
             }
@@ -120,36 +127,28 @@ GatewayParser.prototype.setLightAccessory = function(deviceSid, rawRgb) {
         });
     }
     
-    var brightnessCharacteristic = ligthService.getCharacteristic(Characteristic.Brightness);
-    brightnessCharacteristic.updateValue((rawRgb == 0) ? 0 : accessory.yh_value_brightness);
     if (brightnessCharacteristic.listeners('set').length == 0) {
         brightnessCharacteristic.on("set", function(value, callback) {
-            accessory.yh_value_brightness = value;
-//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]brightness - " + value);
+//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]brightness: " + value);
             if(value > 0) {
-                that.controlLight(deviceSid, true, accessory.yh_value_hue, accessory.yh_value_saturation, accessory.yh_value_brightness);
+                that.controlLight(deviceSid, true, hueCharacteristic.value, saturationCharacteristic.value, value);
             }
             callback();
         });
     }
     
-    var hueCharacteristic = ligthService.getCharacteristic(Characteristic.Hue);
-    hueCharacteristic.updateValue((rawRgb == 0) ? 0 : accessory.yh_value_hue);
     if (hueCharacteristic.listeners('set').length == 0) {
         hueCharacteristic.on("set", function(value, callback) {
-            accessory.yh_value_hue = value;
-//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]hue - " + value);
-            that.controlLight(deviceSid, true, accessory.yh_value_hue, accessory.yh_value_saturation, accessory.yh_value_brightness);
+//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]hue: " + value);
+            that.controlLight(deviceSid, true, value, saturationCharacteristic.value, brightnessCharacteristic.value);
             callback();
         });
     }
     
-    var saturationCharacteristic = ligthService.getCharacteristic(Characteristic.Saturation);
-    saturationCharacteristic.updateValue((rawRgb == 0) ? 0 : accessory.yh_value_saturation);
     if (saturationCharacteristic.listeners('set').length == 0) {
         saturationCharacteristic.on("set", function(value, callback) {
-            accessory.yh_value_saturation = value;
-//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]saturation - " + value);
+//          that.platform.log.debug("[MiAqaraPlatform][DEBUG]saturation: " + value);
+            that.controlLight(deviceSid, true, hueCharacteristic.value, value, brightnessCharacteristic.value);
             callback();
         });
     }
