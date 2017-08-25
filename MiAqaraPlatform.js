@@ -22,7 +22,7 @@ require('./DeviceParsers/TemperatureAndHumidity2Parser');
 require('./DeviceParsers/WaterDetectorParser');
 
 var packageFile = require("./package.json");
-var Accessory, PlatformAccessory, Service, Characteristic, UUIDGen;
+var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
 
 const dgram = require('dgram');
 const crypto = require('crypto');
@@ -37,10 +37,10 @@ const multicastPort = 4321;
 const serverPort = 9898;
 
 module.exports = function(homebridge) {
-    Accessory = homebridge.hap.Accessory;
     PlatformAccessory = homebridge.platformAccessory;
 
     // Service and Characteristic are from hap-nodejs
+    Accessory = homebridge.hap.Accessory;
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
     UUIDGen = homebridge.hap.uuid;
@@ -179,8 +179,10 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
         that.log.debug("[MiAqaraPlatform][DEBUG]" + accessory.displayName + " Identify!!!" );
         callback();
     });
-   
-    this.accessories.push(accessory);
+    
+    if(this.accessories) {
+        this.accessories.push(accessory);
+    }
 }
 
 MiAqaraPlatform.prototype.loadConfig = function(config) {

@@ -9,28 +9,28 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 This repository contains the Aqara plugin for homebridge.  
 Aqara is a ZigBee gateway with a few sensors.  
 
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Gateway.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ContactSensor.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MotionSensor.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Button.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/TemperatureAndHumiditySensor.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleSwitch.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexSwitch.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleSwitchLN.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexSwitchLN.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SingleButton86.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/DuplexButton86.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/PlugBase.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/PlugBase86.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MagicSquare.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/SmokeDetector.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/NatgasDetector.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ElectricCurtain.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/ContactSensor2.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/MotionSensor2.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Button2.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/TemperatureAndHumiditySensor2.jpg)
-![](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/WaterDetector.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Gateway.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ContactSensor.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/MotionSensor.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/TemperatureAndHumiditySensor.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/SingleSwitch.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexSwitch.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/SingleSwitchLN.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexSwitchLN.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/SingleButton86.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexButton86.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/PlugBase.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/PlugBase86.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/MagicSquare.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/SmokeDetector.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/NatgasDetector.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtain.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ContactSensor2.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/MotionSensor2.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button2.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/TemperatureAndHumiditySensor2.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/WaterDetector.jpg)
 
 ## Supported Devices
 1.Gateway(网关)   
@@ -199,6 +199,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.5.3
+1.optimized code.   
 ### 0.5.2
 1.fixed bug that gateway light brightness is 100 when it light up.   
 ### 0.5.1
