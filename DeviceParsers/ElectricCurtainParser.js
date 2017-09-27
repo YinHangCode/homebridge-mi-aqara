@@ -77,7 +77,7 @@ ElectricCurtainParser.prototype.setCurtainAccessory = function(deviceSid, state,
     if (targetPositionCharacteristic.listeners('set').length == 0) {
         var that = this;
         targetPositionCharacteristic.on("set", function(value, callback) {
-            that.platform.log.info("[MiAqaraPlatform][INFO]chuanglian" + value);
+            that.platform.log.info("[MiAqaraPlatform][INFO]Curtain" + value);
             var key = that.platform.getWriteKeyByDeviceSid(deviceSid);
             var command = '{"cmd":"write","model":"curtain","sid":"' + deviceSid + '","data":"{\\"curtain_level\\":\\"' + value + '\\", \\"key\\": \\"' + key + '\\"}"}';
             that.platform.sendCommandByDeviceSid(deviceSid, command);
