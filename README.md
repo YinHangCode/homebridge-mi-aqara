@@ -288,6 +288,11 @@ echo [] > cachedAccessories
 4.optimizing program structure, send fewer packets.   
 5.optimizing config item name, easier to read.   
 6.fixed some bug.   
+7.add Button(single press, double press) virtual switch accessory.   
+8.add Button2(single press, double press) virtual switch accessory.   
+9.add SingleButton86(single press) virtual switch accessory.   
+10.add DuplexButton86(left button single press, right button single press, both press) virtual switch accessory.   
+11.add MagicSquare(flip90, flip180, move, tapTwice, shakeAir) virtual switch accessory.   
 ### 0.5.3
 1.optimized code.   
 ### 0.5.2
