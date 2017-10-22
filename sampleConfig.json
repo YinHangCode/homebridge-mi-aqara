@@ -1,176 +1,223 @@
 {
     "bridge": {
-        "name": "HomeBridge",
+        "name": "HomeBridge_MiAqaraPlatform",
         "username": "B8:27:EB:EE:AF:1B",
         "port": 51888,
         "pin": "011-12-399"
     },
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
-        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
         "defaultValue": {
             "6409802da3b3": {
-                "GW_LS": {
-                    "name": "living room brightness"
-                },
-                "GW_Light": {
+                "Gateway_Lightbulb": {
                     "name": "gateway light"
+                },
+                "Gateway_LightSensor": {
+                    "name": "living room light sensor"
                 }
             },
             "158d0001000001": {
-                "Mag": {
+                "ContactSensor_ContactSensor": {
                     "name": "entrance door"
                 }
             },
             "158d0001000002": {
-                "Mot": {
+                "MotionSensor_MotionSensor": {
                     "name": "living room motion sensor"
                 }
             },
             "158d0001000003": {
-                "Button": {
+                "Button_StatelessProgrammableSwitch": {
                     "name": "living room button"
+                },
+                "Button_Switch_VirtualSinglePress": {
+                    "name": "living room button virtual single press",
+                    "disable": true
+                },
+                "Button_Switch_VirtualDoublePress": {
+                    "name": "living room button virtual double press",
+                    "disable": true
                 }
             },
             "158d0001000004": {
-                "Tem": {
+                "TemperatureAndHumiditySensor_TemperatureSensor": {
                     "name": "living room temperature"
                 },
-                "Hum": {
+                "TemperatureAndHumiditySensor_HumiditySensor": {
                     "name": "living room humidity"
                 }
             },
-            "158d0001000005": {
-                "Tem": {
-                    "name": "master bedroom room temperature"
-                },
-                "Hum": {
-                    "name": "master bedroom room humidity"
-                }
-            },
-            "158d0001000006": {
-                "Tem": {
-                    "name": "study room temperature"
-                },
-                "Hum": {
-                    "name": "study room humidity"
-                }
-            },
             "158d0001000007": {
-                "SingleSwitch": {
+                "SingleSwitch_Switch": {
                     "name": "living room light",
                     "serviceType": "Lightbulb"
                 }
             },
             "158d0001000008": {
-                "DuplexSwitch_1": {
+                "DuplexSwitch_Switch_Left": {
                     "name": "master bedroom room light",
                     "serviceType": "Lightbulb"
                 },
-                "DuplexSwitch_2": {
+                "DuplexSwitch_Switch_Right": {
                     "name": "study room light",
                     "serviceType": "Lightbulb"
                 }
             },
             "158d0001000009": {
-                "SingleSwitchLN": {
+                "SingleSwitchLN_Switch": {
                     "name": "kitchen room light"
                 }
             },
             "158d0001000010": {
-                "DuplexSwitchLN_1": {
+                "DuplexSwitchLN_Switch_Left": {
                     "name": "dining room left light"
                 },
-                "DuplexSwitchLN_2": {
+                "DuplexSwitchLN_Switch_Right": {
                     "name": "dining room right light"
                 }
             },
             "158d0001000011": {
-                "SingleButton86": {
+                "SingleButton86_StatelessProgrammableSwitch": {
                     "name": "living room 86 button"
+                },
+                "SingleButton86_Switch_VirtualSinglePress": {
+                    "name": "living room 86 button virtual single press",
+                    "disable": true
                 }
             },
             "158d0001000012": {
-                "DuplexButton86_1": {
-                    "name": "dining room 86 button"
+                "DuplexButton86_StatelessProgrammableSwitch_Left": {
+                    "name": "dining room 86 button left"
                 },
-                "DuplexButton86_2": {
-                    "name": "study room 86 button"
+                "DuplexButton86_Switch_VirtualSinglePress_Left": {
+                    "name": "dining room 86 button left virtual single press",
+                    "disable": true
+                },
+                "DuplexButton86_StatelessProgrammableSwitch_Right": {
+                    "name": "dining room 86 button right"
+                },
+                "DuplexButton86_Switch_VirtualSinglePress_Right": {
+                    "name": "dining room 86 button right virtual single press",
+                    "disable": true
+                },
+                "DuplexButton86_StatelessProgrammableSwitch_Both": {
+                    "name": "dining room 86 button both"
+                },
+                "DuplexButton86_Switch_VirtualSinglePress_Both": {
+                    "name": "dining room 86 button both virtual single press",
+                    "disable": true
                 }
             },
             "158d0001000013": {
-                "Plug": {
+                "PlugBase_Outlet": {
                     "name": "living room fan"
                 }
             },
             "158d0001000014": {
-                "Plug86": {
+                "PlugBase86_Outlet": {
                     "name": "study room fan"
                 }
             },
             "158d0001000015": {
-                "MS_Flip90": {
-                    "name": "study room magic square flip90"
+                "MagicSquare_StatelessProgrammableSwitch_Flip90": {
+                    "name": "study room magic square flip90",
+                    "disable": true
                 },
-                "MS_Flip180": {
-                    "name": "study room magic square flip180"
+                "MagicSquare_Switch_VirtualFlip90": {
+                    "name": "study room magic square virtual flip90"
                 },
-                "MS_Move": {
+                "MagicSquare_StatelessProgrammableSwitch_Flip180": {
+                    "name": "study room magic square flip180",
+                    "disable": true
+                },
+                "MagicSquare_Switch_VirtualFlip180": {
+                    "name": "study room magic square virtual flip180"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_Move": {
                     "name": "study room magic square move",
                     "disable": true
                 },
-                "MS_TapTwice": {
-                    "name": "study room magic square tapTwice"
+                "MagicSquare_Switch_VirtualMove": {
+                    "name": "study room magic square virtual move"
                 },
-                "MS_ShakeAir": {
-                    "name": "study room magic square shakeAir"
+                "MagicSquare_StatelessProgrammableSwitch_TapTwice": {
+                    "name": "study room magic square tapTwice",
+                    "disable": true
                 },
-                "MS_Rotate": {
-                    "name": "study room magic square rotate"
+                "MagicSquare_Switch_VirtualTapTwice": {
+                    "name": "study room magic square virtual tapTwice"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_ShakeAir": {
+                    "name": "study room magic square shakeAir",
+                    "disable": true
+                },
+                "MagicSquare_Switch_VirtualShakeAir": {
+                    "name": "study room magic square virtual shakeAir"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_Rotate": {
+                    "name": "study room magic square rotate",
+                    "disable": true
                 }
             },
             "158d0001000016": {
-                "natgas": {
-                    "name": "kitchen room natgas"
+                "NatgasDetector_SmokeSensor": {
+                    "name": "kitchen room natgas sensor"
                 }
             },
             "158d0001000017": {
-                "smoke": {
-                    "name": "kitchen room smoke"
+                "SmokeDetector_SmokeSensor": {
+                    "name": "kitchen room smoke sensor"
                 }
             },
             "158d0001000018": {
-                "Curtain": {
+                "ElectricCurtain_WindowCovering": {
                     "name": "living room curtain"
                 }
             },
             "158d0001000019": {
-                "Mag2": {
+                "ContactSensor2_ContactSensor": {
                     "name": "living room window"
                 }
             },
             "158d0001000020": {
-                "Mot2": {
+                "MotionSensor2_MotionSensor": {
                     "name": "study room motion sensor"
                 },
-                "Mot2LS": {
+                "MotionSensor2_LightSensor": {
                     "name": "study room light sensor"
                 }
             },
             "158d0001000021": {
-                "Button2": {
+                "Button2_StatelessProgrammableSwitch": {
                     "name": "study room button"
+                },
+                "Button2_Switch_VirtualSinglePress": {
+                    "name": "study room button virtual single press",
+                    "disable": true
+                },
+                "Button2_Switch_VirtualDoublePress": {
+                    "name": "study room button virtual double press",
+                    "disable": true
                 }
             },
             "158d0001000022": {
-                "Tem2": {
+                "TemperatureAndHumiditySensor2_TemperatureSensor": {
                     "name": "dining room temperature"
                 },
-                "Hum2": {
+                "TemperatureAndHumiditySensor2_HumiditySensor": {
                     "name": "dining room humidity"
                 }
-            }
+            },
+            "158d0001000023": {
+                "WaterDetector_LeakSensor": {
+                    "name": "kitchen room leak sensor"
+                }
+            },
         }
     }]
 }

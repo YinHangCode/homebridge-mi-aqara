@@ -58,7 +58,7 @@ Aqara is a ZigBee gateway with a few sensors.
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
-2. Update gateway firmware to **1.4.1_148.0143** or later. You can contact [@babymoney666](https://github.com/babymoney666) if your firmware is not up to date.  
+2. Update gateway firmware to **1.4.1_150.0143** or later. You can contact [@babymoney666](https://github.com/babymoney666) if your firmware is not up to date.  
 
 ## Installation
 1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).  
@@ -69,13 +69,14 @@ If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi
 ## Configuration
 1. Open Aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
 Please follow the steps in this thread: http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
-2. To control the devices, put gateway's MAC address (**lower case without colon**) and password to ~/.homebridge/config.json.   
+2. To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
 ```
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "sid": ["6409802da3b3"],
-        "password": ["02i44k56zrgg578b"]
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b"
+        }
     }]
 }
 ```
@@ -84,8 +85,11 @@ If you have more than one gateways, fill them in right order, like below.
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
-        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"]
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
     }]
 }
 ```
@@ -95,24 +99,30 @@ For more information about default name, Please refer to file `sampleConfig.json
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
-        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
         "defaultValue": {
             "158d0001000001": {
-                "Mag": {
+                "ContactSensor_ContactSensor": {
                     "name": "entrance door"
                 }
             },
             "158d0001000002": {
-                "Mot": {
-                    "name": "living room motion sensor"
+                "MotionSensor2_MotionSensor": {
+                    "name": "study room motion sensor"
+                },
+                "MotionSensor2_LightSensor": {
+                    "name": "study room light sensor"
                 }
             },
             "158d0001000004": {
-                "Tem": {
+                "TemperatureAndHumiditySensor_TemperatureSensor": {
                     "name": "living room temperature"
                 },
-                "Hum": {
+                "TemperatureAndHumiditySensor_HumiditySensor": {
                     "name": "living room humidity"
                 }
             }
@@ -127,21 +137,24 @@ Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwit
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
-        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
         "defaultValue": {
             "158d0001000007": {
-                "SingleSwitch": {
+                "SingleSwitch_Switch": {
                     "name": "living room light",
                     "serviceType": "Lightbulb"
                 }
             },
             "158d0001000008": {
-                "DuplexSwitch_1": {
+                "DuplexSwitch_Switch_Left": {
                     "name": "master bedroom room light",
                     "serviceType": "Lightbulb"
                 },
-                "DuplexSwitch_2": {
+                "DuplexSwitch_Switch_Right": {
                     "name": "study room light",
                     "serviceType": "Lightbulb"
                 }
@@ -159,18 +172,18 @@ If you want to disable accessories, you can add disable attribute to config.
         "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
         "defaultValue": {
             "158d0001000007": {
-                "SingleSwitch": {
+                "SingleSwitch_Switch": {
                     "name": "living room light",
-                    "serviceType": "Lightbulb",
-                    "disable": true
+                    "serviceType": "Lightbulb"
                 }
             },
             "158d0001000008": {
-                "DuplexSwitch_1": {
+                "DuplexSwitch_Switch_Left": {
                     "name": "master bedroom room light",
-                    "serviceType": "Lightbulb"
+                    "serviceType": "Lightbulb",
+                    "disable": false
                 },
-                "DuplexSwitch_2": {
+                "DuplexSwitch_Switch_Right": {
                     "name": "study room light",
                     "serviceType": "Lightbulb",
                     "disable": true
@@ -178,27 +191,103 @@ If you want to disable accessories, you can add disable attribute to config.
             },
             "158d0001000004": {
                 "Tem": {
-                    "name": "living room temperature",
-                    "disable": true
+                    "name": "living room temperature"
                 },
                 "Hum": {
-                    "name": "living room humidity"
+                    "name": "living room humidity",
+                    "disable": true
+                }
+            },
+            "158d0001000012": {
+                "DuplexButton86_StatelessProgrammableSwitch_Left": {
+                    "name": "dining room 86 button left"
+                },
+                "DuplexButton86_Switch_VirtualSinglePress_Left": {
+                    "name": "dining room 86 button left virtual single press",
+                    "disable": true
+                },
+                "DuplexButton86_StatelessProgrammableSwitch_Right": {
+                    "name": "dining room 86 button right"
+                },
+                "DuplexButton86_Switch_VirtualSinglePress_Right": {
+                    "name": "dining room 86 button right virtual single press",
+                    "disable": true
+                },
+                "DuplexButton86_StatelessProgrammableSwitch_Both": {
+                    "name": "dining room 86 button both"
+                },
+                "DuplexButton86_Switch_VirtualSinglePress_Both": {
+                    "name": "dining room 86 button both virtual single press",
+                    "disable": true
+                }
+            },
+            "158d0001000015": {
+                "MagicSquare_StatelessProgrammableSwitch_Flip90": {
+                    "name": "study room magic square flip90",
+                    "disable": true
+                },
+                "MagicSquare_Switch_VirtualFlip90": {
+                    "name": "study room magic square virtual flip90"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_Flip180": {
+                    "name": "study room magic square flip180",
+                    "disable": true
+                },
+                "MagicSquare_Switch_VirtualFlip180": {
+                    "name": "study room magic square virtual flip180"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_Move": {
+                    "name": "study room magic square move",
+                    "disable": true
+                },
+                "MagicSquare_Switch_VirtualMove": {
+                    "name": "study room magic square virtual move"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_TapTwice": {
+                    "name": "study room magic square tapTwice",
+                    "disable": true
+                },
+                "MagicSquare_Switch_VirtualTapTwice": {
+                    "name": "study room magic square virtual tapTwice"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_ShakeAir": {
+                    "name": "study room magic square shakeAir",
+                    "disable": true
+                },
+                "MagicSquare_Switch_VirtualShakeAir": {
+                    "name": "study room magic square virtual shakeAir"
+                },
+                "MagicSquare_StatelessProgrammableSwitch_Rotate": {
+                    "name": "study room magic square rotate",
+                    "disable": true
                 }
             }
         }
     }]
 }
 ```
+   
+## Some explanation
+Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
+SingleButton86/DuplexButton86(Left, Right, Both) StatelessProgrammableSwitch only support SinglePress.   
+MagicSquare(Flip90, Flip180, Move, TapTwice, ShakeAir, Rotate) StatelessProgrammableSwitch only support SinglePress.   
     
 ## Run it
 homebridge -D   
-
+   
 ## Clear register accessories
 cd ~/.homebridge/accessories/   
 mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak   
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.0
+1.refactoring code.   
+2.add feedback when control accessory.   
+3.synchronization value when homebridge call the get function. (only electrify device)   
+4.optimizing program structure, send fewer packets.   
+5.optimizing config item name, easier to read.   
+6.fixed some bug.   
 ### 0.5.3
 1.optimized code.   
 ### 0.5.2
