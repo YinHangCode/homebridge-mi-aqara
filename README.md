@@ -190,10 +190,10 @@ If you want to disable accessories, you can add disable attribute to config.
                 }
             },
             "158d0001000004": {
-                "Tem": {
+                "TemperatureAndHumiditySensor_TemperatureSensor": {
                     "name": "living room temperature"
                 },
-                "Hum": {
+                "TemperatureAndHumiditySensor_HumiditySensor": {
                     "name": "living room humidity",
                     "disable": true
                 }
