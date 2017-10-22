@@ -69,7 +69,7 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
                         // if(null != value) {
                             // callback(null, value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
                         // } else {
-                            // callback(new Error('get value file: ' + result));
+                            // callback(new Error('get value fail: ' + result));
                         // }
                     // }).catch(function(err) {
                         // that.platform.log.error(err);

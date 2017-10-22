@@ -71,7 +71,7 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
                         // if(null != value) {
                             // callback(null, value);
                         // } else {
-                            // callback(new Error('get value file: ' + result));
+                            // callback(new Error('get value fail: ' + result));
                         // }
                     // }).catch(function(err) {
                         // that.platform.log.error(err);
@@ -145,7 +145,7 @@ class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser 
                         // if(null != value) {
                             // callback(null, value);
                         // } else {
-                            // callback(new Error('get value file: ' + result));
+                            // callback(new Error('get value fail: ' + result));
                         // }
                     // }).catch(function(err) {
                         // that.platform.log.error(err);
@@ -219,7 +219,7 @@ class TemperatureAndHumiditySensor2BarometricSensorParser extends AccessoryParse
                         // if(null != value) {
                             // callback(null, value);
                         // } else {
-                            // callback(new Error('get value file: ' + result));
+                            // callback(new Error('get value fail: ' + result));
                         // }
                     // }).catch(function(err) {
                         // that.platform.log.error(err);

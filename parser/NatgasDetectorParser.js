@@ -69,7 +69,7 @@ class NatgasDetectorSmokeSensorParser extends AccessoryParser {
                         // if(null != value) {
                             // callback(null, value ? that.Characteristic.SmokeDetected.SMOKE_DETECTED : that.Characteristic.SmokeDetected.SMOKE_NOT_DETECTED);
                         // } else {
-                            // callback(new Error('get value file: ' + result));
+                            // callback(new Error('get value fail: ' + result));
                         // }
                     // }).catch(function(err) {
                         // that.platform.log.error(err);

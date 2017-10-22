@@ -119,7 +119,7 @@ class AccessoryParser {
                     // if(batteryLevelValue) {
                         // callback(null, batteryLevelValue);
                     // } else {
-                        // callback(new Error('get value file: ' + result));
+                        // callback(new Error('get value fail: ' + result));
                     // }
                 // }).catch(function(err) {
                     // that.platform.log.error(err);

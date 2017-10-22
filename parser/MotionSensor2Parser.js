@@ -70,7 +70,7 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
                         // if(null != value) {
                             // callback(null, value);
                         // } else {
-                            // callback(new Error('get value file: ' + result));
+                            // callback(new Error('get value fail: ' + result));
                         // }
                     // }).catch(function(err) {
                         // that.platform.log.error(err);
@@ -114,6 +114,12 @@ class MotionSensor2LightSensorParser extends AccessoryParser {
         service.getCharacteristic(that.Characteristic.CurrentAmbientLightLevel);
         result.push(service);
         
+        var batteryService  = new that.Service.BatteryService(accessoryName);
+        batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
+        batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
+        batteryService.getCharacteristic(that.Characteristic.ChargingState);
+        result.push(batteryService);
+        
         return result;
     }
     
@@ -124,7 +130,6 @@ class MotionSensor2LightSensorParser extends AccessoryParser {
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
             var service = accessory.getService(that.Service.LightSensor);
-            
             var currentAmbientLightLevelCharacteristic = service.getCharacteristic(that.Characteristic.CurrentAmbientLightLevel);
             var value = that.getCurrentAmbientLightLevelCharacteristicValue(jsonObj, null);
             if(value) {
@@ -139,7 +144,7 @@ class MotionSensor2LightSensorParser extends AccessoryParser {
                         if(value) {
                             callback(null, value);
                         } else {
-                            callback(new Error('get value file: ' + result));
+                            callback(new Error('get value fail: ' + result));
                         }
                     }).catch(function(err) {
                         that.platform.log.error(err);

@@ -67,7 +67,7 @@ class PlugBase86OutletParser extends AccessoryParser {
                             outletInUseCharacteristic.updateValue(value);
                             callback(null, value);
                         } else {
-                            callback(new Error('get value file: ' + result));
+                            callback(new Error('get value fail: ' + result));
                         }
                     }).catch(function(err) {
                         that.platform.log.error(err);

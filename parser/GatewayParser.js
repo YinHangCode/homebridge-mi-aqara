@@ -65,7 +65,7 @@ class GatewayLightSensorParser extends AccessoryParser {
                         if(value) {
                             callback(null, value);
                         } else {
-                            callback(new Error('get value file: ' + result));
+                            callback(new Error('get value fail: ' + result));
                         }
                     }).catch(function(err) {
                         that.platform.log.error(err);
@@ -163,7 +163,7 @@ class GatewayLightbulbParser extends AccessoryParser {
                         if(null != value) {
                             callback(null, value);
                         } else {
-                            callback(new Error('get value file: ' + result));
+                            callback(new Error('get value fail: ' + result));
                         }
                     }).catch(function(err) {
                         that.platform.log.error(err);
@@ -184,7 +184,7 @@ class GatewayLightbulbParser extends AccessoryParser {
                                 callback(null, brightnessCharacteristic.value);
                             }
                         } else {
-                            callback(new Error('get value file: ' + result));
+                            callback(new Error('get value fail: ' + result));
                         }
                     }).catch(function(err) {
                         that.platform.log.error(err);
@@ -205,7 +205,7 @@ class GatewayLightbulbParser extends AccessoryParser {
                                 callback(null, hueCharacteristic.value);
                             }
                         } else {
-                            callback(new Error('get value file: ' + result));
+                            callback(new Error('get value fail: ' + result));
                         }
                     }).catch(function(err) {
                         that.platform.log.error(err);
@@ -226,7 +226,7 @@ class GatewayLightbulbParser extends AccessoryParser {
                                 callback(null, saturationCharacteristic.value);
                             }
                         } else {
-                            callback(new Error('get value file: ' + result));
+                            callback(new Error('get value fail: ' + result));
                         }
                     }).catch(function(err) {
                         that.platform.log.error(err);
