@@ -168,8 +168,11 @@ If you want to disable accessories, you can add disable attribute to config.
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "sid": ["6409802da3b3", "f0b4299a5b2b", "f0b4299a77dd"],
-        "password": ["02i44k56zrgg578b", "g250s2vtne8q9qhv", "syu3oasva3uqd5qd"],
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
         "defaultValue": {
             "158d0001000007": {
                 "SingleSwitch_Switch": {
