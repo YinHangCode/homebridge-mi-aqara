@@ -84,6 +84,6 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
     
     getMotionDetectedCharacteristicValue(jsonObj, defaultValue) {
         var value = this.getValueFrJsonObjData(jsonObj, 'status');
-        return (null != value) ? (value === 'motion') : defaultValue;
+        return (null != value) ? (value === 'motion') : false;
     }
 }

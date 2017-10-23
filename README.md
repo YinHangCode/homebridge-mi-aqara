@@ -284,6 +284,9 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.2
+1.fixed bug that MotionSensor motion sonser status is error.   
+2.fixed bug that MotionSensor2 motion sonser status is error.   
 ### 0.6.1
 1.fixed bug that MotionSensor2 light sonser value is error.   
 ### 0.6.0
