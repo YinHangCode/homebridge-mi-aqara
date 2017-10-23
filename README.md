@@ -285,10 +285,10 @@ echo [] > cachedAccessories
 
 ## Version Logs
 ### 0.6.2
-1.fixed bug that MotionSensor motion sonser status is error.   
-2.fixed bug that MotionSensor2 motion sonser status is error.   
+1.fixed bug that MotionSensor motion sonser accessory status is error.   
+2.fixed bug that MotionSensor2 motion sonser accessory status is error.   
 ### 0.6.1
-1.fixed bug that MotionSensor2 light sonser value is error.   
+1.fixed bug that MotionSensor2 light sonser accessory value is error.   
 ### 0.6.0
 1.refactoring code.   
 2.add feedback when control accessory.   
