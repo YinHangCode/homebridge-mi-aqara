@@ -6,8 +6,8 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
    
-**Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories).**
-**Note: 0.6.3 will add syncValue configure, user decides whether to synchronize.**
+**Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories).**   
+**Note: 0.6.3 will add syncValue configure, user decides whether to synchronize. [about synchronous](#about-synchronous-value)**   
    
 This repository contains the Aqara plugin for homebridge.  
 Aqara is a ZigBee gateway with a few sensors.  
