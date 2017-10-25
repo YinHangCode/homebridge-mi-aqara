@@ -22,7 +22,7 @@ class AccessoryParser {
         return {};
     }
     
-    getServices() {
+    getServices(jsonObj, accessoryName) {
         return [];
     }
     
@@ -47,6 +47,8 @@ class AccessoryParser {
             that.getServices(jsonObj, accessoryName).forEach(function(service, index, serviceArr) {
                 accessory.addService(service, accessoryName);
             });
+            
+            // accessory.reachable = true;
             
             return accessory;
         }

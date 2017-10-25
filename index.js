@@ -65,7 +65,12 @@ function MiAqaraPlatform(log, config, api) {
 }
 
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
-    this.AccessoryUtil.add(accessory);
+    var that = this;
+    
+    // accessory.reachable = true;
+    if(that.AccessoryUtil) {
+        that.AccessoryUtil.add(accessory);
+    }
 }
 
 MiAqaraPlatform.prototype.initServerSocket = function() {
@@ -218,7 +223,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             that.DeviceUtil.addOrUpdate(gatewaySid, gatewayDevice);
             
             var command1 = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
-            that.sendReadCommand(gatewaySid, command1).then(result => {
+            that.sendReadCommand(gatewaySid, command1, {timeout: 12 * 60 * 1000}).then(result => {
                 that.DeviceUtil.update({model: result['model']});
                 var createAccessories = that.ParseUtil.getCreateAccessories(result);
                 that.registerPlatformAccessories(createAccessories);
@@ -243,7 +248,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
                 that.DeviceUtil.addOrUpdate(deviceSid, device);
                 
                 var command2 = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                that.sendReadCommand(deviceSid, command2).then(result => {
+                that.sendReadCommand(deviceSid, command2, {timeout: 12 * 60 * 1000}).then(result => {
                     that.DeviceUtil.update({model: result['model']});
                     var createAccessories = that.ParseUtil.getCreateAccessories(result);
                     that.registerPlatformAccessories(createAccessories);
@@ -353,7 +358,7 @@ MiAqaraPlatform.prototype.getPromisesTagSerialNumber = function() {
     return this.PromisesTagSerialNumber.time + (this.PromisesTagSerialNumber.num++);
 }
 
-MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg) {
+MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options) {
     var that = this;
     return new Promise((resolve, reject) => {
         if(!that.PromisesSendCommand) {
@@ -402,18 +407,18 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg) {
                 var err = new Error('timeout: ' + msg);
                 triggerCorrelationPromises('reject', err);
                 reject(err);
-            }, 3 * 60 * 1000);
+            }, (options && options.timeout) || 12 * 1000);
         }
     })
 }
 
-MiAqaraPlatform.prototype.sendReadCommand = function(deviceSid, command) {
+MiAqaraPlatform.prototype.sendReadCommand = function(deviceSid, command, options) {
     var that = this;
     return new Promise((resolve, reject) => {
         var device = that.DeviceUtil.getBySid(deviceSid);
         var gateway = that.GatewayUtil.getBySid(device.gatewaySid);
         var msgTag = 'read_' + deviceSid + "_t" + that.getPromisesTagSerialNumber();
-        that.sendCommand(gateway.ip, gateway.port, msgTag, command).then(result => {
+        that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
             resolve(result);
         }).catch(function(err) {
             that.log.error(err);
@@ -422,7 +427,7 @@ MiAqaraPlatform.prototype.sendReadCommand = function(deviceSid, command) {
     })
 }
 
-MiAqaraPlatform.prototype.sendWriteCommand = function(deviceSid, command) {
+MiAqaraPlatform.prototype.sendWriteCommand = function(deviceSid, command, options) {
     var that = this;
     return new Promise((resolve, reject) => {
         var device = that.DeviceUtil.getBySid(deviceSid);
@@ -435,7 +440,7 @@ MiAqaraPlatform.prototype.sendWriteCommand = function(deviceSid, command) {
         
         command = command.replace('${key}', key);
         var msgTag = 'write_' + deviceSid + "_t" + that.getPromisesTagSerialNumber();
-        that.sendCommand(gateway.ip, gateway.port, msgTag, command).then(result => {
+        that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
             resolve(result);
         }).catch(function(err) {
             that.log.error(err);

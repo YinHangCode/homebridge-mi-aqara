@@ -61,22 +61,24 @@ class WaterDetectorLeakSensorParser extends AccessoryParser {
                 leakDetectedCharacteristic.updateValue(value ? that.Characteristic.LeakDetected.LEAK_DETECTED : that.Characteristic.LeakDetected.LEAK_NOT_DETECTED);
             }
             
-            // if (leakDetectedCharacteristic.listeners('get').length == 0) {
-                // leakDetectedCharacteristic.on("get", function(callback) {
-                    // var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    // that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        // var value = that.getLeakDetectedCharacteristicValue(result, null);
-                        // if(null != value) {
-                            // callback(null, value ? that.Characteristic.LeakDetected.LEAK_DETECTED : that.Characteristic.LeakDetected.LEAK_NOT_DETECTED);
-                        // } else {
-                            // callback(new Error('get value fail: ' + result));
-                        // }
-                    // }).catch(function(err) {
-                        // that.platform.log.error(err);
-                        // callback(err);
-                    // });
-                // });
-            // }
+            if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                if (leakDetectedCharacteristic.listeners('get').length == 0) {
+                    leakDetectedCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getLeakDetectedCharacteristicValue(result, null);
+                            if(null != value) {
+                                callback(null, value ? that.Characteristic.LeakDetected.LEAK_DETECTED : that.Characteristic.LeakDetected.LEAK_NOT_DETECTED);
+                            } else {
+                                callback(new Error('get value fail: ' + result));
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
+                    });
+                }
+            }
             
             that.parserBatteryService(accessory, jsonObj);
         }

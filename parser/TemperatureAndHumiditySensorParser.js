@@ -62,22 +62,24 @@ class TemperatureAndHumiditySensorTemperatureSensorParser extends AccessoryParse
                 currentTemperatureCharacteristic.updateValue(value);
             }
             
-            // if (currentTemperatureCharacteristic.listeners('get').length == 0) {
-                // currentTemperatureCharacteristic.on("get", function(callback) {
-                    // var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    // that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        // var value = that.getCurrentTemperatureCharacteristicValue(result, null);
-                        // if(null != value) {
-                            // callback(null, value);
-                        // } else {
-                            // callback(new Error('get value fail: ' + result));
-                        // }
-                    // }).catch(function(err) {
-                        // that.platform.log.error(err);
-                        // callback(err);
-                    // });
-                // });
-            // }
+            if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                if (currentTemperatureCharacteristic.listeners('get').length == 0) {
+                    currentTemperatureCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getCurrentTemperatureCharacteristicValue(result, null);
+                            if(null != value) {
+                                callback(null, value);
+                            } else {
+                                callback(new Error('get value fail: ' + result));
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
+                    });
+                }
+            }
             
             that.parserBatteryService(accessory, jsonObj);
         }
@@ -136,22 +138,24 @@ class TemperatureAndHumiditySensorHumiditySensorParser extends AccessoryParser {
                 currentRelativeHumidityCharacteristic.updateValue(value);
             }
             
-            // if (currentRelativeHumidityCharacteristic.listeners('get').length == 0) {
-                // currentRelativeHumidityCharacteristic.on("get", function(callback) {
-                    // var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    // that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        // var value = that.getCurrentRelativeHumidityCharacteristicValue(result, null);
-                        // if(null != value) {
-                            // callback(null, value);
-                        // } else {
-                            // callback(new Error('get value fail: ' + result));
-                        // }
-                    // }).catch(function(err) {
-                        // that.platform.log.error(err);
-                        // callback(err);
-                    // });
-                // });
-            // }
+            if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                if (currentRelativeHumidityCharacteristic.listeners('get').length == 0) {
+                    currentRelativeHumidityCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getCurrentRelativeHumidityCharacteristicValue(result, null);
+                            if(null != value) {
+                                callback(null, value);
+                            } else {
+                                callback(new Error('get value fail: ' + result));
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
+                    });
+                }
+            }
             
             that.parserBatteryService(accessory, jsonObj);
         }

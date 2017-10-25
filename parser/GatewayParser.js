@@ -57,21 +57,23 @@ class GatewayLightSensorParser extends AccessoryParser {
                 currentAmbientLightLevelCharacteristic.updateValue(value);
             }
             
-            if (currentAmbientLightLevelCharacteristic.listeners('get').length == 0) {
-                currentAmbientLightLevelCharacteristic.on("get", function(callback) {
-                    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        var value = that.getCurrentAmbientLightLevelCharacteristicValue(result, null);
-                        if(value) {
-                            callback(null, value);
-                        } else {
-                            callback(new Error('get value fail: ' + result));
-                        }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        callback(err);
+            if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                if (currentAmbientLightLevelCharacteristic.listeners('get').length == 0) {
+                    currentAmbientLightLevelCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getCurrentAmbientLightLevelCharacteristicValue(result, null);
+                            if(value) {
+                                callback(null, value);
+                            } else {
+                                callback(new Error('get value fail: ' + result));
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
                     });
-                });
+                }
             }
         }
     }
@@ -155,84 +157,86 @@ class GatewayLightbulbParser extends AccessoryParser {
                 saturationCharacteristic.updateValue(saturationValue);
             }
             
-            if (switchCharacteristic.listeners('get').length == 0) {
-                switchCharacteristic.on("get", function(callback) {
-                    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        var value = that.getSwitchCharacteristicValue(result, null);
-                        if(null != value) {
-                            callback(null, value);
-                        } else {
-                            callback(new Error('get value fail: ' + result));
-                        }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        callback(err);
-                    });
-                });
-            }
-            
-            if (brightnessCharacteristic.listeners('get').length == 0) {
-                brightnessCharacteristic.on("get", function(callback) {
-                    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        var value = that.getBrightnessCharacteristicValue(result, null);
-                        if(null != value) {
-                            if(value > 0) {
+            if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                if (switchCharacteristic.listeners('get').length == 0) {
+                    switchCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getSwitchCharacteristicValue(result, null);
+                            if(null != value) {
                                 callback(null, value);
                             } else {
-                                callback(null, brightnessCharacteristic.value);
+                                callback(new Error('get value fail: ' + result));
                             }
-                        } else {
-                            callback(new Error('get value fail: ' + result));
-                        }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        callback(err);
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
                     });
-                });
-            }
-            
-            if (hueCharacteristic.listeners('get').length == 0) {
-                hueCharacteristic.on("get", function(callback) {
-                    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        var value = that.getHueCharacteristicValue(result, null);
-                        if(null != value) {
-                            if(value > 0) {
-                                callback(null, value);
+                }
+                
+                if (brightnessCharacteristic.listeners('get').length == 0) {
+                    brightnessCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getBrightnessCharacteristicValue(result, null);
+                            if(null != value) {
+                                if(value > 0) {
+                                    callback(null, value);
+                                } else {
+                                    callback(null, brightnessCharacteristic.value);
+                                }
                             } else {
-                                callback(null, hueCharacteristic.value);
+                                callback(new Error('get value fail: ' + result));
                             }
-                        } else {
-                            callback(new Error('get value fail: ' + result));
-                        }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        callback(err);
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
                     });
-                });
-            }
-            
-            if (saturationCharacteristic.listeners('get').length == 0) {
-                saturationCharacteristic.on("get", function(callback) {
-                    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        var value = that.getSaturationCharacteristicValue(result, null);
-                        if(null != value) {
-                            if(value > 0) {
-                                callback(null, value);
+                }
+                
+                if (hueCharacteristic.listeners('get').length == 0) {
+                    hueCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getHueCharacteristicValue(result, null);
+                            if(null != value) {
+                                if(value > 0) {
+                                    callback(null, value);
+                                } else {
+                                    callback(null, hueCharacteristic.value);
+                                }
                             } else {
-                                callback(null, saturationCharacteristic.value);
+                                callback(new Error('get value fail: ' + result));
                             }
-                        } else {
-                            callback(new Error('get value fail: ' + result));
-                        }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        callback(err);
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
                     });
-                });
+                }
+                
+                if (saturationCharacteristic.listeners('get').length == 0) {
+                    saturationCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getSaturationCharacteristicValue(result, null);
+                            if(null != value) {
+                                if(value > 0) {
+                                    callback(null, value);
+                                } else {
+                                    callback(null, saturationCharacteristic.value);
+                                }
+                            } else {
+                                callback(new Error('get value fail: ' + result));
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
+                    });
+                }
             }
             
             if (switchCharacteristic.listeners('set').length == 0) {

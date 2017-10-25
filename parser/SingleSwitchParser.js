@@ -73,21 +73,23 @@ class SingleSwitchSwitchParser extends AccessoryParser {
                 onCharacteristic.updateValue(value);
             }
             
-            if (onCharacteristic.listeners('get').length == 0) {
-                onCharacteristic.on("get", function(callback) {
-                    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        var value = that.getOnCharacteristicValue(result, null);
-                        if(null != value) {
-                            callback(null, value);
-                        } else {
-                            callback(new Error('get value fail: ' + result));
-                        }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        callback(err);
+            if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                if (onCharacteristic.listeners('get').length == 0) {
+                    onCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getOnCharacteristicValue(result, null);
+                            if(null != value) {
+                                callback(null, value);
+                            } else {
+                                callback(new Error('get value fail: ' + result));
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
                     });
-                });
+                }
             }
             
             if(onCharacteristic.listeners('set').length == 0) {

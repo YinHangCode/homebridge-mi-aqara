@@ -36,9 +36,9 @@ class ElectricCurtainWindowCoveringParser extends AccessoryParser {
         var result = [];
         
         var service = new that.Service.WindowCovering(accessoryName);
-        service.getCharacteristic(Characteristic.PositionState);
-        service.getCharacteristic(Characteristic.CurrentPosition);
-        service.getCharacteristic(Characteristic.TargetPosition);
+        service.getCharacteristic(that.Characteristic.PositionState);
+        service.getCharacteristic(that.Characteristic.CurrentPosition);
+        service.getCharacteristic(that.Characteristic.TargetPosition);
         result.push(service);
         
         return result;
@@ -51,39 +51,42 @@ class ElectricCurtainWindowCoveringParser extends AccessoryParser {
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
             var service = accessory.getService(that.Service.WindowCovering);
-            var positionStateCharacteristic = curtainService.getCharacteristic(Characteristic.PositionState);
-            var currentPositionCharacteristic = curtainService.getCharacteristic(Characteristic.CurrentPosition);
-            var targetPositionCharacteristic = curtainService.getCharacteristic(Characteristic.TargetPosition);
+            var positionStateCharacteristic = service.getCharacteristic(that.Characteristic.PositionState);
+            var currentPositionCharacteristic = service.getCharacteristic(that.Characteristic.CurrentPosition);
+            var targetPositionCharacteristic = service.getCharacteristic(that.Characteristic.TargetPosition);
             var value = that.getCurrentPositionCharacteristicValue(jsonObj, null);
             if(null != value) {
-                positionStateCharacteristic.updateValue(Characteristic.PositionState.STOPPED);
-                currentPositionCharacteristic.updateValue(curtainLevel);
-                targetPositionCharacteristic.updateValue(curtainLevel);
+                positionStateCharacteristic.updateValue(that.Characteristic.PositionState.STOPPED);
+                currentPositionCharacteristic.updateValue(value);
+                targetPositionCharacteristic.updateValue(value);
             }
             
-            if (currentPositionCharacteristic.listeners('get').length == 0) {
-                currentPositionCharacteristic.on("get", function(callback) {
-                    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
-                        var value = that.getCurrentPositionCharacteristicValue(result, null);
-                        if(null != value) {
-                            positionStateCharacteristic.updateValue(Characteristic.PositionState.STOPPED);
-                            targetPositionCharacteristic.updateValue(curtainLevel);
-                            callback(null, curtainLevel);
-                        } else {
-                            callback(new Error('get value fail: ' + result));
-                        }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        callback(err);
+            if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                if (currentPositionCharacteristic.listeners('get').length == 0) {
+                    currentPositionCharacteristic.on("get", function(callback) {
+                        var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            var value = that.getCurrentPositionCharacteristicValue(result, null);
+                            if(null != value) {
+                                positionStateCharacteristic.updateValue(that.Characteristic.PositionState.STOPPED);
+                                targetPositionCharacteristic.updateValue(value);
+                                callback(null, value);
+                            } else {
+                                callback(new Error('get value fail: ' + result));
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            callback(err);
+                        });
                     });
-                });
+                }
             }
             
             if (targetPositionCharacteristic.listeners('set').length == 0) {
-                    targetPositionCharacteristic.on("set", function(value, callback) {
+                targetPositionCharacteristic.on("set", function(value, callback) {
                     var command = '{"cmd":"write","model":"curtain","sid":"' + deviceSid + '","data":"{\\"curtain_level\\":\\"' + value + '\\", \\"key\\": \\"${key}\\"}"}';
-                    that.platform.sendReadCommand(deviceSid, command).then(result => {
+                    console.info(command);
+                    that.platform.sendWriteCommand(deviceSid, command).then(result => {
                         callback(null);
                     }).catch(function(err) {
                         that.platform.log.error(err);
@@ -91,8 +94,6 @@ class ElectricCurtainWindowCoveringParser extends AccessoryParser {
                     });
                 });
             }
-            
-            that.parserBatteryService(accessory, jsonObj);
         }
     }
     
