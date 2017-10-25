@@ -7,7 +7,6 @@ Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](http
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
    
 **Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories).**   
-**Note: 0.6.3 will add syncValue configure, user decides whether to synchronize. [about synchronous](#about-synchronous-value)**   
    
 This repository contains the Aqara plugin for homebridge.  
 Aqara is a ZigBee gateway with a few sensors.  
@@ -153,13 +152,23 @@ Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwit
                 }
             },
             "158d0001000008": {
+                "Global": {
+                    "serviceType": "Lightbulb"
+                },
+                "DuplexSwitch_Switch_Left": {
+                    "name": "master bedroom room light"
+                },
+                "DuplexSwitch_Switch_Right": {
+                    "name": "study room light"
+                }
+            },
+            "158d10010000001": {
                 "DuplexSwitch_Switch_Left": {
                     "name": "master bedroom room light",
                     "serviceType": "Lightbulb"
                 },
                 "DuplexSwitch_Switch_Right": {
-                    "name": "study room light",
-                    "serviceType": "Lightbulb"
+                    "name": "study room light"
                 }
             }
         }
@@ -205,81 +214,53 @@ If you want to disable accessories, you can add disable attribute to config.
                 }
             },
             "158d0001000012": {
-                "DuplexButton86_StatelessProgrammableSwitch_Left": {
-                    "name": "dining room 86 button left"
-                },
-                "DuplexButton86_Switch_VirtualSinglePress_Left": {
-                    "name": "dining room 86 button left virtual single press",
-                    "disable": true
-                },
-                "DuplexButton86_StatelessProgrammableSwitch_Right": {
-                    "name": "dining room 86 button right"
-                },
-                "DuplexButton86_Switch_VirtualSinglePress_Right": {
-                    "name": "dining room 86 button right virtual single press",
-                    "disable": true
-                },
-                "DuplexButton86_StatelessProgrammableSwitch_Both": {
-                    "name": "dining room 86 button both"
-                },
-                "DuplexButton86_Switch_VirtualSinglePress_Both": {
-                    "name": "dining room 86 button both virtual single press",
+                "Global": {
                     "disable": true
                 }
             },
             "158d0001000015": {
+                "Global": {
+                    "disable": true
+                },
                 "MagicSquare_StatelessProgrammableSwitch_Flip90": {
                     "name": "study room magic square flip90",
-                    "disable": true
-                },
-                "MagicSquare_Switch_VirtualFlip90": {
-                    "name": "study room magic square virtual flip90"
-                },
-                "MagicSquare_StatelessProgrammableSwitch_Flip180": {
-                    "name": "study room magic square flip180",
-                    "disable": true
-                },
-                "MagicSquare_Switch_VirtualFlip180": {
-                    "name": "study room magic square virtual flip180"
-                },
-                "MagicSquare_StatelessProgrammableSwitch_Move": {
-                    "name": "study room magic square move",
-                    "disable": true
-                },
-                "MagicSquare_Switch_VirtualMove": {
-                    "name": "study room magic square virtual move"
-                },
-                "MagicSquare_StatelessProgrammableSwitch_TapTwice": {
-                    "name": "study room magic square tapTwice",
-                    "disable": true
-                },
-                "MagicSquare_Switch_VirtualTapTwice": {
-                    "name": "study room magic square virtual tapTwice"
-                },
-                "MagicSquare_StatelessProgrammableSwitch_ShakeAir": {
-                    "name": "study room magic square shakeAir",
-                    "disable": true
-                },
-                "MagicSquare_Switch_VirtualShakeAir": {
-                    "name": "study room magic square virtual shakeAir"
-                },
-                "MagicSquare_StatelessProgrammableSwitch_Rotate": {
-                    "name": "study room magic square rotate",
-                    "disable": true
+                    "disable": false
                 }
             }
         }
     }]
 }
 ```
+If you want to accessory value exact, you can set syncValue is true.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "158d0001000007": {
+                "SingleSwitch_Switch": {
+                    "name": "living room light",
+                    "serviceType": "Lightbulb",
+                    "syncValue": true
+                }
+            }
+        }
+    }]
+}
+```
+when syncValue is true, accessory will synchronization value when homebridge call the get function. At the same time, it's going to waste more time.   
+when syncValue is false, accessory will use the device last reported value. It's going to respond quickly.   
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/syncValue.png)
    
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
 SingleButton86/DuplexButton86(Left, Right, Both) StatelessProgrammableSwitch only support SinglePress.   
 MagicSquare(Flip90, Flip180, Move, TapTwice, ShakeAir, Rotate) StatelessProgrammableSwitch only support SinglePress.   
-    
-## About synchronous value
-![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/syncValue.png)
    
 ## Run it
 homebridge -D   
@@ -290,6 +271,11 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.3
+1.fixed bug that ElectricCurtain can't work.   
+2.remove synchronization value when homebridge call the get function(only electrify device) and add setting synchronization value feature.   
+3.add config Global mode.   
+
 ### 0.6.2
 1.fixed bug that MotionSensor motion sonser accessory status is error.   
 2.fixed bug that MotionSensor2 motion sonser accessory status is error.   

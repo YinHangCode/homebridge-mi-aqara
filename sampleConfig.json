@@ -32,16 +32,18 @@
                 }
             },
             "158d0001000003": {
+                "Global": {
+                    "disable": true 
+                },
                 "Button_StatelessProgrammableSwitch": {
-                    "name": "living room button"
+                    "name": "living room button",
+                    "disable": false
                 },
                 "Button_Switch_VirtualSinglePress": {
-                    "name": "living room button virtual single press",
-                    "disable": true
+                    "name": "living room button virtual single press"
                 },
                 "Button_Switch_VirtualDoublePress": {
-                    "name": "living room button virtual double press",
-                    "disable": true
+                    "name": "living room button virtual double press"
                 }
             },
             "158d0001000004": {
@@ -59,13 +61,14 @@
                 }
             },
             "158d0001000008": {
-                "DuplexSwitch_Switch_Left": {
-                    "name": "master bedroom room light",
+                "Global": {
                     "serviceType": "Lightbulb"
                 },
+                "DuplexSwitch_Switch_Left": {
+                    "name": "master bedroom room light"
+                },
                 "DuplexSwitch_Switch_Right": {
-                    "name": "study room light",
-                    "serviceType": "Lightbulb"
+                    "name": "study room light"
                 }
             },
             "158d0001000009": {
