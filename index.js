@@ -191,16 +191,17 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
     
     var cmd = jsonObj['cmd'];
     if (cmd === 'iam') {
-        that.log.debug(msg);
+        that.log.debug("[Revc]" + msg);
         var gatewaySid = jsonObj['sid'];
         if(that.ConfigUtil.isConfigGateway(gatewaySid)) {
             var ip = jsonObj['ip'];
             var port = jsonObj['port'];
             var listCmd = '{"cmd":"get_id_list"}';
             serverSocket.send(listCmd, 0, listCmd.length, port, ip);
+            that.log.debug("[Send]" + listCmd);
         }
     } else if (cmd === 'get_id_list_ack') {
-        that.log.debug(msg);
+        that.log.debug("[Revc]" + msg);
         var gatewaySid = jsonObj['sid'];
         var gateway = that.GatewayUtil.getBySid(gatewaySid);
         if(!gateway) {
@@ -237,7 +238,14 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         }
         
         var data = JSON.parse(jsonObj['data']);
-        for(var index in data) {
+        var index = 0;
+        var sendInterval = setInterval(function(){
+            if(index >= data.length) {
+                that.log.debug("read gateway device list finished. size: " + index);
+                clearInterval(sendInterval);
+                return;
+            }
+            
             var deviceSid = data[index];
             if(!that.DeviceUtil.getBySid(deviceSid)) {
                 var device = {
@@ -260,7 +268,9 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
                     that.log.error(err);
                 });
             }
-        }
+            
+            index++;
+        }, 100);
     } else if (cmd === 'heartbeat') {
 //      that.log.debug(msg);
         var model = jsonObj['model'];
@@ -281,11 +291,10 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var msgTag = 'write_' + jsonObj['sid'];
         const p = that.getPromises(msgTag);
         if(!p) {
-            // that.log.warn("unknow msg %s", msg);
+            that.log.warn("[Revc]" + msg);
             return;
         } else {
-            that.log.debug(p.msg);
-            that.log.debug(msg);
+            that.log.debug("[Revc]" + msg);
             if(jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
                 p.reject(new Error(JSON.parse(jsonObj['data'])['error']));
             } else {
@@ -296,11 +305,10 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var msgTag = 'read_' + jsonObj['sid'];
         const p = that.getPromises(msgTag);
         if(!p) {
-            // that.log.warn("unknow msg %s", msg);
+            that.log.warn("[Revc]" + msg);
             return;
         } else {
-            that.log.debug(p.msg);
-            that.log.debug(msg);
+            that.log.debug("[Revc]" + msg);
             if(jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
                 p.reject(new Error(JSON.parse(jsonObj['data'])['error']));
             } else {
@@ -308,10 +316,10 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             }
         }
     } else if (cmd === 'report') {
-        that.log.debug(msg);
+        that.log.debug("[Revc]" + msg);
         that.ParseUtil.parserAccessories(jsonObj);
     } else {
-        that.log.warn(msg);
+        that.log.warn("[Revc]" + msg);
     }
 }
 
@@ -380,7 +388,6 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options)
         }
         
         that._promises[msgTag] = {
-            msg: msg,
             resolve: res => {
                 delete this._sendTimeout;
                 delete that._promises[msgTag];
@@ -400,6 +407,7 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options)
         } else {
             that.PromisesSendCommand[ip + port + msg] = [];
             serverSocket.send(msg, 0, msg.length, port, ip, err => err && reject(err));
+            that.log.debug("[Send]" + msg);
             
             this._sendTimeout = setTimeout(() => {
                 delete this._sendTimeout;

@@ -157,11 +157,23 @@ class MagicSquareSwitchVirtualFlip90Parser extends MagicSquareSwitchVirtualBaseP
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"cube","sid":"' + deviceSid + '","data":"{\\"status\\":\\"flip90\\", \\"key\\": \\"${key}\\"}"}';
     }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"cube\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"flip90\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
 }
 
 class MagicSquareSwitchVirtualFlip180Parser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"cube","sid":"' + deviceSid + '","data":"{\\"status\\":\\"flip180\\", \\"key\\": \\"${key}\\"}"}';
+    }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"cube\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"flip180\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
@@ -169,16 +181,34 @@ class MagicSquareSwitchVirtualMoveParser extends MagicSquareSwitchVirtualBasePar
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"cube","sid":"' + deviceSid + '","data":"{\\"status\\":\\"move\\", \\"key\\": \\"${key}\\"}"}';
     }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"cube\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"move\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
 }
 
 class MagicSquareSwitchVirtualTapTwiceParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"cube","sid":"' + deviceSid + '","data":"{\\"status\\":\\"tap_twice\\", \\"key\\": \\"${key}\\"}"}';
     }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"cube\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"tap_twice\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
 }
 
 class MagicSquareSwitchVirtualShakeAirParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"cube","sid":"' + deviceSid + '","data":"{\\"status\\":\\"shake_air\\", \\"key\\": \\"${key}\\"}"}';
+    }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"cube\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"shake_air\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
     }
 }

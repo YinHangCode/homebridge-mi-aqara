@@ -70,7 +70,7 @@ class SingleButton86StatelessProgrammableSwitchParser extends AccessoryParser {
     }
     
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = this.getValueFrJsonObjData(jsonObj, 'channel_0');
         if(value === 'click') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else if(value === 'double_click') {
@@ -97,6 +97,12 @@ class SingleButton86SwitchVirtualBasePressParser extends SwitchVirtualBasePressP
 class SingleButton86SwitchVirtualSinglePressParser extends SingleButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"86sw1","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+    }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw1\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_0\\\":\\\"click\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 

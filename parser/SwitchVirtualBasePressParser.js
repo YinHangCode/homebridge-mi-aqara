@@ -40,6 +40,7 @@ class SwitchVirtualBasePressParser extends AccessoryParser {
                     var command = that.getWriteCommand(deviceSid, value);
                     that.platform.sendWriteCommand(deviceSid, command).then(result => {
                         callback(null);
+                        that.doSomething(jsonObj);
                         onCharacteristic.updateValue(false);
                     }).catch(function(err) {
                         that.platform.log.error(err);
@@ -50,6 +51,9 @@ class SwitchVirtualBasePressParser extends AccessoryParser {
             
             that.parserBatteryService(accessory, jsonObj);
         }
+    }
+    
+    doSomething(jsonObj) {
     }
 }
 

@@ -133,6 +133,12 @@ class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86Swi
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"86sw2","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
     }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_0\\\":\\\"click\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
 }
 
 // class DuplexButton86SwitchVirtualDoublePressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
@@ -151,6 +157,12 @@ class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86Sw
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"86sw2","sid":"' + deviceSid + '","data":"{\\"channel_1\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
     }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_1\\\":\\\"click\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
 }
 
 // class DuplexButton86SwitchVirtualDoublePressRightParser extends DuplexButton86SwitchVirtualBasePressParser {
@@ -168,5 +180,11 @@ class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86Sw
 class DuplexButton86SwitchVirtualSinglePressBothPressParser extends DuplexButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"86sw2","sid":"' + deviceSid + '","data":"{\\"dual_channel\\":\\"both_click\\", \\"key\\": \\"${key}\\"}"}';
+    }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"dual_channel\\\":\\\"both_click\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
     }
 }

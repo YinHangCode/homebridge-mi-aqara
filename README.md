@@ -271,11 +271,14 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.4
+1.add virtual switch accessory can trigger homekit click events.   
+2.optimizing log content.   
+3.optimizing HomeBridge startup read device info algorithm.   
 ### 0.6.3
 1.fixed bug that ElectricCurtain can't work.   
 2.remove synchronization value when homebridge call the get function(only electrify device) and add setting synchronization value feature.   
 3.add config Global mode.   
-
 ### 0.6.2
 1.fixed bug that MotionSensor motion sonser accessory status is error.   
 2.fixed bug that MotionSensor2 motion sonser accessory status is error.   

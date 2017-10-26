@@ -98,11 +98,23 @@ class Button2SwitchVirtualSinglePressParser extends Button2SwitchVirtualBasePres
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"sensor_switch.aq2","sid":"' + deviceSid + '","data":"{\\"status\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
     }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"sensor_switch.aq2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"click\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
 }
 
 class Button2SwitchVirtualDoublePressParser extends Button2SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         return '{"cmd":"write","model":"sensor_switch.aq2","sid":"' + deviceSid + '","data":"{\\"status\\":\\"double_click\\", \\"key\\": \\"${key}\\"}"}';
+    }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"sensor_switch.aq2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"double_click\\\"}\"}");
+        this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
