@@ -19,6 +19,10 @@
                 },
                 "Gateway_LightSensor": {
                     "name": "living room light sensor"
+                },
+                "Gateway_Switch_JoinPermission": {
+                    "name": "living room gateway join permission switch",
+                    "disable": true
                 }
             },
             "158d0001000001": {
