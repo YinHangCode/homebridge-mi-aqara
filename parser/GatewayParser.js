@@ -9,7 +9,8 @@ class GatewayParser extends DeviceParser {
     getAccessoriesParserInfo() {
         return {
             'Gateway_Lightbulb': GatewayLightbulbParser,
-            'Gateway_LightSensor': GatewayLightSensorParser
+            'Gateway_LightSensor': GatewayLightSensorParser,
+            'Gateway_Switch_JoinPermission': GatewaySwitchJoinPermissionParser
         }
     }
 }
@@ -244,17 +245,17 @@ class GatewayLightbulbParser extends AccessoryParser {
         //          that.platform.log.debug("[MiAqaraPlatform][DEBUG]switch: " + value);
                     if(value == 1 || value == true) { // set by home is 0/1, set by siri is true/false
                         that.controlLight(deviceSid, true, hueCharacteristic.value, saturationCharacteristic.value, brightnessCharacteristic.value).then(result => {
-                            callback(null);
+                            that.callback2HB(deviceSid, this, callback, null);
                         }).catch(function(err) {
                             that.platform.log.error(err);
-                            callback(err);
+                            that.callback2HB(deviceSid, this, callback, err);
                         });
                     } else {
                         that.controlLight(deviceSid, false, null, null, null).then(result => {
-                            callback(null);
+                            that.callback2HB(deviceSid, this, callback, null);
                         }).catch(function(err) {
                             that.platform.log.error(err);
-                            callback(err);
+                            that.callback2HB(deviceSid, this, callback, err);
                         });
                     }
                 });
@@ -267,14 +268,14 @@ class GatewayLightbulbParser extends AccessoryParser {
                         var tmp = brightnessCharacteristic.value;
                         brightnessCharacteristic.value = value;
                         that.controlLight(deviceSid, true, hueCharacteristic.value, saturationCharacteristic.value, value).then(result => {
-                            callback(null);
+                            that.callback2HB(deviceSid, this, callback, null);
                         }).catch(function(err) {
                             brightnessCharacteristic.value = tmp;
                             that.platform.log.error(err);
-                            callback(err);
+                            that.callback2HB(deviceSid, this, callback, err);
                         });
                     } else {
-                        callback(null);
+                        that.callback2HB(deviceSid, this, callback, null);
                     }
                 });
             }
@@ -285,11 +286,11 @@ class GatewayLightbulbParser extends AccessoryParser {
                     var tmp = hueCharacteristic.value;
                     hueCharacteristic.value = value;
                     that.controlLight(deviceSid, true, value, saturationCharacteristic.value, brightnessCharacteristic.value).then(result => {
-                        callback(null);
+                        that.callback2HB(deviceSid, this, callback, null);
                     }).catch(function(err) {
                         hueCharacteristic.value = tmp;
                         that.platform.log.error(err);
-                        callback(err);
+                        that.callback2HB(deviceSid, this, callback, err);
                     });
                 });
             }
@@ -300,11 +301,11 @@ class GatewayLightbulbParser extends AccessoryParser {
                     var tmp = saturationCharacteristic.value;
                     saturationCharacteristic.value = value;
                     that.controlLight(deviceSid, true, hueCharacteristic.value, value, brightnessCharacteristic.value).then(result => {
-                        callback(null);
+                        that.callback2HB(deviceSid, this, callback, null);
                     }).catch(function(err) {
                         saturationCharacteristic.value = tmp;
                         that.platform.log.error(err);
-                        callback(err);
+                        that.callback2HB(deviceSid, this, callback, err);
                     });
                 });
             }
@@ -467,4 +468,98 @@ class GatewayLightbulbParser extends AccessoryParser {
         }
         return hex;
     }
+}
+
+class GatewaySwitchJoinPermissionParser extends AccessoryParser {
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
+        
+        this.joinPermissionTimeout = {};
+    }
+    
+    getAccessoryCategory(deviceSid) {
+        return this.Accessory.Categories.SWITCH;
+    }
+    
+    getAccessoryInformation(deviceSid) {
+        return {
+            'Manufacturer': 'Aqara',
+            'Model': 'Gateway',
+            'SerialNumber': deviceSid
+        };
+    }
+
+    getServices(jsonObj, accessoryName) {
+        var that = this;
+        var result = [];
+        
+        var service = new that.Service.Switch(accessoryName);
+        service.getCharacteristic(that.Characteristic.On);
+        result.push(service);
+        
+        return result;
+    }
+    
+    parserAccessories(jsonObj) {
+        var that = this;
+        var deviceSid = jsonObj['sid'];
+        var uuid = that.getAccessoryUUID(deviceSid);
+        var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
+        if(accessory) {
+            var service = accessory.getService(that.Service.Switch);
+            var onCharacteristic = service.getCharacteristic(that.Characteristic.On);
+            // var value = that.getOnCharacteristicValue(jsonObj, null);
+            // if(null != value) {
+                // onCharacteristic.updateValue(value);
+            // }
+            
+            // if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
+                // if (onCharacteristic.listeners('get').length == 0) {
+                    // onCharacteristic.on("get", function(callback) {
+                        // var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+                        // that.platform.sendReadCommand(deviceSid, command).then(result => {
+                            // var value = that.getOnCharacteristicValue(result, null);
+                            // if(null != value) {
+                                // callback(null, value);
+                            // } else {
+                                // callback(new Error('get value fail: ' + result));
+                            // }
+                        // }).catch(function(err) {
+                            // that.platform.log.error(err);
+                            // callback(err);
+                        // });
+                    // });
+                // }
+            // }
+            
+            if(onCharacteristic.listeners('set').length == 0) {
+                onCharacteristic.on("set", function(value, callback) {
+                    clearTimeout(that.joinPermissionTimeout[deviceSid]);
+                    var command = '{"cmd":"write","model":"gateway","sid":"' + deviceSid + '","data":"{\\"join_permission\\":\\"' + (value ? 'yes' : 'no') + '\\", \\"key\\": \\"${key}\\"}"}';
+                    that.platform.sendWriteCommand(deviceSid, command).then(result => {
+                        that.callback2HB(deviceSid, this, callback, null);
+                        if(value) {
+                            that.joinPermissionTimeout[deviceSid] = setTimeout(() => {
+                                onCharacteristic.updateValue(false);
+                            }, 30 * 1000);
+                        }
+                    }).catch(function(err) {
+                        that.platform.log.error(err);
+                        that.callback2HB(deviceSid, this, callback, err);
+                    });
+                });
+            }
+        }
+    }
+    
+    // getOnCharacteristicValue(jsonObj, defaultValue) {
+        // var value = this.getValueFrJsonObjData(jsonObj, 'channel_0');
+        // if(value === 'on') {
+            // return true;
+        // } else if(value === 'off') {
+            // return false;
+        // } else {
+            // return defaultValue;
+        // }
+    // }
 }

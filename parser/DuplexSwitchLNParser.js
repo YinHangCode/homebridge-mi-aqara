@@ -97,10 +97,10 @@ class DuplexSwitchLNSwitchBaseParser extends AccessoryParser {
                 onCharacteristic.on("set", function(value, callback) {
                     var command = that.getWriteCommand(deviceSid, value);
                     that.platform.sendWriteCommand(deviceSid, command).then(result => {
-                        callback(null);
+                        that.callback2HB(deviceSid, this, callback, null);
                     }).catch(function(err) {
                         that.platform.log.error(err);
-                        callback(err);
+                        that.callback2HB(deviceSid, this, callback, err);
                     });
                 });
             }

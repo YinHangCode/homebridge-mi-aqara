@@ -256,6 +256,31 @@ If you want to accessory value exact, you can set syncValue is true.
 when syncValue is true, accessory will synchronization value when homebridge call the get function. At the same time, it's going to waste more time.   
 when syncValue is false, accessory will use the device last reported value. It's going to respond quickly.   
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/syncValue.png)
+If you don't like "No Response", you can set disableNoResponse is true.   
+When the device is no pesponse and disableNoResponse is true, the accessory value will auto jump back to before the control.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "Global": {
+                "disableNoResponse": true
+            }
+            "158d0001000007": {
+                "SingleSwitch_Switch": {
+                    "name": "living room light",
+                    "serviceType": "Lightbulb",
+                    "syncValue": true
+                }
+            }
+        }
+    }]
+}
    
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
@@ -271,6 +296,12 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.5
+1.optimizing log content.   
+2.optimizing read/write device response timeout rules.   
+3.optimizing read/write device no response rules.   
+4.add gateway join permission switch accessory.   
+5.add setting disable "No Response" feature.   
 ### 0.6.4
 1.add virtual switch accessory can trigger homekit click events.   
 2.optimizing log content.   

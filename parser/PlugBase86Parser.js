@@ -82,10 +82,10 @@ class PlugBase86OutletParser extends AccessoryParser {
                 onCharacteristic.on("set", function(value, callback) {
                     var command = '{"cmd":"write","model":"86plug","sid":"' + deviceSid + '","data":"{\\"status\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
                     that.platform.sendWriteCommand(deviceSid, command).then(result => {
-                        callback(null);
+                        that.callback2HB(deviceSid, this, callback, null);
                     }).catch(function(err) {
                         that.platform.log.error(err);
-                        callback(err);
+                        that.callback2HB(deviceSid, this, callback, err);
                     });
                 });
             }

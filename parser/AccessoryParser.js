@@ -130,6 +130,23 @@ class AccessoryParser {
             // });
         // }
     }
+    
+    callback2HB(deviceSid, characteristic, callback, err) {
+        var that = this;
+        if(err) {
+            if(that.platform.ConfigUtil.getAccessoryNoResponse(deviceSid, that.accessoryType)) {
+                const value = characteristic.value;
+                setTimeout(() => {
+                    characteristic.updateValue(value);
+                }, 10);
+                callback(null);
+            } else {
+                callback(err);
+            }
+        } else {
+            callback(null);
+        }
+    }
 }
 
 module.exports = AccessoryParser;

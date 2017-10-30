@@ -39,12 +39,14 @@ class SwitchVirtualBasePressParser extends AccessoryParser {
                 onCharacteristic.on("set", function(value, callback) {
                     var command = that.getWriteCommand(deviceSid, value);
                     that.platform.sendWriteCommand(deviceSid, command).then(result => {
-                        callback(null);
+                        that.callback2HB(deviceSid, this, callback, null);
                         that.doSomething(jsonObj);
-                        onCharacteristic.updateValue(false);
+                        setTimeout(() => {
+                            onCharacteristic.updateValue(false);
+                        }, 10);
                     }).catch(function(err) {
                         that.platform.log.error(err);
-                        callback(err);
+                        that.callback2HB(deviceSid, this, callback, err);
                     });
                 });
             }

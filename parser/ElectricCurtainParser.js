@@ -87,10 +87,10 @@ class ElectricCurtainWindowCoveringParser extends AccessoryParser {
                     var command = '{"cmd":"write","model":"curtain","sid":"' + deviceSid + '","data":"{\\"curtain_level\\":\\"' + value + '\\", \\"key\\": \\"${key}\\"}"}';
                     console.info(command);
                     that.platform.sendWriteCommand(deviceSid, command).then(result => {
-                        callback(null);
+                        that.callback2HB(deviceSid, this, callback, null);
                     }).catch(function(err) {
                         that.platform.log.error(err);
-                        callback(err);
+                        that.callback2HB(deviceSid, this, callback, err);
                     });
                 });
             }
