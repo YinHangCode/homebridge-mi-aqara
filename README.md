@@ -281,6 +281,7 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
         }
     }]
 }
+```
    
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
