@@ -314,8 +314,8 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             that.log.debug("[Revc]" + msg);
             if(jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
                 p.reject(new Error(JSON.parse(jsonObj['data'])['error']));
-            } else if(jsonObj['data'] && jsonObj['data'].indexOf('unknown') > -1) {
-                p.reject(new Error(jsonObj['data']));
+            // } else if(jsonObj['data'] && jsonObj['data'].indexOf('unknown') > -1) {
+                // p.reject(new Error(jsonObj['data']));
             } else {
                 p.resolve(jsonObj);
             }
