@@ -156,6 +156,7 @@ MiAqaraPlatform.prototype.autoRemoveAccessory = function() {
 
 MiAqaraPlatform.prototype.sendWhoisCommand = function() {
     var whoisCommand = '{"cmd": "whois"}';
+    this.log.debug("[Send]" + whoisCommand);
     serverSocket.send(whoisCommand, 0, whoisCommand.length, multicastPort, multicastAddress);
 }
 
@@ -197,8 +198,8 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             var ip = jsonObj['ip'];
             var port = jsonObj['port'];
             var listCmd = '{"cmd":"get_id_list"}';
-            serverSocket.send(listCmd, 0, listCmd.length, port, ip);
             that.log.debug("[Send]" + listCmd);
+            serverSocket.send(listCmd, 0, listCmd.length, port, ip);
         }
     } else if (cmd === 'get_id_list_ack') {
         that.log.debug("[Revc]" + msg);
@@ -224,7 +225,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             that.DeviceUtil.addOrUpdate(gatewaySid, gatewayDevice);
             
             var command1 = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
-            that.sendReadCommand(gatewaySid, command1, {timeout: 12 * 60 * 1000}).then(result => {
+            that.sendReadCommand(gatewaySid, command1, {timeout: 0.5 * 60 * 1000, retryCount: 12}).then(result => {
                 that.DeviceUtil.update({model: result['model']});
                 var createAccessories = that.ParseUtil.getCreateAccessories(result);
                 that.registerPlatformAccessories(createAccessories);
@@ -239,7 +240,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         
         var data = JSON.parse(jsonObj['data']);
         var index = 0;
-        var sendInterval = setInterval(function(){
+        var sendInterval = setInterval(() => {
             if(index >= data.length) {
                 that.log.debug("read gateway device list finished. size: " + index);
                 clearInterval(sendInterval);
@@ -256,7 +257,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
                 that.DeviceUtil.addOrUpdate(deviceSid, device);
                 
                 var command2 = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                that.sendReadCommand(deviceSid, command2, {timeout: 12 * 60 * 1000}).then(result => {
+                that.sendReadCommand(deviceSid, command2, {timeout: 3 * 1000, retryCount: 12}).then(result => {
                     that.DeviceUtil.update({model: result['model']});
                     var createAccessories = that.ParseUtil.getCreateAccessories(result);
                     that.registerPlatformAccessories(createAccessories);
@@ -270,7 +271,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             }
             
             index++;
-        }, 100);
+        }, 50);
     } else if (cmd === 'heartbeat') {
 //      that.log.debug(msg);
         var model = jsonObj['model'];
@@ -387,15 +388,33 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options)
             }
         }
         
+        let retryLeft = (options && options.retryCount) || 3;
+        const send = () => {
+            retryLeft --;
+            that.log.debug("[Send]" + msg);
+            serverSocket.send(msg, 0, msg.length, port, ip, err => err && reject(err));
+        }
+        const _sendTimeout = setInterval(() => {
+            if(retryLeft > 0) {
+                send();
+            } else {
+                clearInterval(_sendTimeout);
+                delete that._promises[msgTag];
+                var err = new Error('timeout: ' + msg);
+                triggerCorrelationPromises('reject', err);
+                reject(err);
+            }
+        }, (options && options.timeout) || 1 * 1000);
+            
         that._promises[msgTag] = {
             resolve: res => {
-                delete this._sendTimeout;
+                clearInterval(_sendTimeout);
                 delete that._promises[msgTag];
                 triggerCorrelationPromises('resolve', res);
                 resolve(res);
             },
             reject: err => {
-                delete this._sendTimeout;
+                clearInterval(_sendTimeout);
                 delete that._promises[msgTag];
                 triggerCorrelationPromises('reject', err);
                 reject(err);
@@ -406,16 +425,7 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options)
             that.PromisesSendCommand[ip + port + msg].push(msgTag);
         } else {
             that.PromisesSendCommand[ip + port + msg] = [];
-            serverSocket.send(msg, 0, msg.length, port, ip, err => err && reject(err));
-            that.log.debug("[Send]" + msg);
-            
-            this._sendTimeout = setTimeout(() => {
-                delete this._sendTimeout;
-                delete that._promises[msgTag];
-                var err = new Error('timeout: ' + msg);
-                triggerCorrelationPromises('reject', err);
-                reject(err);
-            }, (options && options.timeout) || 12 * 1000);
+            send();
         }
     })
 }
@@ -429,7 +439,7 @@ MiAqaraPlatform.prototype.sendReadCommand = function(deviceSid, command, options
         that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
             resolve(result);
         }).catch(function(err) {
-            that.log.error(err);
+            // that.log.error(err);
             reject(err);
         });
     })
@@ -451,7 +461,7 @@ MiAqaraPlatform.prototype.sendWriteCommand = function(deviceSid, command, option
         that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
             resolve(result);
         }).catch(function(err) {
-            that.log.error(err);
+            // that.log.error(err);
             reject(err);
         });
     })
