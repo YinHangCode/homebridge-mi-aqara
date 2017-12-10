@@ -62,6 +62,7 @@ function MiAqaraPlatform(log, config, api) {
     this.log.info("                                         QQ Group: 107927710  ");
     this.log.info("**************************************************************");
     this.log.info("start success...");
+    this.log.info("config gateways: " + this.log.objKey2Str(config['gateways']));
 }
 
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {

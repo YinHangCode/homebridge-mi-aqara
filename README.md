@@ -323,6 +323,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.7
+1.optimizing log content.   
 ### 0.6.6
 1.fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
 2.fixed bug that sometimes Gateway and MotionSensor2 light senor no response.   
