@@ -269,7 +269,7 @@ you can set ignoreWriteResult is true.
         "defaultValue": {
             "Global": {
                 "ignoreWriteResult": true
-            }
+            },
             "158d0001000007": {
                 "SingleSwitch_Switch": {
                     "name": "living room light",
@@ -296,7 +296,7 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
         "defaultValue": {
             "Global": {
                 "disableNoResponse": true
-            }
+            },
             "158d0001000007": {
                 "SingleSwitch_Switch": {
                     "name": "living room light",
