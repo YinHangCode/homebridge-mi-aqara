@@ -95,12 +95,17 @@ class SingleSwitchLNSwitchParser extends AccessoryParser {
             if(onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
                     var command = '{"cmd":"write","model":"ctrl_ln1","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
-                    that.platform.sendWriteCommand(deviceSid, command).then(result => {
+                    if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
+                        that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        that.callback2HB(deviceSid, this, callback, err);
-                    });
+                    } else {
+                        that.platform.sendWriteCommand(deviceSid, command).then(result => {
+                            that.callback2HB(deviceSid, this, callback, null);
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            that.callback2HB(deviceSid, this, callback, err);
+                        });
+                    }
                 });
             }
         }

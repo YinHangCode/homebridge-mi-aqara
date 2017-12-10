@@ -282,6 +282,32 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
     }]
 }
 ```
+If you control device always timeout, but in fact it's already working.   
+you can set ignoreWriteResult is true.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "Global": {
+                "ignoreWriteResult": true
+            }
+            "158d0001000007": {
+                "SingleSwitch_Switch": {
+                    "name": "living room light",
+                    "serviceType": "Lightbulb",
+                    "syncValue": true
+                }
+            }
+        }
+    }]
+}
+```
    
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
@@ -297,6 +323,11 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.6
+1.fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
+2.fixed bug that sometimes Gateway and MotionSensor2 light senor no response.   
+3.fixed bug that global config not work in some cases.   
+4.add setting "ignoreWriteResult" feature.   
 ### 0.6.5
 1.optimizing log content.   
 2.optimizing read/write device response timeout rules.   

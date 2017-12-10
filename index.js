@@ -298,7 +298,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             that.log.debug("[Revc]" + msg);
             if(jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
                 p.reject(new Error(JSON.parse(jsonObj['data'])['error']));
-            } else if(jsonObj['data'] && jsonObj['data'].indexOf('unknown') > -1) {
+            } else if(jsonObj['data'] && jsonObj['data'].indexOf('unknown') > -1 && jsonObj['data'].indexOf('on') == -1 && jsonObj['data'].indexOf('off') == -1) {
                 p.reject(new Error(jsonObj['data']));
             } else {
                 p.resolve(jsonObj);
@@ -469,6 +469,21 @@ MiAqaraPlatform.prototype.sendWriteCommand = function(deviceSid, command, option
             reject(err);
         });
     })
+}
+
+MiAqaraPlatform.prototype.sendWriteCommandWithoutFeedback = function(deviceSid, command, options) {
+    var that = this;
+    var device = that.DeviceUtil.getBySid(deviceSid);
+    var gateway = that.GatewayUtil.getBySid(device.gatewaySid);
+    
+    var cipher = crypto.createCipheriv('aes-128-cbc', that.ConfigUtil.getGatewayPasswordByGatewaySid(gateway['sid']), iv);
+    var gatewayToken = gateway['token'];
+    var key = cipher.update(gatewayToken, "ascii", "hex");
+    cipher.final('hex'); // Useless data, don't know why yet.
+    
+    command = command.replace('${key}', key);
+    that.log.debug("[Send]" + command);
+    serverSocket.send(command, 0, command.length, gateway.port, gateway.ip, err => err && reject(err));
 }
 
 MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {

@@ -53,7 +53,7 @@ class GatewayLightSensorParser extends AccessoryParser {
             var service = accessory.getService(that.Service.LightSensor);
             
             var currentAmbientLightLevelCharacteristic = service.getCharacteristic(that.Characteristic.CurrentAmbientLightLevel);
-            var value = that.getCurrentAmbientLightLevelCharacteristicValue(jsonObj, null);
+            var value = that.getCurrentAmbientLightLevelCharacteristicValue(jsonObj, 0.0001);
             if(value) {
                 currentAmbientLightLevelCharacteristic.updateValue(value);
             }
@@ -63,7 +63,7 @@ class GatewayLightSensorParser extends AccessoryParser {
                     currentAmbientLightLevelCharacteristic.on("get", function(callback) {
                         var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
                         that.platform.sendReadCommand(deviceSid, command).then(result => {
-                            var value = that.getCurrentAmbientLightLevelCharacteristicValue(result, null);
+                            var value = that.getCurrentAmbientLightLevelCharacteristicValue(result, 0.0001);
                             if(value) {
                                 callback(null, value);
                             } else {
@@ -390,12 +390,17 @@ class GatewayLightbulbParser extends AccessoryParser {
             }
             
             var command = '{"cmd":"write","model":"gateway","sid":"' + deviceSid + '","data":"{\\"rgb\\":' + prepValue + ', \\"key\\": \\"${key}\\"}"}';
-            that.platform.sendWriteCommand(deviceSid, command).then(result => {
-                resolve(result);
-            }).catch(function(err) {
-                that.platform.log.error(err);
-                reject(err);
-            });
+            if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
+                that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
+                resolve(null);
+            } else {
+                that.platform.sendWriteCommand(deviceSid, command).then(result => {
+                    resolve(result);
+                }).catch(function(err) {
+                    that.platform.log.error(err);
+                    reject(err);
+                });
+            }
         })
     }
 
@@ -536,17 +541,27 @@ class GatewaySwitchJoinPermissionParser extends AccessoryParser {
                 onCharacteristic.on("set", function(value, callback) {
                     clearTimeout(that.joinPermissionTimeout[deviceSid]);
                     var command = '{"cmd":"write","model":"gateway","sid":"' + deviceSid + '","data":"{\\"join_permission\\":\\"' + (value ? 'yes' : 'no') + '\\", \\"key\\": \\"${key}\\"}"}';
-                    that.platform.sendWriteCommand(deviceSid, command).then(result => {
+                    if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
+                        that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);
                         if(value) {
                             that.joinPermissionTimeout[deviceSid] = setTimeout(() => {
                                 onCharacteristic.updateValue(false);
                             }, 30 * 1000);
                         }
-                    }).catch(function(err) {
-                        that.platform.log.error(err);
-                        that.callback2HB(deviceSid, this, callback, err);
-                    });
+                    } else {
+                        that.platform.sendWriteCommand(deviceSid, command).then(result => {
+                            that.callback2HB(deviceSid, this, callback, null);
+                            if(value) {
+                                that.joinPermissionTimeout[deviceSid] = setTimeout(() => {
+                                    onCharacteristic.updateValue(false);
+                                }, 30 * 1000);
+                            }
+                        }).catch(function(err) {
+                            that.platform.log.error(err);
+                            that.callback2HB(deviceSid, this, callback, err);
+                        });
+                    }
                 });
             }
         }
