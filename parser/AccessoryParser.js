@@ -99,7 +99,7 @@ class AccessoryParser {
         var chargingStateCharacteristic = batteryService.getCharacteristic(that.Characteristic.ChargingState);
         var statusLowBatteryCharacteristic = batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
         var batteryLevelCharacteristic = batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
-        chargingStateCharacteristic.updateValue(false);
+        chargingStateCharacteristic.updateValue(that.Characteristic.ChargingState.NOT_CHARGEABLE);
         var statusLowBatteryValue = that.getStatusLowBatteryCharacteristicValue(jsonObj, null);
         if(statusLowBatteryValue) {
             statusLowBatteryCharacteristic.updateValue(that.getStatusLowBatteryCharacteristicValue(jsonObj));

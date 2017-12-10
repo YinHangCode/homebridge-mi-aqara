@@ -67,6 +67,9 @@ class MagicSquareStatelessProgrammableSwitchBaseParser extends AccessoryParser {
         if(accessory) {
             var service = accessory.getService(that.Service.StatelessProgrammableSwitch);
             var programmableSwitchEventCharacteristic = service.getCharacteristic(that.Characteristic.ProgrammableSwitchEvent);
+            programmableSwitchEventCharacteristic.setProps({
+                validValues: [0]
+            });
             var value = that.getProgrammableSwitchEventCharacteristicValue(jsonObj, null);
             if(null != value) {
                 programmableSwitchEventCharacteristic.updateValue(value);
