@@ -328,6 +328,7 @@ echo [] > cachedAccessories
 2.fixed bug that sometimes Gateway and MotionSensor2 light senor no response.   
 3.fixed bug that global config not work in some cases.   
 4.add setting "ignoreWriteResult" feature.   
+5.remove the SingleButton86, DuplexButton86, MagicSquare redundant event action.   
 ### 0.6.5
 1.optimizing log content.   
 2.optimizing read/write device response timeout rules.   
