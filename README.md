@@ -232,32 +232,8 @@ If you want to disable accessories, you can add disable attribute to config.
 }
 ```
 If you want to accessory value exact, you can set syncValue is true.   
-```
-{
-    "platforms": [{
-        "platform": "MiAqaraPlatform",
-        "gateways": {
-            "6409802da3b3": "02i44k56zrgg578b",
-            "f0b4299a5b2b": "2F92E7DA90C66B86",
-            "f0b4299a77dd": "syu3oasva3uqd5qd"
-        },
-        "defaultValue": {
-            "158d0001000007": {
-                "SingleSwitch_Switch": {
-                    "name": "living room light",
-                    "serviceType": "Lightbulb",
-                    "syncValue": true
-                }
-            }
-        }
-    }]
-}
-```
 when syncValue is true, accessory will synchronization value when homebridge call the get function. At the same time, it's going to waste more time.   
 when syncValue is false, accessory will use the device last reported value. It's going to respond quickly.   
-![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/syncValue.png)
-If you don't like "No Response", you can set disableNoResponse is true.   
-When the device is no pesponse and disableNoResponse is true, the accessory value will auto jump back to before the control.   
 ```
 {
     "platforms": [{
@@ -268,9 +244,6 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
             "f0b4299a77dd": "syu3oasva3uqd5qd"
         },
         "defaultValue": {
-            "Global": {
-                "disableNoResponse": true
-            }
             "158d0001000007": {
                 "SingleSwitch_Switch": {
                     "name": "living room light",
@@ -296,6 +269,33 @@ you can set ignoreWriteResult is true.
         "defaultValue": {
             "Global": {
                 "ignoreWriteResult": true
+            }
+            "158d0001000007": {
+                "SingleSwitch_Switch": {
+                    "name": "living room light",
+                    "serviceType": "Lightbulb",
+                    "syncValue": true
+                }
+            }
+        }
+    }]
+}
+```
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/syncValue.png)
+If you don't like "No Response", you can set disableNoResponse is true.   
+When the device is no pesponse and disableNoResponse is true, the accessory value will auto jump back to before the control.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "Global": {
+                "disableNoResponse": true
             }
             "158d0001000007": {
                 "SingleSwitch_Switch": {
