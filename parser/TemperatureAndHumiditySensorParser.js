@@ -37,7 +37,11 @@ class TemperatureAndHumiditySensorTemperatureSensorParser extends AccessoryParse
         var result = [];
         
         var service = new that.Service.TemperatureSensor(accessoryName);
-        service.getCharacteristic(that.Characteristic.CurrentTemperature);
+        
+        // Make sure negative temps are working...
+        const characteristic = service.getCharacteristic(that.Characteristic.CurrentTemperature);
+        characteristic.props.minValue = -50;
+
         result.push(service);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
