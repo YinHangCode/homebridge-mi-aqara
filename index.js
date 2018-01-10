@@ -63,6 +63,12 @@ function MiAqaraPlatform(log, config, api) {
     this.log.info("**************************************************************");
     this.log.info("start success...");
     this.log.info("config gateways: " + this.log.objKey2Str(config['gateways']));
+
+    if (null == this.ConfigUtil.getBindAddress()) {
+        this.log.info("binding to the default interface");
+    } else {
+        this.log.info("bind address is: " + this.ConfigUtil.getBindAddress());
+    }
 }
 
 MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
@@ -84,11 +90,19 @@ MiAqaraPlatform.prototype.initServerSocket = function() {
     
     serverSocket.on('listening', function(){
         that.log.info("server is listening on port 9898.");
-        serverSocket.addMembership(multicastAddress);
+
+        if (null == that.ConfigUtil.getBindAddress()) {
+            serverSocket.addMembership(multicastAddress);
+        } else {
+            serverSocket.setMulticastInterface(that.ConfigUtil.getBindAddress());
+            serverSocket.addMembership(multicastAddress, that.ConfigUtil.getBindAddress());
+        }
     });
     
     serverSocket.on('message', this.parseMessage.bind(this));
-    
+
+    // We always bind to all interfaces here because we need to receive
+    // multicast traffic.
     serverSocket.bind(serverPort);
 }
 
@@ -171,11 +185,19 @@ MiAqaraPlatform.prototype.initServerSocket = function() {
     
     serverSocket.on('listening', function(){
         that.log.info("server is listening on port 9898.");
-        serverSocket.addMembership(multicastAddress);
+
+        if (null == that.ConfigUtil.getBindAddress()) {
+            serverSocket.addMembership(multicastAddress);
+        } else {
+            serverSocket.setMulticastInterface(that.ConfigUtil.getBindAddress());
+            serverSocket.addMembership(multicastAddress, that.ConfigUtil.getBindAddress());
+        }
     });
-    
+
     serverSocket.on('message', this.parseMessage.bind(this));
-    
+
+    // We always bind to all interfaces here because we need to receive
+    // multicast traffic.
     serverSocket.bind(serverPort);
 }
 
