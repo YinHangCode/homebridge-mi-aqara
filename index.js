@@ -243,8 +243,9 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var index = 0;
         var sendInterval = setInterval(() => {
             if(index >= data.length) {
-                that.logDevices(data);
                 that.log.debug("read gateway device list finished. size: " + index);
+                that._logDevices(data);
+
                 clearInterval(sendInterval);
                 return;
             }
@@ -506,7 +507,7 @@ MiAqaraPlatform.prototype.unregisterPlatformAccessories = function(accessories) 
     });
 }
 
-MiAqaraPlatform.prototype.logDevices = function(sidList) {
+MiAqaraPlatform.prototype._logDevices = function(sidList) {
     var that = this;
     var descriptions = {};
 
