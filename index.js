@@ -227,7 +227,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             
             var command1 = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
             that.sendReadCommand(gatewaySid, command1, {timeout: 0.5 * 60 * 1000, retryCount: 12}).then(result => {
-                that.DeviceUtil.update({model: result['model']});
+                that.DeviceUtil.update(gatewaySid, {model: result['model']});
                 var createAccessories = that.ParseUtil.getCreateAccessories(result);
                 that.registerPlatformAccessories(createAccessories);
                 that.ParseUtil.parserAccessories(result);
@@ -243,6 +243,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var index = 0;
         var sendInterval = setInterval(() => {
             if(index >= data.length) {
+                that.logDevices(data);
                 that.log.debug("read gateway device list finished. size: " + index);
                 clearInterval(sendInterval);
                 return;
@@ -259,7 +260,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
                 
                 var command2 = '{"cmd":"read", "sid":"' + deviceSid + '"}';
                 that.sendReadCommand(deviceSid, command2, {timeout: 3 * 1000, retryCount: 12}).then(result => {
-                    that.DeviceUtil.update({model: result['model']});
+                    that.DeviceUtil.update(deviceSid, {model: result['model']});
                     var createAccessories = that.ParseUtil.getCreateAccessories(result);
                     that.registerPlatformAccessories(createAccessories);
                     that.ParseUtil.parserAccessories(result);
@@ -504,3 +505,23 @@ MiAqaraPlatform.prototype.unregisterPlatformAccessories = function(accessories) 
         that.AccessoryUtil.remove(accessory);
     });
 }
+
+MiAqaraPlatform.prototype.logDevices = function(sidList) {
+    var that = this;
+    var descriptions = {};
+
+    for ( sid of sidList ) {
+        let device = that.DeviceUtil.getBySid(sid);
+        let type2uuid = that.ParseUtil.getAccessoriesUUID( sid, device['model'] );
+
+        var sidDescription = {};
+        for ( var key in type2uuid ) {
+            let uuid = type2uuid[key];
+            let accessory = that.AccessoryUtil.getByUUID(uuid);
+            sidDescription[key] = {name: accessory['displayName']};
+        }
+        descriptions[sid] = sidDescription;
+    }
+    that.log.debug("Parsed accessories: " + JSON.stringify(descriptions));
+}
+
