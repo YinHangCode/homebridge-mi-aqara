@@ -102,6 +102,7 @@ If you have more than one gateways, fill them in right order, like below.
         }
     }]
 }
+```
 If your device(which running homebridge) has multiple network, please add the bindAddress configuration item to decide to listen which network, like below.   
 ```
 {
