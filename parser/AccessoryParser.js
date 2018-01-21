@@ -101,34 +101,34 @@ class AccessoryParser {
         var batteryLevelCharacteristic = batteryService.getCharacteristic(that.Characteristic.BatteryLevel);
         chargingStateCharacteristic.updateValue(that.Characteristic.ChargingState.NOT_CHARGEABLE);
         var statusLowBatteryValue = that.getStatusLowBatteryCharacteristicValue(jsonObj, null);
-        if(statusLowBatteryValue) {
-            statusLowBatteryCharacteristic.updateValue(that.getStatusLowBatteryCharacteristicValue(jsonObj));
+        if(null != statusLowBatteryValue) {
+            statusLowBatteryCharacteristic.updateValue(statusLowBatteryValue);
         }
         var batteryLevelValue = that.getBatteryLevelCharacteristicValue(jsonObj, null);
-        if(batteryLevelValue) {
-            batteryLevelCharacteristic.updateValue(that.getBatteryLevelCharacteristicValue(jsonObj));
+        if(null != batteryLevelValue) {
+            batteryLevelCharacteristic.updateValue(batteryLevelValue);
         }
         
-        // if (batteryLevelCharacteristic.listeners('get').length == 0) {
-            // batteryLevelCharacteristic.on("get", function(callback) {
-                // var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                // that.platform.sendReadCommand(deviceSid, command).then(result => {
-                    // var statusLowBatteryValue = that.getStatusLowBatteryCharacteristicValue(jsonObj, null);
-                    // if(statusLowBatteryValue) {
-                        // statusLowBatteryCharacteristic.updateValue(that.getStatusLowBatteryCharacteristicValue(jsonObj));
-                    // }
-                    // var batteryLevelValue = that.getBatteryLevelCharacteristicValue(jsonObj, null);
-                    // if(batteryLevelValue) {
-                        // callback(null, batteryLevelValue);
-                    // } else {
-                        // callback(new Error('get value fail: ' + result));
-                    // }
-                // }).catch(function(err) {
-                    // that.platform.log.error(err);
-                    // callback(err);
-                // });
-            // });
-        // }
+//        if (batteryLevelCharacteristic.listeners('get').length == 0) {
+//            batteryLevelCharacteristic.on("get", function(callback) {
+//                var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+//                that.platform.sendReadCommand(deviceSid, command).then(result => {
+//                    var statusLowBatteryValue = that.getStatusLowBatteryCharacteristicValue(jsonObj, null);
+//                    if(null != statusLowBatteryValue) {
+//                        statusLowBatteryCharacteristic.updateValue(statusLowBatteryValue);
+//                    }
+//                    var batteryLevelValue = that.getBatteryLevelCharacteristicValue(jsonObj, null);
+//                    if(null != batteryLevelValue) {
+//                        callback(null, batteryLevelValue);
+//                    } else {
+//                        callback(new Error('get value fail: ' + result));
+//                    }
+//                }).catch(function(err) {
+//                    that.platform.log.error(err);
+//                    callback(err);
+//                });
+//            });
+//        }
     }
     
     callback2HB(deviceSid, characteristic, callback, err) {

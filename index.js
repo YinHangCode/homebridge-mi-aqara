@@ -74,24 +74,6 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     }
 }
 
-MiAqaraPlatform.prototype.initServerSocket = function() {
-    var that = this;
-    
-    // err - Error object, https://nodejs.org/api/errors.html
-    serverSocket.on('error', function(err){
-        that.log.error('error, msg - %s, stack - %s\n', err.message, err.stack);
-    });
-    
-    serverSocket.on('listening', function(){
-        that.log.info("server is listening on port 9898.");
-        serverSocket.addMembership(multicastAddress);
-    });
-    
-    serverSocket.on('message', this.parseMessage.bind(this));
-    
-    serverSocket.bind(serverPort);
-}
-
 MiAqaraPlatform.prototype.doRestThings = function(api) {
     var that = this;
     if (api) {
@@ -299,7 +281,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             that.log.debug("[Revc]" + msg);
             if(jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
                 p.reject(new Error(JSON.parse(jsonObj['data'])['error']));
-            } else if(jsonObj['data'] && jsonObj['data'].indexOf('unknown') > -1 && jsonObj['data'].indexOf('on') == -1 && jsonObj['data'].indexOf('off') == -1) {
+            } else if(jsonObj['data'] && jsonObj['data'].indexOf('\"unknown\"') > -1 && jsonObj['data'].indexOf('\"on\"') == -1 && jsonObj['data'].indexOf('\"off\"') == -1) {
                 p.reject(new Error(jsonObj['data']));
             } else {
                 p.resolve(jsonObj);
