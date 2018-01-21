@@ -2,7 +2,15 @@
 [![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
 
 homebridge plugin for XiaoMi Aqara plugin.  
-Thanks for [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), [licuhui](https://github.com/licuhui), [攀旺智能](https://pwzn.taobao.com/), [瀚思彼岸论坛](https://bbs.hassbian.com/), all other developer and testers.   
+Thanks for 
+[nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), 
+[snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), 
+[licuhui](https://github.com/licuhui), 
+[攀旺智能](https://pwzn.taobao.com/), 
+[瀚思彼岸论坛](https://bbs.hassbian.com/), 
+[magaHH](https://github.com/magaHH), 
+[isundaylee](https://github.com/isundaylee), 
+all other developer and testers.   
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
    
@@ -87,6 +95,19 @@ If you have more than one gateways, fill them in right order, like below.
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
+    }]
+}
+If your device(which running homebridge) has multiple network, please add the bindAddress configuration item to decide to listen which network, like below.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "bindAddress": "10.0.0.1",
         "gateways": {
             "6409802da3b3": "02i44k56zrgg578b",
             "f0b4299a5b2b": "2F92E7DA90C66B86",
@@ -328,7 +349,7 @@ echo [] > cachedAccessories
 2.fixed bug that it still show battery low power after replacing the battery.   
 3.fixed bug that TemperatureAndHumiditySensor and TemperatureAndHumiditySensor2 temperature sensor accessory can't show the negative number.   
 4.remove a duplicated function.   
-5.add the choice BindAddress feature.   
+5.add the choice bindAddress feature.   
 ### 0.6.7 (2017-12-10)
 1.optimizing log content.   
 ### 0.6.6 (2017-12-10)
