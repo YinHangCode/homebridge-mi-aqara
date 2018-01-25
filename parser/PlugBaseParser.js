@@ -13,8 +13,8 @@ class PlugBaseParser extends DeviceParser {
     }
 }
 
-// 支持的设备：插座
-PlugBaseParser.modelName = 'plug';
+// 支持的设备：智能插座，86型墙壁插座
+PlugBaseParser.modelName = ['plug', '86plug'];
 module.exports = PlugBaseParser;
 
 class PlugBaseOutletParser extends AccessoryParser {

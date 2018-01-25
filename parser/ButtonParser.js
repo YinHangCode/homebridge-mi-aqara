@@ -18,7 +18,7 @@ class ButtonParser extends DeviceParser {
 }
 
 // 支持的设备：按钮
-ButtonParser.modelName = 'switch';
+ButtonParser.modelName = ['switch', 'sensor_switch.aq2'];
 module.exports = ButtonParser;
 
 class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
