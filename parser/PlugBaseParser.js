@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class PlugBaseParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -18,8 +18,8 @@ PlugBaseParser.modelName = 'plug';
 module.exports = PlugBaseParser;
 
 class PlugBaseOutletParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -83,7 +83,7 @@ class PlugBaseOutletParser extends AccessoryParser {
             
             if (onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
-                    var command = '{"cmd":"write","model":"plug","sid":"' + deviceSid + '","data":"{\\"status\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
+                    var command = '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);

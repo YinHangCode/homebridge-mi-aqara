@@ -3,8 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
 class Button2Parser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -22,8 +22,8 @@ Button2Parser.modelName = 'sensor_switch.aq2';
 module.exports = Button2Parser;
 
 class Button2StatelessProgrammableSwitchParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -99,24 +99,24 @@ class Button2SwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
 
 class Button2SwitchVirtualSinglePressParser extends Button2SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"sensor_switch.aq2","sid":"' + deviceSid + '","data":"{\\"status\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"sensor_switch.aq2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
 class Button2SwitchVirtualDoublePressParser extends Button2SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"sensor_switch.aq2","sid":"' + deviceSid + '","data":"{\\"status\\":\\"double_click\\", \\"key\\": \\"${key}\\"}"}';
+        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"double_click\\", \\"key\\": \\"${key}\\"}"}';
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"sensor_switch.aq2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"double_click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"double_click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }

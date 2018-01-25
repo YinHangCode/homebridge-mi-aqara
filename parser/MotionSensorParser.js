@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class MotionSensorParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -18,8 +18,8 @@ MotionSensorParser.modelName = 'motion';
 module.exports = MotionSensorParser;
 
 class MotionSensorMotionSensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {

@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class TemperatureAndHumiditySensorParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -19,8 +19,8 @@ TemperatureAndHumiditySensorParser.modelName = 'sensor_ht';
 module.exports = TemperatureAndHumiditySensorParser;
 
 class TemperatureAndHumiditySensorTemperatureSensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -99,8 +99,8 @@ class TemperatureAndHumiditySensorTemperatureSensorParser extends AccessoryParse
 }
 
 class TemperatureAndHumiditySensorHumiditySensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {

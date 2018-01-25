@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class DuplexSwitchParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -19,8 +19,8 @@ DuplexSwitchParser.modelName = 'ctrl_neutral2';
 module.exports = DuplexSwitchParser;
 
 class DuplexSwitchSwitchBaseParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -129,7 +129,7 @@ class DuplexSwitchSwitchLeftParser extends DuplexSwitchSwitchBaseParser {
     }
     
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"ctrl_neutral2","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
+        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
     }
 }
 
@@ -146,6 +146,6 @@ class DuplexSwitchSwitchRightParser extends DuplexSwitchSwitchBaseParser {
     }
     
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"ctrl_neutral2","sid":"' + deviceSid + '","data":"{\\"channel_1\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
+        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"channel_1\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
     }
 }

@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class GatewayParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -20,8 +20,8 @@ GatewayParser.modelName = 'gateway';
 module.exports = GatewayParser;
 
 class GatewayLightSensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -98,8 +98,8 @@ class GatewayLightSensorParser extends AccessoryParser {
 }
 
 class GatewayLightbulbParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -392,7 +392,7 @@ class GatewayLightbulbParser extends AccessoryParser {
                 prepValue = parseInt(that.dec2hex(brightness, 2) + that.dec2hex(rgb[0], 2) + that.dec2hex(rgb[1], 2) + that.dec2hex(rgb[2], 2), 16);
             }
             
-            var command = '{"cmd":"write","model":"gateway","sid":"' + deviceSid + '","data":"{\\"rgb\\":' + prepValue + ', \\"key\\": \\"${key}\\"}"}';
+            var command = '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"rgb\\":' + prepValue + ', \\"key\\": \\"${key}\\"}"}';
             if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                 that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                 resolve(null);
@@ -479,8 +479,8 @@ class GatewayLightbulbParser extends AccessoryParser {
 }
 
 class GatewaySwitchJoinPermissionParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
         
         this.joinPermissionTimeout = {};
     }
@@ -543,7 +543,7 @@ class GatewaySwitchJoinPermissionParser extends AccessoryParser {
             if(onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
                     clearTimeout(that.joinPermissionTimeout[deviceSid]);
-                    var command = '{"cmd":"write","model":"gateway","sid":"' + deviceSid + '","data":"{\\"join_permission\\":\\"' + (value ? 'yes' : 'no') + '\\", \\"key\\": \\"${key}\\"}"}';
+                    var command = '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"join_permission\\":\\"' + (value ? 'yes' : 'no') + '\\", \\"key\\": \\"${key}\\"}"}';
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);
