@@ -23,6 +23,9 @@ class MagicSquareParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：魔方
+MagicSquareParser.modelName = 'cube';
 module.exports = MagicSquareParser;
 
 class MagicSquareStatelessProgrammableSwitchBaseParser extends AccessoryParser {

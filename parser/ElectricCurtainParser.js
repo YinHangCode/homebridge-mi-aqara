@@ -12,6 +12,9 @@ class ElectricCurtainParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：电动窗帘
+ElectricCurtainParser.modelName = 'curtain';
 module.exports = ElectricCurtainParser;
 
 class ElectricCurtainWindowCoveringParser extends AccessoryParser {

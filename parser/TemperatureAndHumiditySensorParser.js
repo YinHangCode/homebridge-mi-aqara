@@ -13,6 +13,9 @@ class TemperatureAndHumiditySensorParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：温度湿度传感器
+TemperatureAndHumiditySensorParser.modelName = 'sensor_ht';
 module.exports = TemperatureAndHumiditySensorParser;
 
 class TemperatureAndHumiditySensorTemperatureSensorParser extends AccessoryParser {

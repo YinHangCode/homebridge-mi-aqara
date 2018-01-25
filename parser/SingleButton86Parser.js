@@ -16,6 +16,9 @@ class SingleButton86Parser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：86型无线单按钮开关
+SingleButton86Parser.modelName = '86sw1';
 module.exports = SingleButton86Parser;
 
 class SingleButton86StatelessProgrammableSwitchParser extends AccessoryParser {

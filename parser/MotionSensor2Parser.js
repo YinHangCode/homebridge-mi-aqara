@@ -13,6 +13,9 @@ class MotionSensor2Parser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：人体感应 第二代
+MotionSensor2Parser.modelName = 'sensor_motion.aq2';
 module.exports = MotionSensor2Parser;
 
 class MotionSensor2MotionSensorParser extends AccessoryParser {

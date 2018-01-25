@@ -14,6 +14,9 @@ class GatewayParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：网关
+GatewayParser.modelName = 'gateway';
 module.exports = GatewayParser;
 
 class GatewayLightSensorParser extends AccessoryParser {

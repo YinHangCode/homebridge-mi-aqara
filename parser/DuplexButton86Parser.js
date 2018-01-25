@@ -22,6 +22,9 @@ class DuplexButton86Parser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：86型无线双按钮开关
+DuplexButton86Parser.modelName = '86sw2';
 module.exports = DuplexButton86Parser;
 
 class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParser {

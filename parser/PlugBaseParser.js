@@ -12,6 +12,9 @@ class PlugBaseParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：插座
+PlugBaseParser.modelName = 'plug';
 module.exports = PlugBaseParser;
 
 class PlugBaseOutletParser extends AccessoryParser {

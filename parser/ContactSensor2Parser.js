@@ -12,6 +12,9 @@ class ContactSensor2Parser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：门磁感应 第二代
+ContactSensor2Parser.modelName = 'sensor_magnet.aq2';
 module.exports = ContactSensor2Parser;
 
 class ContactSensor2ContactSensorParser extends AccessoryParser {

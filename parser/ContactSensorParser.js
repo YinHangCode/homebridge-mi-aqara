@@ -12,6 +12,9 @@ class ContactSensorParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：门磁感应
+ContactSensorParser.modelName = 'magnet';
 module.exports = ContactSensorParser;
 
 class ContactSensorContactSensorParser extends AccessoryParser {

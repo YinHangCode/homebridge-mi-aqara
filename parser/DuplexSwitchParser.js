@@ -13,6 +13,9 @@ class DuplexSwitchParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：双按钮墙壁开关
+DuplexSwitchParser.modelName = 'ctrl_neutral2';
 module.exports = DuplexSwitchParser;
 
 class DuplexSwitchSwitchBaseParser extends AccessoryParser {

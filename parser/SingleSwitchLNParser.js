@@ -12,6 +12,9 @@ class SingleSwitchLNParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：单按钮墙壁开关零火版
+SingleSwitchLNParser.modelName = 'ctrl_ln1';
 module.exports = SingleSwitchLNParser;
 
 class SingleSwitchLNSwitchParser extends AccessoryParser {

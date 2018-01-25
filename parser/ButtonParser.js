@@ -16,6 +16,9 @@ class ButtonParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：按钮
+ButtonParser.modelName = 'switch';
 module.exports = ButtonParser;
 
 class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {

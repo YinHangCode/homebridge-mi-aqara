@@ -12,6 +12,9 @@ class WaterDetectorParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：水浸传感器
+WaterDetectorParser.modelName = 'sensor_wleak.aq1';
 module.exports = WaterDetectorParser;
 
 class WaterDetectorLeakSensorParser extends AccessoryParser {

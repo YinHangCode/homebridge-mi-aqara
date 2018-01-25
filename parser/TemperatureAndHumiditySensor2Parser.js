@@ -14,6 +14,9 @@ class TemperatureAndHumiditySensor2Parser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：温度湿度传感器 第二代
+TemperatureAndHumiditySensor2Parser.modelName = 'weather.v1';
 module.exports = TemperatureAndHumiditySensor2Parser;
 
 class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryParser {

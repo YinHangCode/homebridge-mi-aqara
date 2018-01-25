@@ -12,6 +12,9 @@ class SingleSwitchParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：单按钮墙壁开关
+SingleSwitchParser.modelName = 'ctrl_neutral1';
 module.exports = SingleSwitchParser;
 
 class SingleSwitchSwitchParser extends AccessoryParser {
