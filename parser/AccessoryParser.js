@@ -79,9 +79,16 @@ class AccessoryParser {
     }
     
     getValueFrJsonObjData(jsonObj, valueKey) {
-        var dataStr = jsonObj['data'];
+        var dataStr = jsonObj['data'] || jsonObj['params'];
         if(undefined != dataStr && null != dataStr) {
-            var dataObj = JSON.parse(dataStr);
+            var dataObj = null;
+            if (dataStr instanceof Array) {
+                dataStr.forEach(function (data) {
+                    if (data.hasOwnProperty(valueKey)) dataObj = data;
+                });
+            } else {
+                dataObj = JSON.parse(dataStr);
+            }
             if(undefined != dataObj && null != dataObj) {
                 var value = dataObj[valueKey];
                 if(undefined != value && null != value) {

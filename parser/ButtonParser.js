@@ -18,7 +18,7 @@ class ButtonParser extends DeviceParser {
 }
 
 // 支持的设备：按钮
-ButtonParser.modelName = ['switch', 'sensor_switch.aq2'];
+ButtonParser.modelName = ['switch', 'sensor_switch', 'sensor_switch.aq2'];
 module.exports = ButtonParser;
 
 class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
@@ -73,7 +73,7 @@ class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
     }
     
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = this.getValueFrJsonObjData(jsonObj, this.platform.isProtoVersionByDid(jsonObj['sid'], 2) ? 'channel_0' : 'status');
         if(value === 'click') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else if(value === 'double_click') {
@@ -99,7 +99,8 @@ class ButtonSwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
 
 class ButtonSwitchVirtualSinglePressParser extends ButtonSwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        var data = this.platform.isProtoVersionByDid(deviceSid, 2) ? {channel_0: 'click'} : {status: 'click'};
+        return {cmd:"write",model:this.model,sid:deviceSid,data:data};
     }
     
     doSomething(jsonObj) {
@@ -111,7 +112,8 @@ class ButtonSwitchVirtualSinglePressParser extends ButtonSwitchVirtualBasePressP
 
 class ButtonSwitchVirtualDoublePressParser extends ButtonSwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"double_click\\", \\"key\\": \\"${key}\\"}"}';
+        var data = this.platform.isProtoVersionByDid(deviceSid, 2) ? {channel_0: 'double_click'} : {status: 'double_click'};
+        return {cmd:"write",model:this.model,sid:deviceSid,data:data};
     }
     
     doSomething(jsonObj) {

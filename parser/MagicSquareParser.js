@@ -25,7 +25,7 @@ class MagicSquareParser extends DeviceParser {
 }
 
 // 支持的设备：魔方
-MagicSquareParser.modelName = 'cube';
+MagicSquareParser.modelName = ['cube', 'sensor_cube'];
 module.exports = MagicSquareParser;
 
 class MagicSquareStatelessProgrammableSwitchBaseParser extends AccessoryParser {
@@ -161,7 +161,7 @@ class MagicSquareSwitchVirtualBaseParser extends SwitchVirtualBasePressParser {
 
 class MagicSquareSwitchVirtualFlip90Parser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"flip90\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"flip90"}};
     }
     
     doSomething(jsonObj) {
@@ -173,7 +173,7 @@ class MagicSquareSwitchVirtualFlip90Parser extends MagicSquareSwitchVirtualBaseP
 
 class MagicSquareSwitchVirtualFlip180Parser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"flip180\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"flip180"}};
     }
     
     doSomething(jsonObj) {
@@ -185,7 +185,7 @@ class MagicSquareSwitchVirtualFlip180Parser extends MagicSquareSwitchVirtualBase
 
 class MagicSquareSwitchVirtualMoveParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"move\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"move"}};
     }
     
     doSomething(jsonObj) {
@@ -197,7 +197,7 @@ class MagicSquareSwitchVirtualMoveParser extends MagicSquareSwitchVirtualBasePar
 
 class MagicSquareSwitchVirtualTapTwiceParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"tap_twice\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"tap_twice"}};
     }
     
     doSomething(jsonObj) {
@@ -209,7 +209,7 @@ class MagicSquareSwitchVirtualTapTwiceParser extends MagicSquareSwitchVirtualBas
 
 class MagicSquareSwitchVirtualShakeAirParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"shake_air\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"shake_air"}};
     }
     
     doSomething(jsonObj) {

@@ -24,7 +24,7 @@ class DuplexButton86Parser extends DeviceParser {
 }
 
 // 支持的设备：86型无线双按钮开关
-DuplexButton86Parser.modelName = '86sw2';
+DuplexButton86Parser.modelName = ['86sw2', 'sensor_86sw2.aq1'];
 module.exports = DuplexButton86Parser;
 
 class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParser {
@@ -137,7 +137,7 @@ class DuplexButton86SwitchVirtualBasePressParser extends SwitchVirtualBasePressP
 
 class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model: this.model,sid:deviceSid,data:{channel_0:"click"}};
     }
     
     doSomething(jsonObj) {
@@ -161,7 +161,7 @@ class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86Swi
 
 class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"channel_1\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{channel_1:"click"}};
     }
     
     doSomething(jsonObj) {
@@ -185,7 +185,7 @@ class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86Sw
 
 class DuplexButton86SwitchVirtualSinglePressBothPressParser extends DuplexButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"dual_channel\\":\\"both_click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{dual_channel:"both_click"}};
     }
     
     doSomething(jsonObj) {
