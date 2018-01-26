@@ -208,27 +208,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             that.GatewayUtil.addOrUpdate(gatewaySid, gateway);
         }
         
-        if(!that.DeviceUtil.getBySid(gatewaySid)) {
-            var gatewayDevice = {
-                sid: gatewaySid,
-                gatewaySid: gatewaySid,
-                lastUpdateTime: Date.now()
-            }
-            that.DeviceUtil.addOrUpdate(gatewaySid, gatewayDevice);
-            
-            var command1 = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
-            that.sendReadCommand(gatewaySid, command1, {timeout: 0.5 * 60 * 1000, retryCount: 12}).then(result => {
-                that.DeviceUtil.update({model: result['model']});
-                var createAccessories = that.ParseUtil.getCreateAccessories(result);
-                that.registerPlatformAccessories(createAccessories);
-                that.ParseUtil.parserAccessories(result);
-                
-                that.deleteDisableAccessories(result['sid'], result['model']);
-            }).catch(function(err) {
-                that.DeviceUtil.remove(gatewaySid);
-                that.log.error(err);
-            });
-        }
+        that.addDevice(gatewaySid, gatewaySid);
         
         var data = JSON.parse(jsonObj['data']);
         var index = 0;
@@ -239,28 +219,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
                 return;
             }
             
-            var deviceSid = data[index];
-            if(!that.DeviceUtil.getBySid(deviceSid)) {
-                var device = {
-                    sid: deviceSid,
-                    gatewaySid: gatewaySid,
-                    lastUpdateTime: Date.now()
-                }
-                that.DeviceUtil.addOrUpdate(deviceSid, device);
-                
-                var command2 = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                that.sendReadCommand(deviceSid, command2, {timeout: 3 * 1000, retryCount: 12}).then(result => {
-                    that.DeviceUtil.update({model: result['model']});
-                    var createAccessories = that.ParseUtil.getCreateAccessories(result);
-                    that.registerPlatformAccessories(createAccessories);
-                    that.ParseUtil.parserAccessories(result);
-                    
-                    that.deleteDisableAccessories(result['sid'], result['model']);
-                }).catch(function(err) {
-                    that.DeviceUtil.remove(deviceSid);
-                    that.log.error(err);
-                });
-            }
+            that.addDevice(data[index], gatewaySid);
             
             index++;
         }, 50);
@@ -318,6 +277,29 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
     } else {
         that.log.warn("[Revc]" + msg);
     }
+}
+
+MiAqaraPlatform.prototype.addDevice = function(deviceSid, gatewaySid) {
+    if(this.DeviceUtil.getBySid(deviceSid)) return;
+    var device = {
+        sid: deviceSid,
+        gatewaySid: gatewaySid,
+        lastUpdateTime: Date.now()
+    }
+    this.DeviceUtil.addOrUpdate(deviceSid, device);
+    var that = this;
+    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+    this.sendReadCommand(deviceSid, command, {timeout: 3 * 1000, retryCount: 12}).then(result => {
+        that.DeviceUtil.update({model: result['model']});
+        var createAccessories = that.ParseUtil.getCreateAccessories(result);
+        that.registerPlatformAccessories(createAccessories);
+        that.ParseUtil.parserAccessories(result);
+
+        that.deleteDisableAccessories(result['sid'], result['model']);
+    }).catch(function(err) {
+        that.DeviceUtil.remove(deviceSid);
+        that.log.error(err);
+    });
 }
 
 MiAqaraPlatform.prototype.getPromises = function(msgTag) {
