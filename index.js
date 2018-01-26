@@ -178,7 +178,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
     try {
         jsonObj = JSON.parse(msg);
     } catch (ex) {
-        that.log.error("Bad msg %s", msg);
+        that.log.error("Bad msg: " + msg);
         return;
     }
     

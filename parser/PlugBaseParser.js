@@ -83,7 +83,7 @@ class PlugBaseOutletParser extends AccessoryParser {
             
             if (onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
-                    var command = '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
+                    var command = '{"cmd":"write","model":"' + that.model + '","sid":"' + deviceSid + '","data":"{\\"status\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);

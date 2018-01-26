@@ -392,7 +392,7 @@ class GatewayLightbulbParser extends AccessoryParser {
                 prepValue = parseInt(that.dec2hex(brightness, 2) + that.dec2hex(rgb[0], 2) + that.dec2hex(rgb[1], 2) + that.dec2hex(rgb[2], 2), 16);
             }
             
-            var command = '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"rgb\\":' + prepValue + ', \\"key\\": \\"${key}\\"}"}';
+            var command = '{"cmd":"write","model":"' + that.model + '","sid":"' + deviceSid + '","data":"{\\"rgb\\":' + prepValue + ', \\"key\\": \\"${key}\\"}"}';
             if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                 that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                 resolve(null);
