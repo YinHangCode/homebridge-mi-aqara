@@ -79,6 +79,21 @@ If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi
 ## Configuration
 1. Open Aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
 Please follow the steps in this thread: http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
+
+On iPhone:
+
+* Open the app
+* Select the gateway
+* Press the top right `(…)` Settings button
+* Select `About`
+* Tap five times in the blank area to reveal the hidden menu items
+* Below the version numbers, choose the first: `局域网通信协议` (LAN Communication Protocol)
+* Toggle the `局域网通协议` (LAN Communication Protocol) switch to on
+* Take note of the alphanumeric code beside `密码` (Password)
+* Press `OK`
+* Go back to the previous menu (About) and select the next option: `网关信息` (Gateway Information)
+* Take note of the MAC address at `mac=`
+
 2. To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
 ```
 {
