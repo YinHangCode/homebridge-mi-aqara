@@ -283,12 +283,12 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
 }
 
 MiAqaraPlatform.prototype.isProtoVersionByGid = function(sid, num) {
-    var gateway = this.GatewayUtil.getBySid(sid);
-    return gateway && (gateway.protoVersion||'1.x').substring(0, 2) === (num + '.');
+    var gateway = sid && this.GatewayUtil.getBySid(sid);
+    return (gateway && gateway.protoVersion || '1.x').substring(0, 2) === (num + '.');
 }
 MiAqaraPlatform.prototype.isProtoVersionByDid = function(did, num) {
     var device = this.DeviceUtil.getBySid(did);
-    return this.isProtoVersionByGid(device.gatewaySid, num);
+    return this.isProtoVersionByGid(device && device.gatewaySid, num);
 }
 
 MiAqaraPlatform.prototype.getSubDevice = function(gatewaySid) {
