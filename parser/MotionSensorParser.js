@@ -14,7 +14,7 @@ class MotionSensorParser extends DeviceParser {
 }
 
 // 支持的设备：人体感应
-MotionSensorParser.modelName = 'motion';
+MotionSensorParser.modelName = ['motion', 'sensor_motion'];
 module.exports = MotionSensorParser;
 
 class MotionSensorMotionSensorParser extends AccessoryParser {

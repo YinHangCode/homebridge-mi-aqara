@@ -129,7 +129,7 @@ class DuplexSwitchSwitchLeftParser extends DuplexSwitchSwitchBaseParser {
     }
     
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{channel_0:(value ? 'on' : 'off')}};
     }
 }
 
@@ -146,6 +146,6 @@ class DuplexSwitchSwitchRightParser extends DuplexSwitchSwitchBaseParser {
     }
     
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"channel_1\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{channel_1:(value ? 'on' : 'off')}};
     }
 }

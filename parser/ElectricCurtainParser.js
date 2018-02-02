@@ -87,7 +87,7 @@ class ElectricCurtainWindowCoveringParser extends AccessoryParser {
             
             if (targetPositionCharacteristic.listeners('set').length == 0) {
                 targetPositionCharacteristic.on("set", function(value, callback) {
-                    var command = '{"cmd":"write","model":"' + that.model + '","sid":"' + deviceSid + '","data":"{\\"curtain_level\\":\\"' + value + '\\", \\"key\\": \\"${key}\\"}"}';
+                    var command = {cmd:"write",model:that.model ,sid:deviceSid,data:{curtain_level:value}};
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);

@@ -14,7 +14,7 @@ class NatgasDetectorParser extends DeviceParser {
 }
 
 // 支持的设备：天然气警报器
-NatgasDetectorParser.modelName = 'natgas';
+NatgasDetectorParser.modelName = ['natgas', 'sensor_natgas'];
 module.exports = NatgasDetectorParser;
 
 class NatgasDetectorSmokeSensorParser extends AccessoryParser {

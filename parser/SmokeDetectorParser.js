@@ -14,7 +14,7 @@ class SmokeDetectorParser extends DeviceParser {
 }
 
 // 支持的设备：烟雾警报器
-SmokeDetectorParser.modelName = 'smoke';
+SmokeDetectorParser.modelName = ['smoke', 'sensor_smoke'];
 module.exports = SmokeDetectorParser;
 
 class SmokeDetectorSmokeSensorParser extends AccessoryParser {

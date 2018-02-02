@@ -18,7 +18,7 @@ class SingleButton86Parser extends DeviceParser {
 }
 
 // 支持的设备：86型无线单按钮开关
-SingleButton86Parser.modelName = '86sw1';
+SingleButton86Parser.modelName = ['86sw1', 'sensor_86sw1.aq1'];
 module.exports = SingleButton86Parser;
 
 class SingleButton86StatelessProgrammableSwitchParser extends AccessoryParser {
@@ -102,7 +102,7 @@ class SingleButton86SwitchVirtualBasePressParser extends SwitchVirtualBasePressP
 
 class SingleButton86SwitchVirtualSinglePressParser extends SingleButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{channel_0:"click"}};
     }
     
     doSomething(jsonObj) {

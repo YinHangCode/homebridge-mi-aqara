@@ -16,7 +16,7 @@ class GatewayParser extends DeviceParser {
 }
 
 // 支持的设备：网关
-GatewayParser.modelName = 'gateway';
+GatewayParser.modelName = ['gateway', 'gateway.v3'];
 module.exports = GatewayParser;
 
 class GatewayLightSensorParser extends AccessoryParser {
@@ -392,7 +392,7 @@ class GatewayLightbulbParser extends AccessoryParser {
                 prepValue = parseInt(that.dec2hex(brightness, 2) + that.dec2hex(rgb[0], 2) + that.dec2hex(rgb[1], 2) + that.dec2hex(rgb[2], 2), 16);
             }
             
-            var command = '{"cmd":"write","model":"' + that.model + '","sid":"' + deviceSid + '","data":"{\\"rgb\\":' + prepValue + ', \\"key\\": \\"${key}\\"}"}';
+            var command = {cmd:"write",model:that.model,sid:deviceSid,data:{rgb:prepValue}};
             if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                 that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                 resolve(null);
@@ -543,7 +543,7 @@ class GatewaySwitchJoinPermissionParser extends AccessoryParser {
             if(onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
                     clearTimeout(that.joinPermissionTimeout[deviceSid]);
-                    var command = '{"cmd":"write","model":"' + this.model + '","sid":"' + deviceSid + '","data":"{\\"join_permission\\":\\"' + (value ? 'yes' : 'no') + '\\", \\"key\\": \\"${key}\\"}"}';
+                    var command = {cmd:"write",model:that.model,sid:deviceSid,data:{join_permission:(value ? 'yes' : 'no')}};
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);
