@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class ContactSensorParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,11 +12,14 @@ class ContactSensorParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：门磁感应
+ContactSensorParser.modelName = ['magnet', 'sensor_magnet', 'sensor_magnet.aq2'];
 module.exports = ContactSensorParser;
 
 class ContactSensorContactSensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {

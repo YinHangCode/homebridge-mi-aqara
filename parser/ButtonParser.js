@@ -3,8 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
 class ButtonParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -16,11 +16,14 @@ class ButtonParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：按钮
+ButtonParser.modelName = ['switch', 'sensor_switch', 'sensor_switch.aq2'];
 module.exports = ButtonParser;
 
 class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -70,7 +73,7 @@ class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
     }
     
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = this.getValueFrJsonObjData(jsonObj, this.platform.isProtoVersionByDid(jsonObj['sid'], 2) ? 'channel_0' : 'status');
         if(value === 'click') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else if(value === 'double_click') {
@@ -96,24 +99,26 @@ class ButtonSwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
 
 class ButtonSwitchVirtualSinglePressParser extends ButtonSwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"switch","sid":"' + deviceSid + '","data":"{\\"status\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        var data = this.platform.isProtoVersionByDid(deviceSid, 2) ? {channel_0: 'click'} : {status: 'click'};
+        return {cmd:"write",model:this.model,sid:deviceSid,data:data};
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"switch\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
 class ButtonSwitchVirtualDoublePressParser extends ButtonSwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"switch","sid":"' + deviceSid + '","data":"{\\"status\\":\\"double_click\\", \\"key\\": \\"${key}\\"}"}';
+        var data = this.platform.isProtoVersionByDid(deviceSid, 2) ? {channel_0: 'double_click'} : {status: 'double_click'};
+        return {cmd:"write",model:this.model,sid:deviceSid,data:data};
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"switch\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"double_click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"double_click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }

@@ -3,8 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
 class DuplexButton86Parser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -22,11 +22,14 @@ class DuplexButton86Parser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：86型无线双按钮开关
+DuplexButton86Parser.modelName = ['86sw2', 'sensor_86sw2.aq1'];
 module.exports = DuplexButton86Parser;
 
 class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -134,12 +137,12 @@ class DuplexButton86SwitchVirtualBasePressParser extends SwitchVirtualBasePressP
 
 class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"86sw2","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model: this.model,sid:deviceSid,data:{channel_0:"click"}};
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_0\\\":\\\"click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_0\\\":\\\"click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
@@ -158,12 +161,12 @@ class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86Swi
 
 class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"86sw2","sid":"' + deviceSid + '","data":"{\\"channel_1\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{channel_1:"click"}};
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_1\\\":\\\"click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_1\\\":\\\"click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
@@ -182,12 +185,12 @@ class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86Sw
 
 class DuplexButton86SwitchVirtualSinglePressBothPressParser extends DuplexButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"86sw2","sid":"' + deviceSid + '","data":"{\\"dual_channel\\":\\"both_click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{dual_channel:"both_click"}};
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw2\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"dual_channel\\\":\\\"both_click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"dual_channel\\\":\\\"both_click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
