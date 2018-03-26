@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class MotionSensorParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,11 +12,14 @@ class MotionSensorParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：人体感应
+MotionSensorParser.modelName = ['motion', 'sensor_motion'];
 module.exports = MotionSensorParser;
 
 class MotionSensorMotionSensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {

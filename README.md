@@ -65,6 +65,7 @@ Aqara is a ZigBee gateway with a few sensors.
 20.Button2(按钮第二代)   
 21.TemperatureAndHumiditySensor2(温度湿度传感器第二代)   
 22.WaterDetector(水浸传感器)   
+23.UnlockedSensor(门锁)
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
@@ -154,6 +155,53 @@ For more information about default name, Please refer to file `sampleConfig.json
     }]
 }
 ```
+If you want to use Aqara lock,you need add some configuration like this
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "LockDeviceID": {
+                "UserID": {
+                    "name": "UserName"
+                }
+            }
+        }
+    }]
+}
+```
+`UserID` is user identification from lock.The value can get from `Aqara Lock Plugin` in `MIHOME` APP,The user ID contains the ID type. The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is: 1 fingerprint, 2 password, 3 proximity card, 5 check-in password.Example:
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "158d0001dd0289": {
+                "65536": {
+                    "name": "Administrator"
+                },
+                "65537": {
+                    "name": "Finger"
+                },
+                "196608": {
+                    "name": "Card"
+                }
+            }
+        }
+    }]
+}
+```  
+
 If you like to use Light Bulb type for Light Switch to make grandma Siri happy, like snOOrz, you can set the following in the config.   
 Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.   
 **If you changed serviceType config, Please [clear register accessories](#clear-register-accessories).**   
@@ -345,12 +393,16 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.9 (2018-03-26)
+1.optimized some of the basic code to facilitate the subsequent support of new hardware.   
+2.supports aqara LAN protocol 2.0.   
+3.added some new devices (door locks).   
 ### 0.6.8 (2018-01-21)
 1.fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
 2.fixed bug that it still show battery low power after replacing the battery.   
 3.fixed bug that TemperatureAndHumiditySensor and TemperatureAndHumiditySensor2 temperature sensor accessory can't show the negative number.   
 4.remove a duplicated function.   
-5.add the choice bindAddress feature.   
+5.add the choice bindAddress feature.
 ### 0.6.7 (2017-12-10)
 1.optimizing log content.   
 ### 0.6.6 (2017-12-10)

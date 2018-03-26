@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class ElectricCurtainParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,11 +12,14 @@ class ElectricCurtainParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：电动窗帘
+ElectricCurtainParser.modelName = 'curtain';
 module.exports = ElectricCurtainParser;
 
 class ElectricCurtainWindowCoveringParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -84,7 +87,7 @@ class ElectricCurtainWindowCoveringParser extends AccessoryParser {
             
             if (targetPositionCharacteristic.listeners('set').length == 0) {
                 targetPositionCharacteristic.on("set", function(value, callback) {
-                    var command = '{"cmd":"write","model":"curtain","sid":"' + deviceSid + '","data":"{\\"curtain_level\\":\\"' + value + '\\", \\"key\\": \\"${key}\\"}"}';
+                    var command = {cmd:"write",model:that.model ,sid:deviceSid,data:{curtain_level:value}};
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);

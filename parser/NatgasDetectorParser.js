@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class NatgasDetectorParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,11 +12,14 @@ class NatgasDetectorParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：天然气警报器
+NatgasDetectorParser.modelName = ['natgas', 'sensor_natgas'];
 module.exports = NatgasDetectorParser;
 
 class NatgasDetectorSmokeSensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {

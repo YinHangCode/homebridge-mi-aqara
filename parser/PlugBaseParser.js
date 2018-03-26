@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class PlugBaseParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,11 +12,14 @@ class PlugBaseParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：智能插座，86型墙壁插座
+PlugBaseParser.modelName = ['plug', '86plug', 'ctrl_86plug'];
 module.exports = PlugBaseParser;
 
 class PlugBaseOutletParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -80,7 +83,9 @@ class PlugBaseOutletParser extends AccessoryParser {
             
             if (onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
-                    var command = '{"cmd":"write","model":"plug","sid":"' + deviceSid + '","data":"{\\"status\\":\\"' + (value ? 'on' : 'off') + '\\", \\"key\\": \\"${key}\\"}"}';
+                    var valueStr = (value ? 'on' : 'off');
+                    var data = that.platform.isProtoVersionByDid(deviceSid, 2) ? {channel_0: valueStr} : {status: valueStr};
+                    var command = {cmd:"write",model:that.model,sid:deviceSid,data:data};
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);
@@ -98,7 +103,7 @@ class PlugBaseOutletParser extends AccessoryParser {
     }
     
     getOnCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = this.getValueFrJsonObjData(jsonObj, this.platform.isProtoVersionByDid(jsonObj['sid'], 2) ? 'channel_0' : 'status');
         if(value === 'on') {
             return true;
         } else if(value === 'off') {

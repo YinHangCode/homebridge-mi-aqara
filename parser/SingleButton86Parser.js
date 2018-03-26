@@ -3,8 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
 class SingleButton86Parser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -16,11 +16,14 @@ class SingleButton86Parser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：86型无线单按钮开关
+SingleButton86Parser.modelName = ['86sw1', 'sensor_86sw1.aq1'];
 module.exports = SingleButton86Parser;
 
 class SingleButton86StatelessProgrammableSwitchParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -99,12 +102,12 @@ class SingleButton86SwitchVirtualBasePressParser extends SwitchVirtualBasePressP
 
 class SingleButton86SwitchVirtualSinglePressParser extends SingleButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return '{"cmd":"write","model":"86sw1","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"click\\", \\"key\\": \\"${key}\\"}"}';
+        return {cmd:"write",model:this.model,sid:deviceSid,data:{channel_0:"click"}};
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"86sw1\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_0\\\":\\\"click\\\"}\"}");
+        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_0\\\":\\\"click\\\"}\"}");
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }

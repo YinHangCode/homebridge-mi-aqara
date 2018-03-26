@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class SmokeDetectorParser extends DeviceParser {
-    constructor(platform) {
-        super(platform);
+    constructor(model, platform) {
+        super(model, platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,11 +12,14 @@ class SmokeDetectorParser extends DeviceParser {
         }
     }
 }
+
+// 支持的设备：烟雾警报器
+SmokeDetectorParser.modelName = ['smoke', 'sensor_smoke'];
 module.exports = SmokeDetectorParser;
 
 class SmokeDetectorSmokeSensorParser extends AccessoryParser {
-    constructor(platform, accessoryType) {
-        super(platform, accessoryType)
+    constructor(model, platform, accessoryType) {
+        super(model, platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
