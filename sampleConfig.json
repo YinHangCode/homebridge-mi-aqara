@@ -225,6 +225,11 @@
                     "name": "kitchen room leak sensor"
                 }
             },
+            "158d0001000024": {
+                "65536": {
+                    "name": "Administrator"
+                }
+            }
         }
     }]
 }
