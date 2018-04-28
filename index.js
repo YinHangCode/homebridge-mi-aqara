@@ -17,7 +17,7 @@ const serverSocket = dgram.createSocket({
 const multicastAddress = '224.0.0.50';
 const multicastPort = 4321;
 const serverPort = 9898;
-const gatewayModels = ['gateway', 'acpartner.v3'];
+const gatewayModels = ['gateway', 'gateway.v3', 'acpartner.v3'];
 
 var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
 
