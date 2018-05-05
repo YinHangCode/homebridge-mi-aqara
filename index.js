@@ -8,6 +8,7 @@ const GatewayUtil = require('./lib/GatewayUtil');
 const DeviceUtil = require('./lib/DeviceUtil');
 const AccessoryUtil = require('./lib/AccessoryUtil');
 const ParseUtil = require('./lib/ParseUtil');
+const MqttUtil = require('./lib/MqttUtil');
 
 const iv = Buffer.from([0x17, 0x99, 0x6d, 0x09, 0x3d, 0x28, 0xdd, 0xb3, 0xba, 0x69, 0x5a, 0x2e, 0x6f, 0x58, 0x56, 0x2e]);
 const serverSocket = dgram.createSocket({
@@ -51,6 +52,7 @@ function MiAqaraPlatform(log, config, api) {
     this.DeviceUtil = new DeviceUtil();
     this.AccessoryUtil = new AccessoryUtil();
     this.ParseUtil = new ParseUtil(this);
+    this.MqttUtil = new MqttUtil(this);
     
     this._promises = {};
     this.initServerSocket();
@@ -260,6 +262,9 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         }
     } else if (cmd === 'read_ack' || cmd === 'read_rsp') {
         var msgTag = 'read_' + jsonObj['sid'];
+
+        that.MqttUtil.parseMessage(jsonObj);
+
         const p = that.getPromises(msgTag);
         if(!p) {
             that.log.warn("[Revc]" + msg);

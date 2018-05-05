@@ -378,7 +378,40 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
     }]
 }
 ```
-   
+
+## Support MQTT
+if you are using mqtt server(broker), set a mqtt configure!
+```
+{
+    "platforms": [
+        {
+            "platform": "MiAqaraPlatform",
+            "gateways": {
+                ...
+            },
+            "mqtt": {
+                "host": "mqtt://localhost",
+                "prefix": "homebridge/"
+           }
+       }
+    }]
+}
+```
+It will publish message a topic.
+example(it's my apara temperature and humidity sensor value.)
+
+homebridge/{weather.v1}/{28967}/{temperature} => 24.17
+homebridge/{weather.v1}/{28967}/{humidity} => 47.17
+
+"{}" means dynamic value as your device.
+
+if you install mosquitto client, easy to try better :)
+```
+$ mosquitto_sub -h 192.168.0.2 -v -t 'homebridge/weather.v1/28967/temperature'
+homebridge/weather.v1/28967/temperature 24.16
+homebridge/weather.v1/28967/temperature 24.16
+```
+
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
 SingleButton86/DuplexButton86(Left, Right, Both) StatelessProgrammableSwitch only support SinglePress.   
