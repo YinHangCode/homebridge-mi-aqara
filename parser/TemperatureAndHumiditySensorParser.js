@@ -121,9 +121,6 @@ class TemperatureAndHumiditySensorTemperatureSensorParser extends AccessoryParse
             });
 	      }
 	    }
-	    setTimeout(function(){
-		    that.getTempHistory(jsonObj, defaultValue);
-	    }, 8 * 60 * 1000) //8min
     }
 }
 
@@ -223,8 +220,5 @@ class TemperatureAndHumiditySensorHumiditySensorParser extends AccessoryParser {
             });
 	      }
 	    }
-	    setTimeout(function(){
-		    that.getHumidityHistory(jsonObj, defaultValue);
-	    }, 8 * 60 * 1000) //8min
     }
 }
