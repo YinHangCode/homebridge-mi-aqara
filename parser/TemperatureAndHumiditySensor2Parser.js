@@ -110,7 +110,7 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
         var uuid = that.getAccessoryUUID(deviceSid);
 	    var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
 	    if(accessory){
-		  accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
+		  accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: true, filename: accessory.displayName + '_Temperature.json'});
 		  accessory.context.loggingService.log = that.platform.log.log;
   	      var value = that.getCurrentTemperatureCharacteristicValue(jsonObj, null);
 	      if(null != value){
@@ -131,6 +131,8 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
 class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser {
     constructor(model, platform, accessoryType) {
         super(model, platform, accessoryType)
+        FakeGatoHistoryService = require('fakegato-history')(this.platform.api)
+        this.HBpath = this.platform.api.user.storagePath()+'/accessories';
     }
     
     getAccessoryCategory(deviceSid) {
@@ -210,7 +212,7 @@ class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser 
         var uuid = that.getAccessoryUUID(deviceSid);
 	    var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
 	    if(accessory){
-		  accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
+		  accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: true, filename: accessory.displayName + '_Humidity.json'});
 		  accessory.context.loggingService.log = that.platform.log.log;
   	      var value = that.getCurrentRelativeHumidityCharacteristicValue(jsonObj, null);
 	      if(null != value){
