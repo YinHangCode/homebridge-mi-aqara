@@ -1,6 +1,5 @@
 const dgram = require('dgram');
 const crypto = require('crypto');
-//const moment = require('moment');
 
 const packageFile = require("./package.json");
 const LogUtil = require('./lib/LogUtil');
@@ -18,6 +17,7 @@ const serverSocket = dgram.createSocket({
 const multicastAddress = '224.0.0.50';
 const multicastPort = 4321;
 const serverPort = 9898;
+const gatewayModels = ['gateway', 'gateway.v3', 'acpartner.v3'];
 
 var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen, FakeGatoHistoryService;
 
@@ -47,7 +47,6 @@ function MiAqaraPlatform(log, config, api) {
     this.api = api;
     this.log = new LogUtil(null, log);
     this.ConfigUtil = new ConfigUtil(config);
-    this.HBpath = api.user.storagePath()+'/accessories';
     
     this.GatewayUtil = new GatewayUtil();
     this.DeviceUtil = new DeviceUtil();
@@ -185,7 +184,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
     try {
         jsonObj = JSON.parse(msg);
     } catch (ex) {
-        that.log.error("Bad msg %s", msg);
+        that.log.error("Bad msg: " + msg);
         return;
     }
     
@@ -193,51 +192,33 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
     if (cmd === 'iam') {
         that.log.debug("[Revc]" + msg);
         var gatewaySid = jsonObj['sid'];
-        if(that.ConfigUtil.isConfigGateway(gatewaySid)) {
-            var ip = jsonObj['ip'];
-            var port = jsonObj['port'];
-            var listCmd = '{"cmd":"get_id_list"}';
-            that.log.debug("[Send]" + listCmd);
-            serverSocket.send(listCmd, 0, listCmd.length, port, ip);
+        if(!that.ConfigUtil.isConfigGateway(gatewaySid)) return;
+
+        that.GatewayUtil.addOrUpdate(gatewaySid, {
+            sid: gatewaySid,
+            passwd: that.ConfigUtil.getGatewayPasswordByGatewaySid(gatewaySid),
+            ip: jsonObj['ip'],
+            port: jsonObj['port'],
+            protoVersion: jsonObj['proto_version']
+        });
+
+        if(jsonObj['proto_version']) {
+            //if whois return proto_version, select query commands based on version
+            this.getSubDevice(gatewaySid);
+        } else {
+            //get version by read command
+            that.addDevice(gatewaySid, gatewaySid);
+            this.getProtoVersionAndSubDevice(gatewaySid);
         }
-    } else if (cmd === 'get_id_list_ack') {
+    } else if (cmd === 'get_id_list_ack' || cmd === 'discovery_rsp') {
         that.log.debug("[Revc]" + msg);
         var gatewaySid = jsonObj['sid'];
-        var gateway = that.GatewayUtil.getBySid(gatewaySid);
-        if(!gateway) {
-            gateway = {
-                sid: gatewaySid,
-                passwd: that.ConfigUtil.getGatewayPasswordByGatewaySid(gatewaySid),
-                ip: rinfo.address,
-                port: rinfo.port,
-                token: jsonObj['token']
-            }
-            that.GatewayUtil.addOrUpdate(gatewaySid, gateway);
-        }
-        
-        if(!that.DeviceUtil.getBySid(gatewaySid)) {
-            var gatewayDevice = {
-                sid: gatewaySid,
-                gatewaySid: gatewaySid,
-                lastUpdateTime: Date.now()
-            }
-            that.DeviceUtil.addOrUpdate(gatewaySid, gatewayDevice);
-            
-            var command1 = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
-            that.sendReadCommand(gatewaySid, command1, {timeout: 0.5 * 60 * 1000, retryCount: 12}).then(result => {
-                that.DeviceUtil.update({model: result['model']});
-                var createAccessories = that.ParseUtil.getCreateAccessories(result);
-                that.registerPlatformAccessories(createAccessories);
-                that.ParseUtil.parserAccessories(result);
-                
-                that.deleteDisableAccessories(result['sid'], result['model']);
-            }).catch(function(err) {
-                that.DeviceUtil.remove(gatewaySid);
-                that.log.error(err);
-            });
-        }
-        
-        var data = JSON.parse(jsonObj['data']);
+        that.GatewayUtil.addOrUpdate(gatewaySid, {
+            sid: gatewaySid,
+            token: jsonObj['token']
+        });
+
+        var data = that.isProtoVersionByGid(gatewaySid, 2) ? jsonObj['dev_list'] : JSON.parse(jsonObj['data']);
         var index = 0;
         var sendInterval = setInterval(() => {
             if(index >= data.length) {
@@ -246,28 +227,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
                 return;
             }
             
-            var deviceSid = data[index];
-            if(!that.DeviceUtil.getBySid(deviceSid)) {
-                var device = {
-                    sid: deviceSid,
-                    gatewaySid: gatewaySid,
-                    lastUpdateTime: Date.now()
-                }
-                that.DeviceUtil.addOrUpdate(deviceSid, device);
-                
-                var command2 = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                that.sendReadCommand(deviceSid, command2, {timeout: 3 * 1000, retryCount: 12}).then(result => {
-                    that.DeviceUtil.update({model: result['model']});
-                    var createAccessories = that.ParseUtil.getCreateAccessories(result);
-                    that.registerPlatformAccessories(createAccessories);
-                    that.ParseUtil.parserAccessories(result);
-                    
-                    that.deleteDisableAccessories(result['sid'], result['model']);
-                }).catch(function(err) {
-                    that.DeviceUtil.remove(deviceSid);
-                    that.log.error(err);
-                });
-            }
+            that.addDevice(that.isProtoVersionByGid(gatewaySid, 2) ? data[index]['sid'] : data[index], gatewaySid);
             
             index++;
         }, 50);
@@ -276,7 +236,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         var model = jsonObj['model'];
         var sid = jsonObj['sid'];
         
-        if (model === 'gateway') {
+        if (gatewayModels.indexOf(model) != -1) {
             that.GatewayUtil.update(sid, {token: jsonObj['token']});
         }
 
@@ -287,7 +247,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
             that.DeviceUtil.update(sid, {lastUpdateTime: newLastUpdateTime});
         } else {
         }
-    } else if (cmd === 'write_ack') {
+    } else if (cmd === 'write_ack' || cmd === 'write_rsp') {
         var msgTag = 'write_' + jsonObj['sid'];
         const p = that.getPromises(msgTag);
         if(!p) {
@@ -303,7 +263,7 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
                 p.resolve(jsonObj);
             }
         }
-    } else if (cmd === 'read_ack') {
+    } else if (cmd === 'read_ack' || cmd === 'read_rsp') {
         var msgTag = 'read_' + jsonObj['sid'];
         const p = that.getPromises(msgTag);
         if(!p) {
@@ -325,6 +285,76 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
     } else {
         that.log.warn("[Revc]" + msg);
     }
+}
+
+MiAqaraPlatform.prototype.isProtoVersionByGid = function(sid, num) {
+    var gateway = sid && this.GatewayUtil.getBySid(sid);
+    return (gateway && gateway.protoVersion || '1.x').substring(0, 2) === (num + '.');
+}
+MiAqaraPlatform.prototype.isProtoVersionByDid = function(did, num) {
+    var device = this.DeviceUtil.getBySid(did);
+    return this.isProtoVersionByGid(device && device.gatewaySid, num);
+}
+
+MiAqaraPlatform.prototype.getSubDevice = function(gatewaySid) {
+    var that = this;
+    var gateway = that.GatewayUtil.getBySid(gatewaySid);
+    if (that.isProtoVersionByGid(gatewaySid, 2)) {
+        var listCmd = '{"cmd":"discovery"}';
+        that.log.debug("[Send]" + listCmd);
+        serverSocket.send(listCmd, 0, listCmd.length, gateway.port, gateway.ip);
+    } else {
+        //default version 1
+        var listCmd = '{"cmd":"get_id_list"}';
+        that.log.debug("[Send]" + listCmd);
+        serverSocket.send(listCmd, 0, listCmd.length, gateway.port, gateway.ip);
+    }
+    return;
+}
+
+MiAqaraPlatform.prototype.getProtoVersionAndSubDevice = function(gatewaySid) {
+    var that = this;
+    var command = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
+    this.sendReadCommand(gatewaySid, command, {timeout: 3 * 1000, retryCount: 12}).then(result => {
+        var protoVersion = result['data'] && result['data']['proto_version'];
+        if (!protoVersion && result['params']) {
+            result['params'].forEach((param) => {
+                if (param['proto_version']) {
+                    protoVersion = param['proto_version'];
+                }
+            });
+        }
+        that.GatewayUtil.addOrUpdate(gatewaySid, {
+            sid: gatewaySid,
+            protoVersion: protoVersion
+        });
+        that.getSubDevice(gatewaySid);
+    }).catch(function(err) {
+        that.log.error(err);
+    });
+}
+
+MiAqaraPlatform.prototype.addDevice = function(deviceSid, gatewaySid) {
+    if(this.DeviceUtil.getBySid(deviceSid)) return;
+    var device = {
+        sid: deviceSid,
+        gatewaySid: gatewaySid,
+        lastUpdateTime: Date.now()
+    }
+    this.DeviceUtil.addOrUpdate(deviceSid, device);
+    var that = this;
+    var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
+    this.sendReadCommand(deviceSid, command, {timeout: 3 * 1000, retryCount: 12}).then(result => {
+        that.DeviceUtil.update({model: result['model']});
+        var createAccessories = that.ParseUtil.getCreateAccessories(result);
+        that.registerPlatformAccessories(createAccessories);
+        that.ParseUtil.parserAccessories(result);
+
+        that.deleteDisableAccessories(result['sid'], result['model']);
+    }).catch(function(err) {
+        that.DeviceUtil.remove(deviceSid);
+        that.log.error(err);
+    });
 }
 
 MiAqaraPlatform.prototype.getPromises = function(msgTag) {
@@ -437,6 +467,10 @@ MiAqaraPlatform.prototype.sendReadCommand = function(deviceSid, command, options
     var that = this;
     return new Promise((resolve, reject) => {
         var device = that.DeviceUtil.getBySid(deviceSid);
+        if (!device) {
+            reject('no such device: ' + deviceSid);
+            return;
+        }
         var gateway = that.GatewayUtil.getBySid(device.gatewaySid);
         var msgTag = 'read_' + deviceSid + "_t" + that.getPromisesTagSerialNumber();
         that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
@@ -452,16 +486,26 @@ MiAqaraPlatform.prototype.sendWriteCommand = function(deviceSid, command, option
     var that = this;
     return new Promise((resolve, reject) => {
         var device = that.DeviceUtil.getBySid(deviceSid);
+        if (!device) {
+            reject('no such device: ' + deviceSid);
+            return;
+        }
         var gateway = that.GatewayUtil.getBySid(device.gatewaySid);
         
         var cipher = crypto.createCipheriv('aes-128-cbc', that.ConfigUtil.getGatewayPasswordByGatewaySid(gateway['sid']), iv);
         var gatewayToken = gateway['token'];
         var key = cipher.update(gatewayToken, "ascii", "hex");
         cipher.final('hex'); // Useless data, don't know why yet.
-        
-        command = command.replace('${key}', key);
+
+        if (that.isProtoVersionByGid(device.gatewaySid, 2)) {
+            command.key = key;
+            command.params = [command.data];
+            delete command.data;
+        } else {
+            command.data.key = key;
+        }
         var msgTag = 'write_' + deviceSid + "_t" + that.getPromisesTagSerialNumber();
-        that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
+        that.sendCommand(gateway.ip, gateway.port, msgTag, JSON.stringify(command), options).then(result => {
             resolve(result);
         }).catch(function(err) {
             // that.log.error(err);
@@ -479,10 +523,17 @@ MiAqaraPlatform.prototype.sendWriteCommandWithoutFeedback = function(deviceSid, 
     var gatewayToken = gateway['token'];
     var key = cipher.update(gatewayToken, "ascii", "hex");
     cipher.final('hex'); // Useless data, don't know why yet.
-    
-    command = command.replace('${key}', key);
-    that.log.debug("[Send]" + command);
-    serverSocket.send(command, 0, command.length, gateway.port, gateway.ip, err => err && reject(err));
+
+    if (that.isProtoVersionByGid(device.gatewaySid, 2)) {
+        command.key = key;
+        command.params = [command.data];
+        delete command.data;
+    } else {
+        command.data.key = key;
+    }
+    var commandStr = JSON.stringify(command);
+    that.log.debug("[Send]" + commandStr);
+    serverSocket.send(commandStr, 0, commandStr.length, gateway.port, gateway.ip, err => err && reject(err));
 }
 
 MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
