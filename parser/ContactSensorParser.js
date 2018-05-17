@@ -1,5 +1,6 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
+const moment = require('moment');
 
 class ContactSensorParser extends DeviceParser {
     constructor(model, platform) {
@@ -62,6 +63,12 @@ class ContactSensorContactSensorParser extends AccessoryParser {
             var value = that.getContactSensorStateCharacteristicValue(jsonObj, null);
             if(null != value) {
                 contactSensorStateCharacteristic.updateValue(value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
+                let contactDetected = 0;
+                value ? contactDetected = 1 : contactDetected = 0;
+                accessory.context.loggingService.addEntry({
+                  time: moment().unix(),
+                  status: contactDetected
+                });
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
