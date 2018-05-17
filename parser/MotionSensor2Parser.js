@@ -1,5 +1,6 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
+const moment = require('moment');
 
 class MotionSensor2Parser extends DeviceParser {
     constructor(model, platform) {
@@ -62,7 +63,13 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
             var motionDetectedCharacteristic = service.getCharacteristic(that.Characteristic.MotionDetected);
             var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
             if(null != value) {
+                let motionDetected = 0;
                 motionDetectedCharacteristic.updateValue(value);
+                value ? motionDetected = 1 : motionDetected = 0;
+                accessory.context.loggingService.addEntry({
+                  time: moment().unix(),
+                  status: motionDetected
+                });
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
