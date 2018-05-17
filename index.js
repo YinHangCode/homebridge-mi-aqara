@@ -43,6 +43,7 @@ function MiAqaraPlatform(log, config, api) {
     this.Service = Service;
     this.Characteristic = Characteristic;
     this.UUIDGen = UUIDGen;
+    this.HBpath = api.user.storagePath()+'/accessories';
     
     this.api = api;
     this.log = new LogUtil(null, log);
