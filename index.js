@@ -79,8 +79,8 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     // accessory.reachable = true;
     if(that.AccessoryUtil) {
         if(accessory.displayName.match('Temperature')){
-          accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
-          accessory.context.loggingService.log = that.log.log;
+            accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
+            accessory.context.loggingService.log = that.log.log;
         }
         that.AccessoryUtil.add(accessory);
     }
@@ -542,6 +542,10 @@ MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
     that.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessories);
     accessories.forEach(function(accessory, index, arr) {
         that.log.info("create accessory - UUID: " + accessory.UUID);
+        if(accessory.displayName.match('Temperature')){
+            accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
+            accessory.context.loggingService.log = that.log.log;
+        }
         that.AccessoryUtil.add(accessory);
     });
 }
