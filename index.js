@@ -84,6 +84,9 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
         } else if(accessory.displayName.match('MotionSensor')){
             accessory.context.loggingService = new FakeGatoHistoryService("motion",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
             accessory.context.loggingService.log = that.log.log;
+        } else if(accessory.displayName.match('ContactSensor')){
+            accessory.context.loggingService = new FakeGatoHistoryService("door",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
+            accessory.context.loggingService.log = that.log.log;
         }
         that.AccessoryUtil.add(accessory);
     }
@@ -550,6 +553,9 @@ MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
             accessory.context.loggingService.log = that.log.log;
         } else if(accessory.displayName.match('MotionSensor')){
             accessory.context.loggingService = new FakeGatoHistoryService("motion",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
+            accessory.context.loggingService.log = that.log.log;
+        } else if(accessory.displayName.match('ContactSensor')){
+            accessory.context.loggingService = new FakeGatoHistoryService("door",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
             accessory.context.loggingService.log = that.log.log;
         }
         that.AccessoryUtil.add(accessory);
