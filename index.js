@@ -79,6 +79,14 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
     // accessory.reachable = true;
     if(that.AccessoryUtil) {
         if(accessory.displayName.match('TemperatureAndHumiditySensor')){
+            //SerialNumber must be unique, lets check for old SerialNumber
+            let oldSerial = accessory.getService(Service.AccessoryInformation).getCharacteristic(Characteristic.SerialNumber).value;
+            if(!oldSerial.match('-')&&accessory.displayName.match('_TemperatureSensor_')){
+                oldSerial = oldSerial + '-T'
+            } else if(!oldSerial.match('-')&&accessory.displayName.match('_HumiditySensor_')){
+                oldSerial = oldSerial + '-H'
+            }
+            accessory.getService(Service.AccessoryInformation).setCharacteristic(Characteristic.SerialNumber, oldSerial);
             accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
             accessory.context.loggingService.log = that.log.log;
         } else if(accessory.displayName.match('MotionSensor')){
