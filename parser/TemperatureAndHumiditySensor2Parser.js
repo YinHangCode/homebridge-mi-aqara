@@ -33,7 +33,7 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
         return {
             'Manufacturer': 'Aqara',
             'Model': 'Temperature And Humidity Sensor 2',
-            'SerialNumber': deviceSid
+            'SerialNumber': deviceSid + '-T'
         };
     }
 
@@ -119,7 +119,7 @@ class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser 
         return {
             'Manufacturer': 'Aqara',
             'Model': 'Temperature And Humidity Sensor 2',
-            'SerialNumber': deviceSid
+            'SerialNumber': deviceSid + '-H'
         };
     }
 
