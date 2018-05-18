@@ -64,7 +64,7 @@ class ContactSensorContactSensorParser extends AccessoryParser {
             if(null != value) {
                 contactSensorStateCharacteristic.updateValue(value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
                 let contactDetected = 0;
-                value ? contactDetected = 1 : contactDetected = 0;
+                value ? contactDetected = 0 : contactDetected = 1;
                 accessory.context.loggingService.addEntry({
                   time: moment().unix(),
                   status: contactDetected
