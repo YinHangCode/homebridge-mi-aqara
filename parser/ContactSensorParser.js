@@ -1,6 +1,9 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 const moment = require('moment');
+const inherits = require('util').inherits;
+
+var Accessory, Service, Characteristic, PlatformAccessory;
 
 class ContactSensorParser extends DeviceParser {
     constructor(model, platform) {
@@ -21,6 +24,40 @@ module.exports = ContactSensorParser;
 class ContactSensorContactSensorParser extends AccessoryParser {
     constructor(model, platform, accessoryType) {
         super(model, platform, accessoryType)
+        PlatformAccessory = platform.PlatformAccessory;
+        Accessory = platform.Accessory;
+        Service = platform.Service;
+        Characteristic = platform.Characteristic;
+        
+       /// /////////////////////////////////////////////////////////////////////////
+       // OpenDuration Characteristic
+       /// ///////////////////////////////////////////////////////////////////////// 
+       Characteristic.OpenDuration = function() {
+         Characteristic.call(this, 'Open Duration', 'E863F118-079E-48FF-8F27-9C2605A29F52');
+         this.setProps({
+           format: Characteristic.Formats.UINT32,
+           unit: Characteristic.Units.SECONDS,
+           perms: [Characteristic.Perms.READ, Characteristic.Perms.NOTIFY, Characteristic.Perms.WRITE]
+         });
+         this.value = this.getDefaultValue();
+       };
+       inherits(Characteristic.OpenDuration, Characteristic);
+       Characteristic.OpenDuration.UUID = 'E863F118-079E-48FF-8F27-9C2605A29F52';  
+              
+       /// /////////////////////////////////////////////////////////////////////////
+       // ClosedDuration Characteristic
+       /// ///////////////////////////////////////////////////////////////////////// 
+       Characteristic.ClosedDuration = function() {
+         Characteristic.call(this, 'Closed Duration', 'E863F119-079E-48FF-8F27-9C2605A29F52');
+         this.setProps({
+           format: Characteristic.Formats.UINT32,
+           unit: Characteristic.Units.SECONDS,
+           perms: [Characteristic.Perms.READ, Characteristic.Perms.NOTIFY, Characteristic.Perms.WRITE]
+         });
+         this.value = this.getDefaultValue();
+       };
+       inherits(Characteristic.ClosedDuration, Characteristic);
+       Characteristic.ClosedDuration.UUID = 'E863F119-079E-48FF-8F27-9C2605A29F52';  
     }
     
     getAccessoryCategory(deviceSid) {
@@ -41,6 +78,10 @@ class ContactSensorContactSensorParser extends AccessoryParser {
         
         var service = new that.Service.ContactSensor(accessoryName);
         service.getCharacteristic(that.Characteristic.ContactSensorState);
+        service.addCharacteristic(that.Characteristic.OpenDuration);
+        service.getCharacteristic(that.Characteristic.OpenDuration);
+        service.addCharacteristic(that.Characteristic.ClosedDuration);
+        service.getCharacteristic(that.Characteristic.ClosedDuration);
         result.push(service);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
@@ -59,7 +100,11 @@ class ContactSensorContactSensorParser extends AccessoryParser {
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
             var service = accessory.getService(that.Service.ContactSensor);
-            var contactSensorStateCharacteristic = service.getCharacteristic(that.Characteristic.ContactSensorState);
+            var contactSensorStateCharacteristic = service.getCharacteristic(that.Characteristic.ContactSensorState);            
+            if(!service.testCharacteristic(that.Characteristic.OpenDuration))service.addCharacteristic(that.Characteristic.OpenDuration);
+            if(!service.testCharacteristic(that.Characteristic.ClosedDuration))service.addCharacteristic(that.Characteristic.ClosedDuration);
+            service.getCharacteristic(that.Characteristic.OpenDuration);
+            service.getCharacteristic(that.Characteristic.ClosedDuration);                        
             var value = that.getContactSensorStateCharacteristicValue(jsonObj, null);
             if(null != value) {
                 contactSensorStateCharacteristic.updateValue(value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
