@@ -91,11 +91,11 @@ MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
           accessory.context.loggingService.log = that.log.log;
           accessory.context.loggingService.subtype = oldSerial;
         } else if(accessory.displayName.match('MotionSensor')){
-          accessory.context.loggingService = new FakeGatoHistoryService("motion",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
+          accessory.context.loggingService = new FakeGatoHistoryService("motion",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
           accessory.context.loggingService.log = that.log.log;
           accessory.context.loggingService.subtype = accessory.getService(Service.AccessoryInformation).getCharacteristic(Characteristic.SerialNumber).value;
         } else if(accessory.displayName.match('ContactSensor')){
-          accessory.context.loggingService = new FakeGatoHistoryService("door",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
+          accessory.context.loggingService = new FakeGatoHistoryService("door",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
           accessory.context.loggingService.log = that.log.log;
           accessory.context.loggingService.subtype = accessory.getService(Service.AccessoryInformation).getCharacteristic(Characteristic.SerialNumber).value;
         }
@@ -563,10 +563,10 @@ MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
             accessory.context.loggingService = new FakeGatoHistoryService("weather",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
             accessory.context.loggingService.log = that.log.log;
         } else if(accessory.displayName.match('MotionSensor')){
-            accessory.context.loggingService = new FakeGatoHistoryService("motion",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
+            accessory.context.loggingService = new FakeGatoHistoryService("motion",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
             accessory.context.loggingService.log = that.log.log;
         } else if(accessory.displayName.match('ContactSensor')){
-            accessory.context.loggingService = new FakeGatoHistoryService("door",accessory,{storage:'fs',path:that.HBpath, disableTimer: false});
+            accessory.context.loggingService = new FakeGatoHistoryService("door",accessory,{storage:'fs',path:that.HBpath, disableTimer: true});
             accessory.context.loggingService.log = that.log.log;
         }
         that.AccessoryUtil.add(accessory);
