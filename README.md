@@ -49,32 +49,28 @@ Aqara is a ZigBee gateway with a few sensors.
 |1|Gateway(网关)|gateway<br>gateway.v3|Gateway_Lightbulb<br>Gateway_LightSensor<br>Gateway_Switch_JoinPermission|
 |2|ContactSensor(门磁感应)|magnet|ContactSensor_ContactSensor|
 |3|MotionSensor(人体感应)|motion|MotionSensor_MotionSensor|
+|4|Button(按钮)|switch|Button_StatelessProgrammableSwitch<br>Button_Switch_VirtualSinglePress<br>Button_Switch_VirtualDoublePress|
+|5|TemperatureAndHumiditySensor(温度湿度传感器)|sensor_ht|TemperatureAndHumiditySensor_TemperatureSensor<br>TemperatureAndHumiditySensor_HumiditySensor|
+|6|SingleSwitch(单按钮墙壁开关)|ctrl_neutral1|SingleSwitch_Switch|
+|7|DuplexSwitch(双按钮墙壁开关)|ctrl_neutral2|DuplexSwitch_Switch_Left<br>DuplexSwitch_Switch_Right|
+|8|SingleSwitchLN(单按钮墙壁开关零火版)|ctrl_ln1<br>ctrl_ln1.aq1|SingleSwitchLN_Switch|
+|9|DuplexSwitchLN(双按钮墙壁开关零火版)|ctrl_ln2|DuplexSwitchLN_Switch_Left<br>DuplexSwitchLN_Switch_Right|
+|10|SingleButton86(86型无线单按钮开关)|86sw1<br>sensor_86sw1.aq1|SingleButton86_StatelessProgrammableSwitch<br>SingleButton86_Switch_VirtualSinglePress|
+|11|DuplexButton86(86型无线双按钮开关)|86sw2<br>sensor_86sw2.aq1|DuplexButton86_StatelessProgrammableSwitch_Left<br>DuplexButton86_Switch_VirtualSinglePress_Left<br>DuplexButton86_StatelessProgrammableSwitch_Right<br>DuplexButton86_Switch_VirtualSinglePress_Right<br>DuplexButton86_StatelessProgrammableSwitch_Both<br>DuplexButton86_Switch_VirtualSinglePress_Both|
+|12|PlugBase(插座)|plug|PlugBase_Outlet|
+|13|PlugBase86(86型墙壁插座)|86plug<br>ctrl_86plug|PlugBase86_Outlet|
+|14|MagicSquare(魔方)|cube<br>sensor_cube|MagicSquare_StatelessProgrammableSwitch_Flip90<br>MagicSquare_StatelessProgrammableSwitch_Flip180<br>MagicSquare_StatelessProgrammableSwitch_Move<br>MagicSquareStatelessProgrammableSwitchTapTwiceParser<br>MagicSquare_StatelessProgrammableSwitch_ShakeAir<br>MagicSquare_StatelessProgrammableSwitch_Rotate<br>MagicSquare_Switch_VirtualFlip90<br>MagicSquare_Switch_VirtualFlip180<br>MagicSquare_Switch_VirtualMove<br>MagicSquare_Switch_VirtualTapTwice<br>MagicSquare_Switch_VirtualShakeAir|
+|15|SmokeDetector(烟雾报警器)|smoke<br>sensor_smoke|SmokeDetector_SmokeSensor|
+|16|NatgasDetector(天然气报警器)|natgas<br>sensor_natgas|NatgasDetector_SmokeSensor|
+|17|ElectricCurtain(电动窗帘)|curtain|ElectricCurtain_WindowCovering|
+|18|ContactSensor2(门磁感应第二代)|sensor_magnet<br>sensor_magnet.aq2|ContactSensor2_ContactSensor|
+|19|MotionSensor2(人体感应第二代)|sensor_motion.aq2|MotionSensor2_MotionSensor<br>MotionSensor2_LightSensor|
+|20|Button2(按钮第二代)|sensor_switch<br>sensor_switch.aq2|Button2_StatelessProgrammableSwitch<br>Button2_Switch_VirtualSinglePress<br>Button2_Switch_VirtualDoublePress|
+|21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
+|22|WaterDetector(水浸传感器)|sensor_wleak.aq1|WaterDetector_LeakSensor|
+|23|UnlockedSensor(门锁)|lock.aq1|UnlockedSensor_MotionSensor|
+|24|AcPartner(空调伴侣)|acpartner.v3|AcPartner_Switch_JoinPermission|
 
-
-
-1.Gateway(网关)
-2.ContactSensor(门磁感应)
-3.MotionSensor(人体感应)
-4.Button(按钮)
-5.TemperatureAndHumiditySensor(温度湿度传感器)
-6.SingleSwitch(单按钮墙壁开关)
-7.DuplexSwitch(双按钮墙壁开关)
-8.SingleSwitchLN(单按钮墙壁开关零火版)
-9.DuplexSwitchLN(双按钮墙壁开关零火版)
-10.SingleButton86(86型无线单按钮开关)
-11.DuplexButton86(86型无线双按钮开关)
-12.PlugBase(插座)
-13.PlugBase86(86型墙壁插座)
-14.MagicSquare(魔方)
-15.SmokeDetector(烟雾报警器)
-16.NatgasDetector(天然气报警器)
-17.ElectricCurtain(电动窗帘)
-18.ContactSensor2(门磁感应第二代)
-19.MotionSensor2(人体感应第二代)
-20.Button2(按钮第二代)
-21.TemperatureAndHumiditySensor2(温度湿度传感器第二代)
-22.WaterDetector(水浸传感器)
-23.UnlockedSensor(门锁)
 
 ## Pre-Requirements
 1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
@@ -402,6 +398,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.6.10 (coding)
+
 ### 0.6.9 (2018-03-26)
 1.optimized some of the basic code to facilitate the subsequent support of new hardware.   
 2.supports aqara LAN protocol 2.0.   
