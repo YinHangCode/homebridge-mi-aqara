@@ -174,8 +174,8 @@ For more information about default name, Please refer to the following table or 
 |17|ElectricCurtain(电动窗帘)|ElectricCurtain_WindowCovering|
 |18|ContactSensor2(门磁感应第二代)|ContactSensor2_ContactSensor|
 |19|MotionSensor2(人体感应第二代)|MotionSensor2_MotionSensor<br>MotionSensor2_LightSensor|
-|20|Button2(按钮第二代)||Button2_StatelessProgrammableSwitch<br>Button2_Switch_VirtualSinglePress<br>Button2_Switch_VirtualDoublePress|
-|21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
+|20|Button2(按钮第二代)|Button2_StatelessProgrammableSwitch<br>Button2_Switch_VirtualSinglePress<br>Button2_Switch_VirtualDoublePress|
+|21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
 |23|UnlockedSensor(门锁)|UnlockedSensor_MotionSensor|
 |24|AcPartner(空调伴侣)|AcPartner_Switch_JoinPermission|
