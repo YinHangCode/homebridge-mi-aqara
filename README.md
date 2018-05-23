@@ -152,6 +152,7 @@ If you want to specify the default name of the device or any other configs, you 
 }
 ```
 For more information about default name, Please refer to the following table or file `sampleConfig.json`.   
+
 ||Device Name|Config Default Value Type|
 |:-:|:-|:-|
 |1|Gateway(网关)|Gateway_Lightbulb<br>Gateway_LightSensor<br>Gateway_Switch_JoinPermission|
