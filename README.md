@@ -10,6 +10,7 @@ Thanks for
 [瀚思彼岸论坛](https://bbs.hassbian.com/), 
 [magaHH](https://github.com/magaHH), 
 [isundaylee](https://github.com/isundaylee), 
+[ileler](https://github.com/ileler), 
 all other developer and testers.   
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
@@ -43,28 +44,36 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/WaterDetector.jpg)
 
 ## Supported Devices
-1.Gateway(网关)   
-2.ContactSensor(门磁感应)   
-3.MotionSensor(人体感应)   
-4.Button(按钮)   
-5.TemperatureAndHumiditySensor(温度湿度传感器)   
-6.SingleSwitch(单按钮墙壁开关)   
-7.DuplexSwitch(双按钮墙壁开关)   
-8.SingleSwitchLN(单按钮墙壁开关零火版)   
-9.DuplexSwitchLN(双按钮墙壁开关零火版)   
-10.SingleButton86(86型无线单按钮开关)   
-11.DuplexButton86(86型无线双按钮开关)   
-12.PlugBase(插座)   
-13.PlugBase86(86型墙壁插座)   
-14.MagicSquare(魔方)   
-15.SmokeDetector(烟雾报警器)   
-16.NatgasDetector(天然气报警器)   
-17.ElectricCurtain(电动窗帘)   
-18.ContactSensor2(门磁感应第二代)   
-19.MotionSensor2(人体感应第二代)   
-20.Button2(按钮第二代)   
-21.TemperatureAndHumiditySensor2(温度湿度传感器第二代)   
-22.WaterDetector(水浸传感器)   
+||Device Name|Protocol Model Value|Config Default Value Type|
+|:-:|:-|:-|:-|
+|1|Gateway(网关)|gateway<br>gateway.v3|Gateway_Lightbulb<br>Gateway_LightSensor<br>Gateway_Switch_JoinPermission|
+|2|ContactSensor(门磁感应)|magnet|ContactSensor_ContactSensor|
+|3|MotionSensor(人体感应)|motion|MotionSensor_MotionSensor|
+
+
+
+1.Gateway(网关)
+2.ContactSensor(门磁感应)
+3.MotionSensor(人体感应)
+4.Button(按钮)
+5.TemperatureAndHumiditySensor(温度湿度传感器)
+6.SingleSwitch(单按钮墙壁开关)
+7.DuplexSwitch(双按钮墙壁开关)
+8.SingleSwitchLN(单按钮墙壁开关零火版)
+9.DuplexSwitchLN(双按钮墙壁开关零火版)
+10.SingleButton86(86型无线单按钮开关)
+11.DuplexButton86(86型无线双按钮开关)
+12.PlugBase(插座)
+13.PlugBase86(86型墙壁插座)
+14.MagicSquare(魔方)
+15.SmokeDetector(烟雾报警器)
+16.NatgasDetector(天然气报警器)
+17.ElectricCurtain(电动窗帘)
+18.ContactSensor2(门磁感应第二代)
+19.MotionSensor2(人体感应第二代)
+20.Button2(按钮第二代)
+21.TemperatureAndHumiditySensor2(温度湿度传感器第二代)
+22.WaterDetector(水浸传感器)
 23.UnlockedSensor(门锁)
 
 ## Pre-Requirements
