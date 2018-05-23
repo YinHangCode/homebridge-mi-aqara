@@ -179,6 +179,7 @@ For more information about default name, Please refer to the following table or 
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
 |23|UnlockedSensor(门锁)|UnlockedSensor_MotionSensor|
 |24|AcPartner(空调伴侣)|AcPartner_Switch_JoinPermission|
+
 Here are some examples:    
 If you want to specify the name of the device:
 ```
