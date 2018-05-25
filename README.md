@@ -223,7 +223,7 @@ DeviceName_HomeBridgeAccessoryType_ExtraMessage
 ```
 detail:   
 
-||Device Name|Config Default Value Type|
+||Device Name|DeviceAccessoryType|
 |:-:|:-|:-|
 |1|Gateway(网关)|Gateway_Lightbulb<br>Gateway_LightSensor<br>Gateway_Switch_JoinPermission|
 |2|ContactSensor(门磁感应)|ContactSensor_ContactSensor|
