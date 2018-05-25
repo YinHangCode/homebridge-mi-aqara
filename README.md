@@ -219,7 +219,7 @@ examples:
    
 The rules of A DeviceAccessoryType:   
 ```
-DeviceName_HomeBridgeAccessoryType_ExtraMessage
+DeviceName_HomeBridgeAccessoryType(_ExtraMessage)
 ```
 detail:   
 
