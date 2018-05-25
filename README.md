@@ -1,7 +1,8 @@
 # homebridge-mi-aqara
 [![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
 
-homebridge plugin for XiaoMi Aqara plugin.  
+homebridge plugin for XiaoMi Aqara plugin.   
+
 Thanks for 
 [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), 
 [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), 
@@ -17,8 +18,8 @@ all other developer and testers.
    
 **Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories) and update [configuration](#configuration) file content.**   
    
-This repository contains the Aqara plugin for homebridge.  
-Aqara is a ZigBee gateway with a few sensors.  
+This repository contains the Aqara plugin for homebridge.   
+Aqara is a ZigBee gateway with a few sensors.   
 
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Gateway.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ContactSensor.jpg)
@@ -42,6 +43,8 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button2.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/TemperatureAndHumiditySensor2.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/WaterDetector.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/UnlockedSensor.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/AcPartner.jpg)
 
 ## Supported Devices
 ||Device Name|Protocol Model Value|
@@ -73,19 +76,35 @@ Aqara is a ZigBee gateway with a few sensors.
 
 
 ## Pre-Requirements
-1. Make sure you have V2 of the gateway. V1 has limited space so can't support this feature.  
-2. Update gateway firmware to **1.4.1_150.0143** or later. You can contact [@babymoney666](https://github.com/babymoney666) if your firmware is not up to date.  
+1. Make sure your IOS version is ios11 or later.   
+2. Make sure you have gateway v2 or acpartner v3. gateway v1 has limited space so can't support this feature.   
+3. Update gateway firmware to **1.4.1_155.0143(gateway v2)**, **1.4.1_148.019(acpartner v3)** or later.   
 
 ## Installation
-1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).  
-If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).  
-2. Make sure you can see HomeBridge in your iOS devices, if not, please go back to step 1.  
-3. Download homebridge-mi-aqara to your local folder.  
+1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).   
+If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
+2. Make sure you can see HomeBridge in your iOS devices, if not, please go back to step 1.   
+3. Download homebridge-mi-aqara to your HomeBridge path or installation through NPM:
+```
+npm install -g homebridge-mi-aqara
+```
+   
 
 ## Configuration
-1. Open Aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
-Please follow the steps in this thread: http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
-2. To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
+
+||Name|Required|Value Type|Description|Value Example|
+|:-:|:-|:-|:-|:-|
+|1|platform|True|String||It must be 'MiAqaraPlatform'|
+|2|gateways|True|Object|set gateway information.|{ "6409802da3b3": "02i44k56zrgg578b" }|
+|3|bindAddress|False|String|specified network.|"10.0.0.1"|
+|4|defaultValue|False|Object|set device default value.||
+
+For more information about config, Please refer to file `sampleConfig.json`.   
+
+### gateways configuration
+Open aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
+Please follow the steps in this thread: http://wiki.yinhh.com/Wiki.jsp?page=Homebridge-mi-aqara or http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
+To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
 ```
 {
     "platforms": [{
@@ -109,6 +128,8 @@ If you have more than one gateways, fill them in right order, like below.
     }]
 }
 ```
+
+### bindAddress configuration
 If your device(which running homebridge) has multiple network, please add the bindAddress configuration item to decide to listen which network, like below.   
 ```
 {
@@ -123,7 +144,21 @@ If your device(which running homebridge) has multiple network, please add the bi
     }]
 }
 ```
-If you want to specify the default name of the device or any other configs, you can add a mapping table to your config.json, The rules are as follows:   
+
+### defaultValue configuration
+If you want to specify the default value, such as specify the name of the accessory, hide the accessory, any other configs. You can add a defaultValue mapping table to your config.json.   
+The config supported are as follows:   
+
+||Name|Value Type|Description|Default Value|Recommended Value|Value Example|
+|:-:|:-|:-|:-|:-|:-|
+|1|name|String|set accessory name.|DeviceAccessoryType_device SID last four bits||"living room temperature"|
+|2|serviceType|String|set accessory type for Switch or Lightbulb. <br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.|"Switch"|"Switch"|"Lightbulb"|
+|3|disable|Boolean|disable accessory|false|the accessories that do not need to be set to true, such as virtual press.|true|
+|4|syncValue|Boolean|accessory will synchronization value when homebridge call the get function, if it's true.|false|fasle|false|
+|4|ignoreWriteResult|Boolean|if set to true, the result of control is not detected.|true|If your network is awful, it's recommended to be set true.|false|
+|4|disableNoResponse|Boolean|use jump back the last value to replace show NoResponse, you can set it true.|false|false|true|
+
+The rules are as follows:
 ```
 {
     "platforms": [{
@@ -135,23 +170,57 @@ If you want to specify the default name of the device or any other configs, you 
         },
         "defaultValue": {
             "device1 sid": {
-                "device1 accessory1": {
-                    "name": "device1 accessory1 name"
+                "DeviceAccessoryType1": {
+                    "config1": "config1 value"
                 }
             },
             "device2 sid": {
-                "device2 accessory1": {
-                    "name": "device2 accessory1 name"
+                "DeviceAccessoryType1": {
+                    "config1": "config1 value"
+                    "config2": "config2 value"
                 },
-                "device2 accessory2": {
-                    "name": "device2 accessory2 name"
+                "DeviceAccessoryType2": {
+                    "config1": "config1 value"
                 }
             }
         }
     }]
 }
 ```
-For more information about default name, Please refer to the following table or file `sampleConfig.json`.   
+examples:   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "158d0001000001": {
+                "ContactSensor_ContactSensor": {
+                    "name": "entrance door"
+                }
+            },
+            "158d0001000002": {
+                "MotionSensor2_MotionSensor": {
+                    "name": "study room motion sensor"
+                },
+                "MotionSensor2_LightSensor": {
+                    "name": "study room light sensor"
+                }
+            }
+        }
+    }]
+}
+```
+   
+The rules of A DeviceAccessoryType:   
+```
+DeviceName_HomeBridgeAccessoryType_ExtraMessage
+```
+detail:   
 
 ||Device Name|Config Default Value Type|
 |:-:|:-|:-|
@@ -180,8 +249,170 @@ For more information about default name, Please refer to the following table or 
 |23|UnlockedSensor(门锁)|UnlockedSensor_MotionSensor|
 |24|AcPartner(空调伴侣)|AcPartner_Switch_JoinPermission|
 
-Here are some examples:    
-If you want to specify the name of the device:
+About Global:   
+Some similar configurations and repeated multiple copies are boring things. So I provided a global writing method.   
+The following two methods of writing are equivalent:   
+```
+....
+"158d0001000008": {
+    "DuplexSwitch_Switch_Left": {
+        "name": "master bedroom room light",
+        "serviceType": "Lightbulb"
+    },
+    "DuplexSwitch_Switch_Right": {
+        "name": "study room light",
+        "serviceType": "Lightbulb"
+    }
+}
+....
+```
+```
+....
+"158d0001000008": {
+    "Global": {
+        "serviceType": "Lightbulb"
+    },
+    "DuplexSwitch_Switch_Left": {
+        "name": "master bedroom room light"
+    },
+    "DuplexSwitch_Switch_Right": {
+        "name": "study room light"
+    }
+}
+....
+```
+In the same way, the following two kinds of writing are alse equivalent:   
+```
+....
+"158d0001000003": {
+    "Button_StatelessProgrammableSwitch": {
+        "name": "living room button"
+    },
+    "Button_Switch_VirtualSinglePress": {
+        "name": "living room button virtual single press",
+        "disable": true
+    },
+    "Button_Switch_VirtualDoublePress": {
+        "name": "living room button virtual double press",
+        "disable": true
+    }
+}
+....
+```
+```
+....
+"158d0001000003": {
+    "Global": {
+        "disable": true 
+    },
+    "Button_StatelessProgrammableSwitch": {
+        "name": "living room button",
+        "disable": false
+    },
+    "Button_Switch_VirtualSinglePress": {
+        "name": "living room button virtual single press"
+    },
+    "Button_Switch_VirtualDoublePress": {
+        "name": "living room button virtual double press"
+    }
+}
+....
+```
+It also provides a higher level of way, the following three kinds of writing are alse equivalent:   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "158d0001000007": {
+                "SingleSwitch_Switch": {
+                    "name": "living room light",
+                    "ignoreWriteResult": true
+                }
+            },
+            "158d0001000008": {
+                "DuplexSwitch_Switch_Left": {
+                    "name": "master bedroom room light",
+                    "ignoreWriteResult": true
+                },
+                "DuplexSwitch_Switch_Right": {
+                    "name": "study room light",
+                    "ignoreWriteResult": true
+                }
+            }
+        }
+    }]
+}
+```
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "158d0001000007": {
+                "SingleSwitch_Switch": {
+                    "name": "living room light",
+                    "ignoreWriteResult": true
+                }
+            },
+            "158d0001000008": {
+                "Global": {
+                    "ignoreWriteResult": true
+                },
+                "DuplexSwitch_Switch_Left": {
+                    "name": "master bedroom room light"
+                },
+                "DuplexSwitch_Switch_Right": {
+                    "name": "study room light"
+                }
+            }
+        }
+    }]
+}
+```
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "Global": {
+                "ignoreWriteResult": true
+            },
+            "158d0001000007": {
+                "SingleSwitch_Switch": {
+                    "name": "living room light"
+                }
+            },
+            "158d0001000008": {
+                "DuplexSwitch_Switch_Left": {
+                    "name": "master bedroom room light"
+                },
+                "DuplexSwitch_Switch_Right": {
+                    "name": "study room light"
+                }
+            }
+        }
+    }]
+}
+```
+
+### defaultValue name configuration
+If you want to specify the default name of the device, add a mapping table to your config.json like this.
 ```
 {
     "platforms": [{
@@ -217,53 +448,8 @@ If you want to specify the name of the device:
     }]
 }
 ```
-If you want to use Aqara lock,you need add some configuration like this
-```
-{
-    "platforms": [{
-        "platform": "MiAqaraPlatform",
-        "gateways": {
-            "6409802da3b3": "02i44k56zrgg578b",
-            "f0b4299a5b2b": "2F92E7DA90C66B86",
-            "f0b4299a77dd": "syu3oasva3uqd5qd"
-        },
-        "defaultValue": {
-            "LockDeviceID": {
-                "UserID": {
-                    "name": "UserName"
-                }
-            }
-        }
-    }]
-}
-```
-`UserID` is user identification from lock.The value can get from `Aqara Lock Plugin` in `MIHOME` APP,The user ID contains the ID type. The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is: 1 fingerprint, 2 password, 3 proximity card, 5 check-in password.Example:
-```
-{
-    "platforms": [{
-        "platform": "MiAqaraPlatform",
-        "gateways": {
-            "6409802da3b3": "02i44k56zrgg578b",
-            "f0b4299a5b2b": "2F92E7DA90C66B86",
-            "f0b4299a77dd": "syu3oasva3uqd5qd"
-        },
-        "defaultValue": {
-            "158d0001dd0289": {
-                "65536": {
-                    "name": "Administrator"
-                },
-                "65537": {
-                    "name": "Finger"
-                },
-                "196608": {
-                    "name": "Card"
-                }
-            }
-        }
-    }]
-}
-```  
 
+### defaultValue serviceType configuration
 If you like to use Light Bulb type for Light Switch to make grandma Siri happy, like snOOrz, you can set the following in the config.   
 Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.   
 **If you changed serviceType config, Please [clear register accessories](#clear-register-accessories).**   
@@ -307,6 +493,8 @@ Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwit
     }]
 }
 ```
+
+### defaultValue disable configuration
 If you want to disable accessories, you can add disable attribute to config.   
 ```
 {
@@ -363,6 +551,8 @@ If you want to disable accessories, you can add disable attribute to config.
     }]
 }
 ```
+
+### defaultValue syncValue configuration
 If you want to accessory value exact, you can set syncValue is true.   
 when syncValue is true, accessory will synchronization value when homebridge call the get function. At the same time, it's going to waste more time.   
 when syncValue is false, accessory will use the device last reported value. It's going to respond quickly.   
@@ -387,6 +577,8 @@ when syncValue is false, accessory will use the device last reported value. It's
     }]
 }
 ```
+
+### defaultValue ignoreWriteResult configuration
 If you control device always timeout, but in fact it's already working.   
 you can set ignoreWriteResult is true.   
 ```
@@ -413,7 +605,10 @@ you can set ignoreWriteResult is true.
     }]
 }
 ```
+   
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/syncValue.png)
+   
+### defaultValue disableNoResponse configuration
 If you don't like "No Response", you can set disableNoResponse is true.   
 When the device is no pesponse and disableNoResponse is true, the accessory value will auto jump back to before the control.   
 ```
@@ -440,6 +635,54 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
     }]
 }
 ```
+
+### defaultValue other configuration
+If you want to use Aqara lock,you need add some configuration like this
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "LockDeviceID": {
+                "UserID": {
+                    "name": "UserName"
+                }
+            }
+        }
+    }]
+}
+```
+`UserID` is user identification from lock.The value can get from `Aqara Lock Plugin` in `MIHOME` APP,The user ID contains the ID type. The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is: 1 fingerprint, 2 password, 3 proximity card, 5 check-in password.Example:
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        },
+        "defaultValue": {
+            "158d0001dd0289": {
+                "65536": {
+                    "name": "Administrator"
+                },
+                "65537": {
+                    "name": "Finger"
+                },
+                "196608": {
+                    "name": "Card"
+                }
+            }
+        }
+    }]
+}
+```  
    
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
