@@ -18,6 +18,8 @@ all other developer and testers.
    
 **Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories) and update [configuration](#configuration) file content.**   
    
+**Note: About AcPartner, This project only provides gateway functionality. If you want the use air conditioning function Please refer to the project for [homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner).**   
+   
 This repository contains the Aqara plugin for homebridge.   
 Aqara is a ZigBee gateway with a few sensors.   
 
@@ -91,13 +93,12 @@ npm install -g homebridge-mi-aqara
    
 
 ## Configuration
-
 ||Name|Required|Value Type|Description|Value Example|
-|:-:|:-|:-|:-|:-|
+|:-:|:-|:-|:-|:-|:-|
 |1|platform|True|String||It must be 'MiAqaraPlatform'|
-|2|gateways|True|Object|set gateway information.|{ "6409802da3b3": "02i44k56zrgg578b" }|
-|3|bindAddress|False|String|specified network.|"10.0.0.1"|
-|4|defaultValue|False|Object|set device default value.||
+|2|[gateways](#gateways-configuration)|True|Object|set gateway information.|{ "6409802da3b3": "02i44k56zrgg578b" }|
+|3|[bindAddress](#bindAddress-configuration)|False|String|specified network.|"10.0.0.1"|
+|4|[defaultValue](#defaultValue-configuration)|False|Object|set device default value.||
 
 For more information about config, Please refer to file `sampleConfig.json`.   
 
@@ -150,13 +151,13 @@ If you want to specify the default value, such as specify the name of the access
 The config supported are as follows:   
 
 ||Name|Value Type|Description|Default Value|Recommended Value|Value Example|
-|:-:|:-|:-|:-|:-|:-|
-|1|name|String|set accessory name.|DeviceAccessoryType_device SID last four bits||"living room temperature"|
-|2|serviceType|String|set accessory type for Switch or Lightbulb. <br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.|"Switch"|"Switch"|"Lightbulb"|
-|3|disable|Boolean|disable accessory|false|the accessories that do not need to be set to true, such as virtual press.|true|
-|4|syncValue|Boolean|accessory will synchronization value when homebridge call the get function, if it's true.|false|fasle|false|
-|4|ignoreWriteResult|Boolean|if set to true, the result of control is not detected.|true|If your network is awful, it's recommended to be set true.|false|
-|4|disableNoResponse|Boolean|use jump back the last value to replace show NoResponse, you can set it true.|false|false|true|
+|:-:|:-|:-|:-|:-|:-|:-|
+|1|[name](#defaultvalue-name-configuration)|String|set accessory name.|DeviceAccessoryType_device SID last four bits||"living room temperature"|
+|2|[serviceType](#defaultvalue-servicetype-configuration)|String|set accessory type for Switch or Lightbulb. <br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.|"Switch"|"Switch"|"Lightbulb"|
+|3|[disable](#defaultvalue-disable-configuration)|Boolean|disable accessory|false|the accessories that do not need to be set to true, such as virtual press.|true|
+|4|[syncValue](#defaultvalue-syncvalue-configuration)|Boolean|accessory will synchronization value when homebridge call the get function, if it's true.|false|fasle|false|
+|4|[ignoreWriteResult](#defaultvalue-ignorewriteresult-configuration)|Boolean|if set to true, the result of control is not detected.|true|If your network is awful, it's recommended to be set true.|false|
+|4|[disableNoResponse](#defaultvalue-disablenoresponse-configuration)|Boolean|use jump back the last value to replace show NoResponse, you can set it true.|false|false|true|
 
 The rules are as follows:
 ```
