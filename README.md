@@ -97,8 +97,8 @@ npm install -g homebridge-mi-aqara
 |:-:|:-|:-|:-|:-|:-|
 |1|platform|True|String||It must be 'MiAqaraPlatform'|
 |2|[gateways](#gateways-configuration)|True|Object|set gateway information.|{ "6409802da3b3": "02i44k56zrgg578b" }|
-|3|[bindAddress](#bindAddress-configuration)|False|String|specified network.|"10.0.0.1"|
-|4|[defaultValue](#defaultValue-configuration)|False|Object|set device default value.||
+|3|[bindAddress](#bindaddress-configuration)|False|String|specified network.|"10.0.0.1"|
+|4|[defaultValue](#defaultvalue-configuration)|False|Object|set device default value.||
 
 For more information about config, Please refer to file `sampleConfig.json`.   
 
