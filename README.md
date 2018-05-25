@@ -18,7 +18,7 @@ all other developer and testers.
    
 **Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories) and update [configuration](#configuration) file content.**   
    
-**Note: About AcPartner, This project only provides gateway functionality. If you want the use air conditioning function Please refer to the project for [homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner).**   
+**Note: About AcPartner, This project only provides gateway functionality. If you want the use air conditioning function, please refer to the project for [homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner).**   
    
 This repository contains the Aqara plugin for homebridge.   
 Aqara is a ZigBee gateway with a few sensors.   
