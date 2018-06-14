@@ -1,21 +1,21 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
-class NatgasDetectorParser extends DeviceParser {
+class ContactSensor2Parser extends DeviceParser {
     constructor(platform) {
         super(platform);
     }
     
     getAccessoriesParserInfo() {
         return {
-            'NatgasDetector_SmokeSensor': NatgasDetectorSmokeSensorParser
+            'ContactSensor2_ContactSensor': ContactSensor2ContactSensorParser
         }
     }
 }
-NatgasDetectorParser.modelName = ['natgas', 'sensor_natgas'];
-module.exports = NatgasDetectorParser;
+ContactSensor2Parser.modelName = ['sensor_magnet', 'sensor_magnet.aq2'];
+module.exports = ContactSensor2Parser;
 
-class NatgasDetectorSmokeSensorParser extends AccessoryParser {
+class ContactSensor2ContactSensorParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
     }
@@ -27,7 +27,7 @@ class NatgasDetectorSmokeSensorParser extends AccessoryParser {
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
-            'Model': 'Natgas Detector',
+            'Model': 'Contact Sensor 2',
             'SerialNumber': deviceSid
         };
     }
@@ -36,8 +36,8 @@ class NatgasDetectorSmokeSensorParser extends AccessoryParser {
         var that = this;
         var result = [];
         
-        var service = new that.Service.SmokeSensor(accessoryName);
-        service.getCharacteristic(that.Characteristic.SmokeDetected);
+        var service = new that.Service.ContactSensor(accessoryName);
+        service.getCharacteristic(that.Characteristic.ContactSensorState);
         result.push(service);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
@@ -55,21 +55,21 @@ class NatgasDetectorSmokeSensorParser extends AccessoryParser {
         var uuid = that.getAccessoryUUID(deviceSid);
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
-            var service = accessory.getService(that.Service.SmokeSensor);
-            var smokeDetectedCharacteristic = service.getCharacteristic(that.Characteristic.SmokeDetected);
-            var value = that.getSmokeDetectedCharacteristicValue(jsonObj, null);
+            var service = accessory.getService(that.Service.ContactSensor);
+            var contactSensorStateCharacteristic = service.getCharacteristic(that.Characteristic.ContactSensorState);
+            var value = that.getContactSensorStateCharacteristicValue(jsonObj, null);
             if(null != value) {
-                smokeDetectedCharacteristic.updateValue(value ? that.Characteristic.SmokeDetected.SMOKE_DETECTED : that.Characteristic.SmokeDetected.SMOKE_NOT_DETECTED);
+                contactSensorStateCharacteristic.updateValue(value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
-                if (smokeDetectedCharacteristic.listeners('get').length == 0) {
-                    smokeDetectedCharacteristic.on("get", function(callback) {
+                if (contactSensorStateCharacteristic.listeners('get').length == 0) {
+                    contactSensorStateCharacteristic.on("get", function(callback) {
                         var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
                         that.platform.sendReadCommand(deviceSid, command).then(result => {
-                            var value = that.getSmokeDetectedCharacteristicValue(result, null);
+                            var value = that.getContactSensorStateCharacteristicValue(result, null);
                             if(null != value) {
-                                callback(null, value ? that.Characteristic.SmokeDetected.SMOKE_DETECTED : that.Characteristic.SmokeDetected.SMOKE_NOT_DETECTED);
+                                callback(null, value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
                             } else {
                                 callback(new Error('get value fail: ' + result));
                             }
@@ -85,14 +85,16 @@ class NatgasDetectorSmokeSensorParser extends AccessoryParser {
         }
     }
     
-    getSmokeDetectedCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'alarm');
-        if(value === '1' || value === '2') {
-            return true;
-        } else if(value === '0') {
-            return false;
+    getContactSensorStateCharacteristicValue(jsonObj, defaultValue) {
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'window_status');
         } else {
-            return false;
         }
+        
+        return (null != value) ? (value === 'close') : defaultValue;
     }
 }

@@ -1,8 +1,8 @@
 const AccessoryParser = require('./AccessoryParser');
 
 class SwitchVirtualBasePressParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {

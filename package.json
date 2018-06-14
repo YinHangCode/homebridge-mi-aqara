@@ -1,6 +1,6 @@
 {
   "name": "homebridge-mi-aqara",
-  "version": "0.6.8", 
+  "version": "0.6.10", 
   "description": "XiaoMi Aqara plugins for HomeBridge(https://github.com/nfarina/homebridge).",
   "license": "ISC",
   "keywords": [

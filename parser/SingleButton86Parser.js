@@ -3,8 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
 class SingleButton86Parser extends DeviceParser {
-    constructor(model, platform) {
-        super(model, platform);
+    constructor(platform) {
+        super(platform);
     }
     
     getAccessoriesParserInfo() {
@@ -16,14 +16,12 @@ class SingleButton86Parser extends DeviceParser {
         }
     }
 }
-
-// 支持的设备：86型无线单按钮开关
 SingleButton86Parser.modelName = ['86sw1', 'sensor_86sw1.aq1'];
 module.exports = SingleButton86Parser;
 
 class SingleButton86StatelessProgrammableSwitchParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -76,7 +74,15 @@ class SingleButton86StatelessProgrammableSwitchParser extends AccessoryParser {
     }
     
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'channel_0');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'channel_0');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'button_0');
+        } else {
+        }
+        
         if(value === 'click') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else if(value === 'double_click') {
@@ -102,24 +108,94 @@ class SingleButton86SwitchVirtualBasePressParser extends SwitchVirtualBasePressP
 
 class SingleButton86SwitchVirtualSinglePressParser extends SingleButton86SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
-        return {cmd:"write",model:this.model,sid:deviceSid,data:{channel_0:"click"}};
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"click", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"button_0":"click"}], "key": "${key}"}';
+        } else {
+        }
+        
+        return command;
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"channel_0\\\":\\\"click\\\"}\"}");
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"click"}}"';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"click"}]}"';
+        } else {
+        }
+        var newObj = JSON.parse(command);
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
-// class SingleButton86SwitchVirtualDoublePressParser extends SingleButton86SwitchVirtualBasePressParser {
-    // getWriteCommand(deviceSid, value) {
-        // return '{"cmd":"write","model":"86sw1","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"double_click\\", \\"key\\": \\"${key}\\"}"}';
-    // }
-// }
+class SingleButton86SwitchVirtualDoublePressParser extends SingleButton86SwitchVirtualBasePressParser {
+    getWriteCommand(deviceSid, value) {
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"double_click", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"button_0":"double_click"}], "key": "${key}"}';
+        } else {
+        }
+        
+        return command;
+    }
+    
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"double_click"}}"';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"double_click"}]}"';
+        } else {
+        }
+        var newObj = JSON.parse(command);
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
+}
 
 // class SingleButton86SwitchVirtualLongPressParser extends SingleButton86SwitchVirtualBasePressParser {
     // getWriteCommand(deviceSid, value) {
-        // return '{"cmd":"write","model":"86sw1","sid":"' + deviceSid + '","data":"{\\"channel_0\\":\\"long_click_press\\", \\"key\\": \\"${key}\\"}"}';
+        // var model = this.platform.getDeviceModelBySid(deviceSid);
+        // var command = null;
+        // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        // if(1 == proto_version_prefix) {
+            // command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"long_click_press", "key": "${key}"}}';
+        // } else if(2 == proto_version_prefix) {
+            // command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"button_0":"long_click_press"}], "key": "${key}"}';
+        // } else {
+        // }
+
+        // return command;
+    // }
+    
+    // doSomething(jsonObj) {
+        // var deviceSid = jsonObj['sid'];
+        // var model = this.platform.getDeviceModelBySid(deviceSid);
+        // var command = null;
+        // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        // if(1 == proto_version_prefix) {
+            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"long_click_press"}}"';
+        // } else if(2 == proto_version_prefix) {
+            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"long_click_press"}]}"';
+        // } else {
+        // }
+        // var newObj = JSON.parse(command);
+        // this.platform.ParseUtil.parserAccessories(newObj);
     // }
 // }
+

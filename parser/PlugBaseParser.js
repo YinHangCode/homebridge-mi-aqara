@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class PlugBaseParser extends DeviceParser {
-    constructor(model, platform) {
-        super(model, platform);
+    constructor(platform) {
+        super(platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,14 +12,12 @@ class PlugBaseParser extends DeviceParser {
         }
     }
 }
-
-// 支持的设备：智能插座，86型墙壁插座
-PlugBaseParser.modelName = ['plug', '86plug', 'ctrl_86plug'];
+PlugBaseParser.modelName = ['plug'];
 module.exports = PlugBaseParser;
 
 class PlugBaseOutletParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -83,9 +81,16 @@ class PlugBaseOutletParser extends AccessoryParser {
             
             if (onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
-                    var valueStr = (value ? 'on' : 'off');
-                    var data = that.platform.isProtoVersionByDid(deviceSid, 2) ? {channel_0: valueStr} : {status: valueStr};
-                    var command = {cmd:"write",model:that.model,sid:deviceSid,data:data};
+                    var model = that.platform.getDeviceModelBySid(deviceSid);
+                    var command = null;
+                    var proto_version_prefix = that.platform.getProtoVersionPrefixByProtoVersion(that.platform.getDeviceProtoVersionBySid(deviceSid));
+                    if(1 == proto_version_prefix) {
+                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"status":"' + (value ? 'on' : 'off') + '", "key": "${key}"}}';
+                    } else if(2 == proto_version_prefix) {
+                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_0":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
+                    } else {
+                    }
+        
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);
@@ -103,7 +108,15 @@ class PlugBaseOutletParser extends AccessoryParser {
     }
     
     getOnCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, this.platform.isProtoVersionByDid(jsonObj['sid'], 2) ? 'channel_0' : 'status');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'channel_0');
+        } else {
+        }
+
         if(value === 'on') {
             return true;
         } else if(value === 'off') {
