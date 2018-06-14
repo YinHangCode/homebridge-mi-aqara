@@ -292,7 +292,7 @@ detail:
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
 |23|Lock(门锁)|UnlockedSensor_MotionSensor|
-|24|AcPartner(空调伴侣)|AcPartner_Switch_JoinPermission|
+|24|AcPartner(空调伴侣)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
 
 About Global:   
 Some similar configurations and repeated multiple copies are boring things. So I provided a global writing method.   
