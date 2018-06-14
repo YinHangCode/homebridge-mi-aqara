@@ -12,7 +12,7 @@ class ContactSensorParser extends DeviceParser {
         }
     }
 }
-ContactSensorParser.modelName = ['magnet'];
+ContactSensorParser.modelName = ['magnet', 'sensor_magnet'];
 module.exports = ContactSensorParser;
 
 class ContactSensorContactSensorParser extends AccessoryParser {
