@@ -91,7 +91,7 @@ class ElectricCurtainWindowCoveringParser extends AccessoryParser {
                     if(1 == proto_version_prefix) {
                         command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"curtain_level":"' + value + '", "key": "${key}"}}';
                     } else if(2 == proto_version_prefix) {
-                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"curtain_level":"' + value + '"}], "key": "${key}"}';
+                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"curtain_level":' + value + '}], "key": "${key}"}';
                     } else {
                     }
                     
