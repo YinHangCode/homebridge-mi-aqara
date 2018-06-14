@@ -22,7 +22,7 @@ class DuplexButton86Parser extends DeviceParser {
         }
     }
 }
-DuplexButton86Parser.modelName = ['86sw2', 'sensor_86sw2.aq1'];
+DuplexButton86Parser.modelName = ['86sw2', 'sensor_86sw2.aq1', 'sensor_86sw2'];
 module.exports = DuplexButton86Parser;
 
 class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParser {

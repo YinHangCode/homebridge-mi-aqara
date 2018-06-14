@@ -16,7 +16,7 @@ class SingleButton86Parser extends DeviceParser {
         }
     }
 }
-SingleButton86Parser.modelName = ['86sw1', 'sensor_86sw1.aq1'];
+SingleButton86Parser.modelName = ['86sw1', 'sensor_86sw1.aq1', 'sensor_86sw1'];
 module.exports = SingleButton86Parser;
 
 class SingleButton86StatelessProgrammableSwitchParser extends AccessoryParser {

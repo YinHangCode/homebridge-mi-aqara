@@ -62,8 +62,8 @@ Aqara is a ZigBee gateway with a few sensors.
 |7|DuplexSwitch(双按钮墙壁开关)|ctrl_neutral2|
 |8|SingleSwitchLN(单按钮墙壁开关零火版)|ctrl_ln1<br>ctrl_ln1.aq1|
 |9|DuplexSwitchLN(双按钮墙壁开关零火版)|ctrl_ln2<br>ctrl_ln2.aq1|
-|10|SingleButton86(86型无线单按钮开关)|86sw1<br>sensor_86sw1.aq1|
-|11|DuplexButton86(86型无线双按钮开关)|86sw2<br>sensor_86sw2.aq1|
+|10|SingleButton86(86型无线单按钮开关)|86sw1<br>sensor_86sw1.aq1<br>sensor_86sw1|
+|11|DuplexButton86(86型无线双按钮开关)|86sw2<br>sensor_86sw2.aq1<br>sensor_86sw2|
 |12|PlugBase(插座)|plug|
 |13|PlugBase86(86型墙壁插座)|86plug<br>ctrl_86plug<br>ctrl_86plug.aq1|
 |14|MagicSquare(魔方)|cube<br>sensor_cube<br>sensor_cube.aqgl01|
