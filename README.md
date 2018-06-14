@@ -108,12 +108,12 @@ For more information about config, Please refer to file `sampleConfig.json`.
 Open aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
 Please follow the steps in this thread: http://wiki.yinhh.com/Wiki.jsp?page=Homebridge-mi-aqara or http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
 To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
-`
+   
 Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
 Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
 Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
 Important things are to be repeated for 3 times.
-`
+   
 ```
 {
     "platforms": [{
