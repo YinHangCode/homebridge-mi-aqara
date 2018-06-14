@@ -131,6 +131,48 @@ If you have more than one gateways, fill them in right order, like below.
     }]
 }
 ```
+Here is a way to search for gateways instead of multicast, because of some friends do not respond to information from gateway in their network environment.   
+That is to say, we can config the IP address of the gateway to replace search gateway by multicast.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": {
+                "password": "02i44k56zrgg578b",
+                "ip": "10.3.3.1"
+            },
+            "f0b4299a5b2b": {
+                "password": "2F92E7DA90C66B86",
+                "ip": "10.3.3.2"
+            },
+            "f0b4299a77dd": {
+                "password": "syu3oasva3uqd5qd",
+                "ip": "10.3.3.3"
+            }
+        }
+    }]
+}
+```
+It can also be mixed config, but without full configuration of ip, multicast packets will still be sent to search for other gateways which do not config ip.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": {
+                "password": "2F92E7DA90C66B86",
+                "ip": "10.3.3.2"
+            },
+            "f0b4299a77dd": {
+                "password": "syu3oasva3uqd5qd",
+                "ip": "10.3.3.3"
+            }
+        }
+    }]
+}
+```
 
 ### bindAddress configuration
 If your device(which running homebridge) has multiple network, please add the bindAddress configuration item to decide to listen which network, like below.   
@@ -701,12 +743,15 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
-### 0.6.10 (coding)
-
-### 0.6.9 (2018-03-26)
+### 0.6.9 (2018-06-14)
+1.fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
+2.fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
+3.support config gateway ip feature.   
+### 0.6.9_beta (2018-03-26)
 1.optimized some of the basic code to facilitate the subsequent support of new hardware.   
-2.supports aqara LAN protocol 2.0.   
-3.added some new devices (door locks).   
+2.supports aqara local network protocol 2.x version.   
+3.add support for lock device.   
+4.add support for acpartner accessory.   
 ### 0.6.8 (2018-01-21)
 1.fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
 2.fixed bug that it still show battery low power after replacing the battery.   
