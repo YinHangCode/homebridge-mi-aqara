@@ -688,7 +688,7 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
 ```
 
 ### defaultValue other configuration
-If you want to use Aqara lock,you need add some configuration like this
+If you want to use Aqara lock,you need add some configuration like this:   
 ```
 {
     "platforms": [{
@@ -714,7 +714,7 @@ If you want to use Aqara lock,you need add some configuration like this
     }]
 }
 ```
-`UserID` is user identification from lock.   
+`{UserID}` is user identification from lock.   
 The value can get from `Aqara Lock Plugin` in `MIHOME` APP. The user ID contains the ID type.   
 The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is:   
 1 fingerprint   
