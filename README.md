@@ -54,7 +54,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ||Device Name|Protocol Model Value|
 |:-:|:-|:-|
 |1|Gateway(网关)|gateway<br>gateway.v3|
-|2|ContactSensor(门磁感应)|magnet|
+|2|ContactSensor(门磁感应)|magnet<br>sensor_magnet|
 |3|MotionSensor(人体感应)|motion|
 |4|Button(按钮)|switch|
 |5|TemperatureAndHumiditySensor(温度湿度传感器)|sensor_ht|
@@ -70,7 +70,7 @@ Aqara is a ZigBee gateway with a few sensors.
 |15|SmokeDetector(烟雾报警器)|smoke<br>sensor_smoke|
 |16|NatgasDetector(天然气报警器)|natgas<br>sensor_natgas|
 |17|ElectricCurtain(电动窗帘)|curtain|
-|18|ContactSensor2(门磁感应第二代)|sensor_magnet<br>sensor_magnet.aq2|
+|18|ContactSensor2(门磁感应第二代)|sensor_magnet.aq2|
 |19|MotionSensor2(人体感应第二代)|sensor_motion.aq2|
 |20|Button2(按钮第二代)|sensor_switch<br>sensor_switch.aq2|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|
