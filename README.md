@@ -297,7 +297,7 @@ detail:
 |20|Button2(按钮第二代)|Button2_StatelessProgrammableSwitch<br>Button2_Switch_VirtualSinglePress<br>Button2_Switch_VirtualDoublePress|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
-|23|Lock(门锁)|UnlockedSensor_MotionSensor|
+|23|Lock(门锁)|Lock_ContactSensor<br>Lock_MotionSensor_{UserID}|
 |24|AcPartner(空调伴侣)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
 
 About Global:   
@@ -700,15 +700,28 @@ If you want to use Aqara lock,you need add some configuration like this
         },
         "defaultValue": {
             "LockDeviceID": {
-                "UserID": {
-                    "name": "UserName"
+                "Lock_ContactSensor": {
+                    "name": "door",
+                },
+                "Lock_MotionSensor_{User1ID}": {
+                    "name": "User1Name"
+                },
+                "Lock_MotionSensor_{User2ID}": {
+                    "name": "User2Name"
                 }
             }
         }
     }]
 }
 ```
-`UserID` is user identification from lock.The value can get from `Aqara Lock Plugin` in `MIHOME` APP,The user ID contains the ID type. The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is: 1 fingerprint, 2 password, 3 proximity card, 5 check-in password.Example:
+`UserID` is user identification from lock.   
+The value can get from `Aqara Lock Plugin` in `MIHOME` APP. The user ID contains the ID type.   
+The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is:   
+1 fingerprint   
+2 password   
+3 proximity card   
+5 check-in password   
+Example:   
 ```
 {
     "platforms": [{
@@ -720,13 +733,16 @@ If you want to use Aqara lock,you need add some configuration like this
         },
         "defaultValue": {
             "158d0001dd0289": {
-                "65536": {
+                "Lock_ContactSensor": {
+                    "name": "door",
+                },
+                "Lock_MotionSensor_65536": {
                     "name": "Administrator"
                 },
-                "65537": {
+                "Lock_MotionSensor_65537": {
                     "name": "Finger"
                 },
-                "196608": {
+                "Lock_MotionSensor_196608": {
                     "name": "Card"
                 }
             }
