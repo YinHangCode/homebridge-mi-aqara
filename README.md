@@ -47,7 +47,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button2.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/TemperatureAndHumiditySensor2.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/WaterDetector.jpg)
-![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/UnlockedSensor.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Lock.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/AcPartner.jpg)
 
 ## Supported Devices

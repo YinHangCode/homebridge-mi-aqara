@@ -226,8 +226,17 @@
                 }
             },
             "158d0001000024": {
-                "65536": {
+                "Lock_ContactSensor": {
+                    "name": "door",
+                },
+                "Lock_MotionSensor_65536": {
                     "name": "Administrator"
+                },
+                "Lock_MotionSensor_65537": {
+                    "name": "Finger"
+                },
+                "Lock_MotionSensor_196608": {
+                    "name": "Card"
                 }
             }
         }

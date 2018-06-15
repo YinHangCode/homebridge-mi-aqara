@@ -31,7 +31,7 @@ module.exports = function(homebridge) {
 }
 
 function MiAqaraPlatform(log, config, api) {
-    if(null == config) {
+    if (null == config) {
         return;
     }
     
