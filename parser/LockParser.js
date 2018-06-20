@@ -80,14 +80,19 @@ class LockLockMechanismParser extends AccessoryParser {
                 setTimeout(() => {
                     lockCurrentStateCharacteristic.updateValue(value ? that.Characteristic.LockCurrentState.UNSECURED : that.Characteristic.LockCurrentState.SECURED);
                 }, 100);
-                
+            }
+            
+            var value = that.getMotionSensorCharacteristicValue(jsonObj, null);
+            if(null != value) {
                 var motionSensorServiceUUID = that.getAccessoryUUID(deviceSid + 'Lock_MotionSensor_' + value);
                 var motionSensorService = accessory.getServiceByUUIDAndSubType(motionSensorServiceUUID, value);
-                var motionDetectedCharacteristic = motionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
-                motionDetectedCharacteristic.updateValue(true);
-                setTimeout(() => {
-                    motionDetectedCharacteristic.updateValue(false);
-                }, 1 * 60 * 1000);
+                if(motionSensorService) {
+                    var motionDetectedCharacteristic = motionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
+                    motionDetectedCharacteristic.updateValue(true);
+                    setTimeout(() => {
+                        motionDetectedCharacteristic.updateValue(false);
+                    }, 1 * 60 * 1000);
+                }
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
@@ -125,7 +130,7 @@ class LockLockMechanismParser extends AccessoryParser {
         }
     }
     
-    getLockTargetStateCharacteristicValue(jsonObj, defaultValue) {
+    getMotionSensorCharacteristicValue(jsonObj, defaultValue) {
         var success_value = null;
         var wrong_value = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
