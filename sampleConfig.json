@@ -226,7 +226,7 @@
                 }
             },
             "158d0001000024": {
-                "Lock_LockMechanism": {
+                "Lock_MotionSensor": {
                     "name": "door",
                 },
                 "Lock_MotionSensor_65536": {

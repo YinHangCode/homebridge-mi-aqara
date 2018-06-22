@@ -297,7 +297,7 @@ detail:
 |20|Button2(按钮第二代)|Button2_StatelessProgrammableSwitch<br>Button2_Switch_VirtualSinglePress<br>Button2_Switch_VirtualDoublePress|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
-|23|Lock(门锁)|Lock_LockMechanism<br>Lock_MotionSensor_{UserID}|
+|23|Lock(门锁)|Lock_MotionSensor<br>Lock_MotionSensor_{UserID}|
 |24|AcPartner(空调伴侣)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
 
 About Global:   
@@ -700,7 +700,7 @@ If you want to use Aqara lock,you need add some configuration like this:
         },
         "defaultValue": {
             "LockDeviceID": {
-                "Lock_LockMechanism": {
+                "Lock_MotionSensor": {
                     "name": "door",
                 },
                 "Lock_MotionSensor_{User1ID}": {
@@ -733,7 +733,7 @@ Example:
         },
         "defaultValue": {
             "158d0001dd0289": {
-                "Lock_LockMechanism": {
+                "Lock_MotionSensor": {
                     "name": "door",
                 },
                 "Lock_MotionSensor_65536": {
