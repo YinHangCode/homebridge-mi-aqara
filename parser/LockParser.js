@@ -8,7 +8,7 @@ class LockParser extends DeviceParser {
 
     getAccessoriesParserInfo() {
         var parserInfo = {
-            'Lock_LockMechanism': LockLockMechanismParser
+            'Lock_MotionSensor': LockMotionSensorParser
         };
 
         return parserInfo;
@@ -17,7 +17,7 @@ class LockParser extends DeviceParser {
 LockParser.modelName = ['lock.aq1'];
 module.exports = LockParser;
 
-class LockLockMechanismParser extends AccessoryParser {
+class LockMotionSensorParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
     }
@@ -38,8 +38,11 @@ class LockLockMechanismParser extends AccessoryParser {
         var that = this;
         var result = [];
         
-        var service = new that.Service.LockMechanism(accessoryName);
-        result.push(service);
+        var deviceSid = jsonObj['sid'];
+        
+        var mainMotionSensorUuid = that.getAccessoryUUID(deviceSid);
+        var mainMotionSensorService = new that.Service.MotionSensor(accessoryName, mainMotionSensorUuid, 'main');
+        result.push(mainMotionSensorService);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
         batteryService.getCharacteristic(that.Characteristic.StatusLowBattery);
@@ -48,16 +51,15 @@ class LockLockMechanismParser extends AccessoryParser {
         result.push(batteryService);
         
         // get Config
-        var deviceSid = jsonObj['sid'];
         var accessoryConfig = that.platform.ConfigUtil.getAccessoryConfig(deviceSid);
         if (accessoryConfig) {
             for (var key in accessoryConfig) {
                 if(key.indexOf('Lock_MotionSensor_') > -1) {
-                    var id = key.substring('Lock_MotionSensor_'.length, key.length);
-                    var uuid = that.getAccessoryUUID(deviceSid + 'Lock_MotionSensor_' + id);
-                    var name = that.platform.ConfigUtil.getAccessoryName(deviceSid, 'Lock_MotionSensor_' + id);
-                    var motionSensorService = new that.Service.MotionSensor(name, uuid, id);
-                    result.push(motionSensorService);
+                    var subMotionSensorId = key.substring('Lock_MotionSensor_'.length, key.length);
+                    var subMotionSensorUuid = that.getAccessoryUUID(deviceSid, 'Lock_MotionSensor_' + id);
+                    var subMotionSensorName = that.platform.ConfigUtil.getAccessoryName(deviceSid, 'Lock_MotionSensor_' + id);
+                    var subMotionSensorService = new that.Service.MotionSensor(subMotionSensorName, subMotionSensorUuid, subMotionSensorId);
+                    result.push(subMotionSensorService);
                 }
             }
         }
@@ -71,41 +73,34 @@ class LockLockMechanismParser extends AccessoryParser {
         var uuid = that.getAccessoryUUID(deviceSid);
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
-            var service = accessory.getService(that.Service.LockMechanism);
-            var lockCurrentStateCharacteristic = service.getCharacteristic(that.Characteristic.LockCurrentState);
-            var lockTargetStateCharacteristic = service.getCharacteristic(that.Characteristic.LockTargetState);
-            var value = that.getLockTargetStateCharacteristicValue(jsonObj, null);
+            var mainMotionSensorService = accessory.getServiceByUUIDAndSubType(uuid, 'main');
+            var mainMotionDetectedCharacteristic = mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
+            var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
             if(null != value) {
-                lockTargetStateCharacteristic.updateValue(value ? that.Characteristic.LockTargetState.UNSECURED : that.Characteristic.LockTargetState.SECURED);
+                mainMotionDetectedCharacteristic.updateValue(true);
                 setTimeout(() => {
-                    lockCurrentStateCharacteristic.updateValue(value ? that.Characteristic.LockCurrentState.UNSECURED : that.Characteristic.LockCurrentState.SECURED);
-                }, 100);
-            }
-            
-            var value = that.getMotionSensorCharacteristicValue(jsonObj, null);
-            if(null != value) {
-                var motionSensorServiceUUID = that.getAccessoryUUID(deviceSid + 'Lock_MotionSensor_' + value);
-                var motionSensorService = accessory.getServiceByUUIDAndSubType(motionSensorServiceUUID, value);
-                if(motionSensorService) {
-                    var motionDetectedCharacteristic = motionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
-                    motionDetectedCharacteristic.updateValue(true);
+                    mainMotionDetectedCharacteristic.updateValue(false);
+                }, 1 * 60 * 1000);
+                
+                var subMotionSensorUuid = that.getAccessoryUUID(deviceSid, 'Lock_MotionSensor_' + value);
+                var subMotionSensorService = accessory.getServiceByUUIDAndSubType(subMotionSensorUuid, value);
+                if(subMotionSensorService) {
+                    var subMotionDetectedCharacteristic = subMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
+                    subMotionDetectedCharacteristic.updateValue(true);
                     setTimeout(() => {
-                        motionDetectedCharacteristic.updateValue(false);
+                        subMotionDetectedCharacteristic.updateValue(false);
                     }, 1 * 60 * 1000);
                 }
             }
-            
+/*            
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
                 if (lockTargetStateCharacteristic.listeners('get').length == 0) {
                     lockTargetStateCharacteristic.on("get", function(callback) {
                         var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
                         that.platform.sendReadCommand(deviceSid, command).then(result => {
-                            var value = that.getLockTargetStateCharacteristicValue(jsonObj, null);
+                            var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
                             if(null != value) {
-                                callback(null, value ? that.Characteristic.LockTargetState.UNSECURED : that.Characteristic.LockTargetState.SECURED);
-                                setTimeout(() => {
-                                    lockCurrentStateCharacteristic.updateValue(value ? that.Characteristic.LockCurrentState.UNSECURED : that.Characteristic.LockCurrentState.SECURED);
-                                }, 100);
+                                callback(null, true);
                             } else {
                                 callback(new Error('get value fail: ' + result));
                             }
@@ -116,21 +111,12 @@ class LockLockMechanismParser extends AccessoryParser {
                     });
                 }
             }
-            
-            if(lockTargetStateCharacteristic.listeners('set').length == 0) {
-                lockTargetStateCharacteristic.on("set", function(value, callback) {
-                    setTimeout(() => {
-                        lockTargetStateCharacteristic.updateValue(lockTargetStateCharacteristic.value);
-                    }, 100);
-                    callback(null);
-                });
-            }
-            
+*/            
             that.parserBatteryService(accessory, jsonObj);
         }
     }
     
-    getMotionSensorCharacteristicValue(jsonObj, defaultValue) {
+    getMotionDetectedCharacteristicValue(jsonObj, defaultValue) {
         var success_value = null;
         var wrong_value = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));

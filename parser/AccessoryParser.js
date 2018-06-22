@@ -14,6 +14,10 @@ class AccessoryParser {
         return this.UUIDGen.generate(deviceSid + this.accessoryType);
     }
     
+    getAccessoryUUID(deviceSid, accessoryType) {
+        return this.UUIDGen.generate(deviceSid + accessoryType);
+    }
+    
     getAccessoryCategory() {
         return null;
     }
