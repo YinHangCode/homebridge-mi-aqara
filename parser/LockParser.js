@@ -40,8 +40,9 @@ class LockMotionSensorParser extends AccessoryParser {
         
         var deviceSid = jsonObj['sid'];
         
-        var mainMotionSensorUuid = that.getAccessoryUUID(deviceSid);
-        var mainMotionSensorService = new that.Service.MotionSensor(accessoryName, mainMotionSensorUuid, 'main');
+        var mainMotionSensorService = new that.Service.MotionSensor(accessoryName);
+        mainMotionSensorService.subtype = 'main';
+        mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
         result.push(mainMotionSensorService);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
@@ -55,10 +56,10 @@ class LockMotionSensorParser extends AccessoryParser {
         if (accessoryConfig) {
             for (var key in accessoryConfig) {
                 if(key.indexOf('Lock_MotionSensor_') > -1) {
-                    var subMotionSensorId = key.substring('Lock_MotionSensor_'.length, key.length);
-                    var subMotionSensorUuid = that.getAccessoryUUID(deviceSid, 'Lock_MotionSensor_' + id);
+                    var id = key.substring('Lock_MotionSensor_'.length, key.length);
                     var subMotionSensorName = that.platform.ConfigUtil.getAccessoryName(deviceSid, 'Lock_MotionSensor_' + id);
-                    var subMotionSensorService = new that.Service.MotionSensor(subMotionSensorName, subMotionSensorUuid, subMotionSensorId);
+                    var subMotionSensorService = new that.Service.MotionSensor(subMotionSensorName);
+                    subMotionSensorService.subtype = id;
                     result.push(subMotionSensorService);
                 }
             }
@@ -74,16 +75,15 @@ class LockMotionSensorParser extends AccessoryParser {
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
             var mainMotionSensorService = accessory.getServiceByUUIDAndSubType(uuid, 'main');
-            var mainMotionDetectedCharacteristic = mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
+            var mainMotionSensorService = mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
             var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
             if(null != value) {
-                mainMotionDetectedCharacteristic.updateValue(true);
+                mainMotionSensorService.updateValue(true);
                 setTimeout(() => {
-                    mainMotionDetectedCharacteristic.updateValue(false);
+                    mainMotionSensorService.updateValue(false);
                 }, 1 * 60 * 1000);
                 
-                var subMotionSensorUuid = that.getAccessoryUUID(deviceSid, 'Lock_MotionSensor_' + value);
-                var subMotionSensorService = accessory.getServiceByUUIDAndSubType(subMotionSensorUuid, value);
+                var subMotionSensorService = accessory.getServiceByUUIDAndSubType(uuid, value);
                 if(subMotionSensorService) {
                     var subMotionDetectedCharacteristic = subMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
                     subMotionDetectedCharacteristic.updateValue(true);
@@ -94,13 +94,13 @@ class LockMotionSensorParser extends AccessoryParser {
             }
 /*            
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
-                if (lockTargetStateCharacteristic.listeners('get').length == 0) {
-                    lockTargetStateCharacteristic.on("get", function(callback) {
+                if (motionDetectedCharacteristic.listeners('get').length == 0) {
+                    motionDetectedCharacteristic.on("get", function(callback) {
                         var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
                         that.platform.sendReadCommand(deviceSid, command).then(result => {
-                            var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
+                            var value = that.getMotionDetectedCharacteristicValue(result, null);
                             if(null != value) {
-                                callback(null, true);
+                                callback(null, value);
                             } else {
                                 callback(new Error('get value fail: ' + result));
                             }
