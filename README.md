@@ -701,7 +701,7 @@ If you want to use Aqara lock,you need add some configuration like this:
         "defaultValue": {
             "LockDeviceID": {
                 "Lock_MotionSensor": {
-                    "name": "door",
+                    "name": "door"
                 },
                 "Lock_MotionSensor_{User1ID}": {
                     "name": "User1Name"
@@ -734,7 +734,7 @@ Example:
         "defaultValue": {
             "158d0001dd0289": {
                 "Lock_MotionSensor": {
-                    "name": "door",
+                    "name": "door"
                 },
                 "Lock_MotionSensor_65536": {
                     "name": "Administrator"

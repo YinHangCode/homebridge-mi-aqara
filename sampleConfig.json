@@ -227,7 +227,7 @@
             },
             "158d0001000024": {
                 "Lock_MotionSensor": {
-                    "name": "door",
+                    "name": "door"
                 },
                 "Lock_MotionSensor_65536": {
                     "name": "Administrator"
