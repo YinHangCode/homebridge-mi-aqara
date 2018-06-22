@@ -72,9 +72,10 @@ class LockMotionSensorParser extends AccessoryParser {
         var that = this;
         var deviceSid = jsonObj['sid'];
         var uuid = that.getAccessoryUUID(deviceSid);
+        var accessoryName = that.platform.ConfigUtil.getAccessoryName(deviceSid, that.accessoryType);
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
-            var mainMotionSensorService = accessory.getServiceByUUIDAndSubType(uuid, 'main');
+            var mainMotionSensorService = accessory.getServiceByUUIDAndSubType(accessoryName, 'main');
             var mainMotionSensorService = mainMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
             var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
             if(null != value) {
@@ -83,7 +84,8 @@ class LockMotionSensorParser extends AccessoryParser {
                     mainMotionSensorService.updateValue(false);
                 }, 1 * 60 * 1000);
                 
-                var subMotionSensorService = accessory.getServiceByUUIDAndSubType(uuid, value);
+                var subMotionSensorName = that.platform.ConfigUtil.getAccessoryName(deviceSid, 'Lock_MotionSensor_' + value);
+                var subMotionSensorService = accessory.getServiceByUUIDAndSubType(subMotionSensorName, value);
                 if(subMotionSensorService) {
                     var subMotionDetectedCharacteristic = subMotionSensorService.getCharacteristic(that.Characteristic.MotionDetected);
                     subMotionDetectedCharacteristic.updateValue(true);
