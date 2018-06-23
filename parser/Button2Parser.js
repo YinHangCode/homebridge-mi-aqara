@@ -2,24 +2,24 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
-class ButtonParser extends DeviceParser {
+class Button2Parser extends DeviceParser {
     constructor(platform) {
         super(platform);
     }
     
     getAccessoriesParserInfo() {
         return {
-            'Button_StatelessProgrammableSwitch': ButtonStatelessProgrammableSwitchParser,
-            'Button_Switch_VirtualSinglePress': ButtonSwitchVirtualSinglePressParser,
-            'Button_Switch_VirtualDoublePress': ButtonSwitchVirtualDoublePressParser
+            'Button2_StatelessProgrammableSwitch': Button2StatelessProgrammableSwitchParser,
+            'Button2_Switch_VirtualSinglePress': Button2SwitchVirtualSinglePressParser,
+            'Button2_Switch_VirtualDoublePress': Button2SwitchVirtualDoublePressParser
             // 'Button_Switch_VirtualLongPress': ButtonSwitchVirtualLongPressParser
         }
     }
 }
-ButtonParser.modelName = ['switch'];
-module.exports = ButtonParser;
+Button2Parser.modelName = ['sensor_switch', 'sensor_switch.aq2'];
+module.exports = Button2Parser;
 
-class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
+class Button2StatelessProgrammableSwitchParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
     }
@@ -31,7 +31,7 @@ class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
-            'Model': 'Button',
+            'Model': 'Button 2',
             'SerialNumber': deviceSid
         };
     }
@@ -93,7 +93,7 @@ class ButtonStatelessProgrammableSwitchParser extends AccessoryParser {
     }
 }
 
-class ButtonSwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
+class Button2SwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
@@ -103,7 +103,7 @@ class ButtonSwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
     }
 }
 
-class ButtonSwitchVirtualSinglePressParser extends ButtonSwitchVirtualBasePressParser {
+class Button2SwitchVirtualSinglePressParser extends Button2SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         var model = this.platform.getDeviceModelBySid(deviceSid);
         var command = null;
@@ -122,7 +122,7 @@ class ButtonSwitchVirtualSinglePressParser extends ButtonSwitchVirtualBasePressP
         var deviceSid = jsonObj['sid'];
         var model = this.platform.getDeviceModelBySid(deviceSid);
         var command = null;
-        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
         if(1 == proto_version_prefix) {
             command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"click"}}"';
         } else if(2 == proto_version_prefix) {
@@ -134,7 +134,7 @@ class ButtonSwitchVirtualSinglePressParser extends ButtonSwitchVirtualBasePressP
     }
 }
 
-class ButtonSwitchVirtualDoublePressParser extends ButtonSwitchVirtualBasePressParser {
+class Button2SwitchVirtualDoublePressParser extends Button2SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         var model = this.platform.getDeviceModelBySid(deviceSid);
         var command = null;
@@ -165,7 +165,7 @@ class ButtonSwitchVirtualDoublePressParser extends ButtonSwitchVirtualBasePressP
     }
 }
 
-// class ButtonSwitchVirtualLongPressParser extends ButtonSwitchVirtualBasePressParser {
+// class Button2SwitchVirtualLongPressParser extends Button2SwitchVirtualBasePressParser {
     // getWriteCommand(deviceSid, value) {
         // var model = this.platform.getDeviceModelBySid(deviceSid);
         // var command = null;
@@ -195,3 +195,4 @@ class ButtonSwitchVirtualDoublePressParser extends ButtonSwitchVirtualBasePressP
         // this.platform.ParseUtil.parserAccessories(newObj);
     // }
 // }
+

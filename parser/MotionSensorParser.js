@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class MotionSensorParser extends DeviceParser {
-    constructor(model, platform) {
-        super(model, platform);
+    constructor(platform) {
+        super(platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,14 +12,12 @@ class MotionSensorParser extends DeviceParser {
         }
     }
 }
-
-// 支持的设备：人体感应
-MotionSensorParser.modelName = ['motion', 'sensor_motion'];
+MotionSensorParser.modelName = ['motion'];
 module.exports = MotionSensorParser;
 
 class MotionSensorMotionSensorParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -88,7 +86,15 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
     }
     
     getMotionDetectedCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'motion_status');
+        } else {
+        }
+        
         return (null != value) ? (value === 'motion') : false;
     }
 }

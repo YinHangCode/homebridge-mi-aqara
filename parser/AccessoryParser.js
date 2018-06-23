@@ -1,6 +1,5 @@
 class AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        this.model = model;
+    constructor(platform, accessoryType) {
         this.platform = platform;
         this.accessoryType = accessoryType;
         
@@ -11,8 +10,17 @@ class AccessoryParser {
         this.UUIDGen = platform.UUIDGen;
     }
     
-    getAccessoryUUID(deviceSid) {
-        return this.UUIDGen.generate(deviceSid + this.accessoryType);
+    getAccessoryUUID(deviceSid, accessoryType) {
+        var result = null;
+        switch(arguments.length) {
+            case 1:
+                result = this.UUIDGen.generate(deviceSid + this.accessoryType);
+                break;
+            case 2:
+                result = this.UUIDGen.generate(deviceSid + accessoryType);
+                break;
+        }
+        return result;
     }
     
     getAccessoryCategory() {
@@ -49,8 +57,12 @@ class AccessoryParser {
                 accessory.addService(service, accessoryName);
             });
             
-            // accessory.reachable = true;
-            
+            accessory.reachable = true;
+            accessory.on('identify', function(paired, callback) {
+                that.platform.log.debug(accessory.displayName + " Identify!!!");
+                callback();
+            });
+
             return accessory;
         }
         
@@ -58,6 +70,47 @@ class AccessoryParser {
     }
     
     parserAccessories(jsonObj) {
+    }
+    
+    getValueFrJsonObjData1(jsonObj, valueKey) {
+        var dataStr = jsonObj['data'];
+        if(undefined != dataStr && null != dataStr) {
+            var dataObj = JSON.parse(dataStr);
+            if(undefined != dataObj && null != dataObj) {
+                var value = dataObj[valueKey];
+                if(undefined != value && null != value) {
+                    return value;
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    getValueFrJsonObjData2(jsonObj, valueKey) {
+        var params = jsonObj['params'];
+        if(undefined != params && null != params) {
+            for(var i in params) {
+                var value = params[i][valueKey];
+                if(undefined != value && null != value) {
+                    return value;
+                }
+            }
+        }
+
+        return null;
+    }
+    
+    getValueFrJsonObjData(jsonObj, valueKey) {
+        var dataStr = jsonObj['data'];
+        var params = jsonObj['params'];
+        if(dataStr) {
+            return this.getValueFrJsonObjData1(jsonObj, valueKey);
+        } else if(params) {
+            return this.getValueFrJsonObjData2(jsonObj, valueKey);
+        } else {
+            return null;
+        }
     }
     
     getLowBatteryByVoltage(voltage) {
@@ -69,35 +122,27 @@ class AccessoryParser {
     }
     
     getStatusLowBatteryCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'voltage');
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            var value = this.getValueFrJsonObjData1(jsonObj, 'voltage');
+        } else if(2 == proto_version_prefix) {
+            var value = this.getValueFrJsonObjData2(jsonObj, 'battery_voltage');
+        } else {
+        }
+        
         return value ? this.getLowBatteryByVoltage(value / 1.0) : defaultValue;
     }
     
     getBatteryLevelCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'voltage');
-        return value ? this.getBatteryLevelByVoltage(value / 1.0) : defaultValue;
-    }
-    
-    getValueFrJsonObjData(jsonObj, valueKey) {
-        var dataStr = jsonObj['data'] || jsonObj['params'];
-        if(undefined != dataStr && null != dataStr) {
-            var dataObj = null;
-            if (dataStr instanceof Array) {
-                dataStr.forEach(function (data) {
-                    if (data.hasOwnProperty(valueKey)) dataObj = data;
-                });
-            } else {
-                dataObj = JSON.parse(dataStr);
-            }
-            if(undefined != dataObj && null != dataObj) {
-                var value = dataObj[valueKey];
-                if(undefined != value && null != value) {
-                    return value;
-                }
-            }
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            var value = this.getValueFrJsonObjData1(jsonObj, 'voltage');
+        } else if(2 == proto_version_prefix) {
+            var value = this.getValueFrJsonObjData2(jsonObj, 'battery_voltage');
+        } else {
         }
-
-        return null;
+        
+        return value ? this.getBatteryLevelByVoltage(value / 1.0) : defaultValue;
     }
     
     parserBatteryService(accessory, jsonObj) {

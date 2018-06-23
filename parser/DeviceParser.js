@@ -1,8 +1,6 @@
 class DeviceParser {
-    constructor(model, platform, deviceSid) {
-        this.model = model;
+    constructor(platform) {
         this.platform = platform;
-        this.deviceSid = deviceSid;
         
         this.initAccessoriesParser();
     }
@@ -27,7 +25,7 @@ class DeviceParser {
         
         var accessoriesParserInfo = this.getAccessoriesParserInfo();
         for(var key in accessoriesParserInfo) {
-            this.accessoriesParsers[key] = new (accessoriesParserInfo[key])(this.model, this.platform, key);
+            this.accessoriesParsers[key] = new (accessoriesParserInfo[key])(this.platform, key);
         }
     }
     

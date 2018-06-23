@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class TemperatureAndHumiditySensor2Parser extends DeviceParser {
-    constructor(model, platform) {
-        super(model, platform);
+    constructor(platform) {
+        super(platform);
     }
     
     getAccessoriesParserInfo() {
@@ -14,14 +14,12 @@ class TemperatureAndHumiditySensor2Parser extends DeviceParser {
         }
     }
 }
-
-// 支持的设备：温度湿度传感器 第二代
 TemperatureAndHumiditySensor2Parser.modelName = ['weather.v1', 'weather'];
 module.exports = TemperatureAndHumiditySensor2Parser;
 
 class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -100,8 +98,8 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
 }
 
 class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {

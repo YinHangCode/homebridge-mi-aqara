@@ -16,6 +16,8 @@ all other developer and testers.
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
    
+**Note: According to aqara local network protocol use UDP port 9898, please notice the relevant configuration of firewall.**   
+   
 **Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories) and update [configuration](#configuration) file content.**   
    
 **Note: About AcPartner, This project only provides gateway functionality. If you want the use air conditioning function, please refer to the project for [homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner).**   
@@ -45,35 +47,35 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button2.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/TemperatureAndHumiditySensor2.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/WaterDetector.jpg)
-![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/UnlockedSensor.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Lock.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/AcPartner.jpg)
 
 ## Supported Devices
 ||Device Name|Protocol Model Value|
 |:-:|:-|:-|
 |1|Gateway(网关)|gateway<br>gateway.v3|
-|2|ContactSensor(门磁感应)|magnet|
+|2|ContactSensor(门磁感应)|magnet<br>sensor_magnet|
 |3|MotionSensor(人体感应)|motion|
 |4|Button(按钮)|switch|
 |5|TemperatureAndHumiditySensor(温度湿度传感器)|sensor_ht|
 |6|SingleSwitch(单按钮墙壁开关)|ctrl_neutral1|
 |7|DuplexSwitch(双按钮墙壁开关)|ctrl_neutral2|
 |8|SingleSwitchLN(单按钮墙壁开关零火版)|ctrl_ln1<br>ctrl_ln1.aq1|
-|9|DuplexSwitchLN(双按钮墙壁开关零火版)|ctrl_ln2|
-|10|SingleButton86(86型无线单按钮开关)|86sw1<br>sensor_86sw1.aq1|
-|11|DuplexButton86(86型无线双按钮开关)|86sw2<br>sensor_86sw2.aq1|
+|9|DuplexSwitchLN(双按钮墙壁开关零火版)|ctrl_ln2<br>ctrl_ln2.aq1|
+|10|SingleButton86(86型无线单按钮开关)|86sw1<br>sensor_86sw1.aq1<br>sensor_86sw1|
+|11|DuplexButton86(86型无线双按钮开关)|86sw2<br>sensor_86sw2.aq1<br>sensor_86sw2|
 |12|PlugBase(插座)|plug|
-|13|PlugBase86(86型墙壁插座)|86plug<br>ctrl_86plug|
-|14|MagicSquare(魔方)|cube<br>sensor_cube|
+|13|PlugBase86(86型墙壁插座)|86plug<br>ctrl_86plug<br>ctrl_86plug.aq1|
+|14|MagicSquare(魔方)|cube<br>sensor_cube<br>sensor_cube.aqgl01|
 |15|SmokeDetector(烟雾报警器)|smoke<br>sensor_smoke|
 |16|NatgasDetector(天然气报警器)|natgas<br>sensor_natgas|
 |17|ElectricCurtain(电动窗帘)|curtain|
-|18|ContactSensor2(门磁感应第二代)|sensor_magnet<br>sensor_magnet.aq2|
+|18|ContactSensor2(门磁感应第二代)|sensor_magnet.aq2|
 |19|MotionSensor2(人体感应第二代)|sensor_motion.aq2|
 |20|Button2(按钮第二代)|sensor_switch<br>sensor_switch.aq2|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|
 |22|WaterDetector(水浸传感器)|sensor_wleak.aq1|
-|23|UnlockedSensor(门锁)|lock.aq1|
+|23|Lock(门锁)|lock.aq1|
 |24|AcPartner(空调伴侣)|acpartner.v3|
 
 
@@ -106,6 +108,12 @@ For more information about config, Please refer to file `sampleConfig.json`.
 Open aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
 Please follow the steps in this thread: http://wiki.yinhh.com/Wiki.jsp?page=Homebridge-mi-aqara or http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
 To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
+   
+Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
+Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
+Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
+Important things are to be repeated for 3 times.
+   
 ```
 {
     "platforms": [{
@@ -125,6 +133,48 @@ If you have more than one gateways, fill them in right order, like below.
             "6409802da3b3": "02i44k56zrgg578b",
             "f0b4299a5b2b": "2F92E7DA90C66B86",
             "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
+    }]
+}
+```
+Here is a way to search for gateways instead of multicast, because of some friends do not respond to information from gateway in their network environment.   
+That is to say, we can config the IP address of the gateway to replace search gateway by multicast.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": {
+                "password": "02i44k56zrgg578b",
+                "ip": "10.3.3.1"
+            },
+            "f0b4299a5b2b": {
+                "password": "2F92E7DA90C66B86",
+                "ip": "10.3.3.2"
+            },
+            "f0b4299a77dd": {
+                "password": "syu3oasva3uqd5qd",
+                "ip": "10.3.3.3"
+            }
+        }
+    }]
+}
+```
+It can also be mixed config, but without full configuration of ip, multicast packets will still be sent to search for other gateways which do not config ip.   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": {
+                "password": "2F92E7DA90C66B86",
+                "ip": "10.3.3.2"
+            },
+            "f0b4299a77dd": {
+                "password": "syu3oasva3uqd5qd",
+                "ip": "10.3.3.3"
+            }
         }
     }]
 }
@@ -247,8 +297,8 @@ detail:
 |20|Button2(按钮第二代)|Button2_StatelessProgrammableSwitch<br>Button2_Switch_VirtualSinglePress<br>Button2_Switch_VirtualDoublePress|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
-|23|UnlockedSensor(门锁)|UnlockedSensor_MotionSensor|
-|24|AcPartner(空调伴侣)|AcPartner_Switch_JoinPermission|
+|23|Lock(门锁)|Lock_MotionSensor<br>Lock_MotionSensor_{UserID}|
+|24|AcPartner(空调伴侣)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
 
 About Global:   
 Some similar configurations and repeated multiple copies are boring things. So I provided a global writing method.   
@@ -638,7 +688,7 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
 ```
 
 ### defaultValue other configuration
-If you want to use Aqara lock,you need add some configuration like this
+If you want to use Aqara lock,you need add some configuration like this:   
 ```
 {
     "platforms": [{
@@ -650,15 +700,28 @@ If you want to use Aqara lock,you need add some configuration like this
         },
         "defaultValue": {
             "LockDeviceID": {
-                "UserID": {
-                    "name": "UserName"
+                "Lock_MotionSensor": {
+                    "name": "door"
+                },
+                "Lock_MotionSensor_{User1ID}": {
+                    "name": "User1Name"
+                },
+                "Lock_MotionSensor_{User2ID}": {
+                    "name": "User2Name"
                 }
             }
         }
     }]
 }
 ```
-`UserID` is user identification from lock.The value can get from `Aqara Lock Plugin` in `MIHOME` APP,The user ID contains the ID type. The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is: 1 fingerprint, 2 password, 3 proximity card, 5 check-in password.Example:
+`{UserID}` is user identification from lock.   
+The value can get from `Aqara Lock Plugin` in `MIHOME` APP. The user ID contains the ID type.   
+The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is:   
+1 fingerprint   
+2 password   
+3 proximity card   
+5 check-in password   
+Example:   
 ```
 {
     "platforms": [{
@@ -670,13 +733,16 @@ If you want to use Aqara lock,you need add some configuration like this
         },
         "defaultValue": {
             "158d0001dd0289": {
-                "65536": {
+                "Lock_MotionSensor": {
+                    "name": "door"
+                },
+                "Lock_MotionSensor_65536": {
                     "name": "Administrator"
                 },
-                "65537": {
+                "Lock_MotionSensor_65537": {
                     "name": "Finger"
                 },
-                "196608": {
+                "Lock_MotionSensor_196608": {
                     "name": "Card"
                 }
             }
@@ -699,12 +765,15 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
-### 0.6.10 (coding)
-
-### 0.6.9 (2018-03-26)
+### 0.6.9 (2018-06-23)
+1.fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
+2.fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
+3.support config gateway ip feature.   
+### 0.6.9_beta (2018-03-26)
 1.optimized some of the basic code to facilitate the subsequent support of new hardware.   
-2.supports aqara LAN protocol 2.0.   
-3.added some new devices (door locks).   
+2.supports aqara local network protocol 2.x version.   
+3.add support for lock device.   
+4.add support for acpartner accessory.   
 ### 0.6.8 (2018-01-21)
 1.fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
 2.fixed bug that it still show battery low power after replacing the battery.   

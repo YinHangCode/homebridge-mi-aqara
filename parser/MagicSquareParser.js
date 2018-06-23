@@ -3,8 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
 class MagicSquareParser extends DeviceParser {
-    constructor(model, platform) {
-        super(model, platform);
+    constructor(platform) {
+        super(platform);
     }
     
     getAccessoriesParserInfo() {
@@ -23,14 +23,12 @@ class MagicSquareParser extends DeviceParser {
         }
     }
 }
-
-// 支持的设备：魔方
-MagicSquareParser.modelName = ['cube', 'sensor_cube'];
+MagicSquareParser.modelName = ['cube', 'sensor_cube', 'sensor_cube.aqgl01'];
 module.exports = MagicSquareParser;
 
 class MagicSquareStatelessProgrammableSwitchBaseParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -85,7 +83,15 @@ class MagicSquareStatelessProgrammableSwitchBaseParser extends AccessoryParser {
 
 class MagicSquareStatelessProgrammableSwitchFlip90Parser extends MagicSquareStatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'cube_status');
+        } else {
+        }
+        
         if(value === 'flip90') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
@@ -96,7 +102,15 @@ class MagicSquareStatelessProgrammableSwitchFlip90Parser extends MagicSquareStat
 
 class MagicSquareStatelessProgrammableSwitchFlip180Parser extends MagicSquareStatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'cube_status');
+        } else {
+        }
+        
         if(value === 'flip180') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
@@ -107,7 +121,15 @@ class MagicSquareStatelessProgrammableSwitchFlip180Parser extends MagicSquareSta
 
 class MagicSquareStatelessProgrammableSwitchMoveParser extends MagicSquareStatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'cube_status');
+        } else {
+        }
+        
         if(value === 'move') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
@@ -118,7 +140,15 @@ class MagicSquareStatelessProgrammableSwitchMoveParser extends MagicSquareStatel
 
 class MagicSquareStatelessProgrammableSwitchTapTwiceParser extends MagicSquareStatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'cube_status');
+        } else {
+        }
+        
         if(value === 'tap_twice') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
@@ -129,7 +159,15 @@ class MagicSquareStatelessProgrammableSwitchTapTwiceParser extends MagicSquareSt
 
 class MagicSquareStatelessProgrammableSwitchShakeAirParser extends MagicSquareStatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'status');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'cube_status');
+        } else {
+        }
+        
         if(value === 'shake_air') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
@@ -140,7 +178,15 @@ class MagicSquareStatelessProgrammableSwitchShakeAirParser extends MagicSquareSt
 
 class MagicSquareStatelessProgrammableSwitchRotateParser extends MagicSquareStatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'rotate');
+        var value = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
+        if(1 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData1(jsonObj, 'status');
+        } else if(2 == proto_version_prefix) {
+            value = this.getValueFrJsonObjData2(jsonObj, 'cube_status');
+        } else {
+        }
+        
         if(null != value) {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
@@ -161,60 +207,155 @@ class MagicSquareSwitchVirtualBaseParser extends SwitchVirtualBasePressParser {
 
 class MagicSquareSwitchVirtualFlip90Parser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"flip90"}};
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"status":"flip90", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"cube_status":"flip90"}], "key": "${key}"}';
+        } else {
+        }
+        
+        return command;
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"flip90\\\"}\"}");
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"flip90"}}"';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"flip90"}]}"';
+        } else {
+        }
+        var newObj = JSON.parse(command);
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
 class MagicSquareSwitchVirtualFlip180Parser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"flip180"}};
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"status":"flip180", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"cube_status":"flip180"}], "key": "${key}"}';
+        } else {
+        }
+        
+        return command;
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"flip180\\\"}\"}");
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"flip180"}}"';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"flip180"}]}"';
+        } else {
+        }
+        var newObj = JSON.parse(command);
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
 class MagicSquareSwitchVirtualMoveParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"move"}};
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"status":"move", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"cube_status":"move"}], "key": "${key}"}';
+        } else {
+        }
+        
+        return command;
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"move\\\"}\"}");
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"move"}}"';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"move"}]}"';
+        } else {
+        }
+        var newObj = JSON.parse(command);
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
 class MagicSquareSwitchVirtualTapTwiceParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"tap_twice"}};
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"status":"tap_twice", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"cube_status":"tap_twice"}], "key": "${key}"}';
+        } else {
+        }
+        
+        return command;
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"tap_twice\\\"}\"}");
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"tap_twice"}}"';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"tap_twice"}]}"';
+        } else {
+        }
+        var newObj = JSON.parse(command);
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }
 
 class MagicSquareSwitchVirtualShakeAirParser extends MagicSquareSwitchVirtualBaseParser {
     getWriteCommand(deviceSid, value) {
-        return {cmd:"write",model:this.model,sid:deviceSid,data:{tatus:"shake_air"}};
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"status":"shake_air", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"cube_status":"shake_air"}], "key": "${key}"}';
+        } else {
+        }
+        
+        return command;
     }
     
     doSomething(jsonObj) {
         var deviceSid = jsonObj['sid'];
-        var newObj = JSON.parse("{\"cmd\":\"report\",\"model\":\"" + this.model + "\",\"sid\":\"" + deviceSid + "\",\"data\":\"{\\\"status\\\":\\\"shake_air\\\"}\"}");
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"shake_air"}}"';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"shake_air"}]}"';
+        } else {
+        }
+        var newObj = JSON.parse(command);
         this.platform.ParseUtil.parserAccessories(newObj);
     }
 }

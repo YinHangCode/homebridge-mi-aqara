@@ -2,8 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
 class SingleSwitchParser extends DeviceParser {
-    constructor(model, platform) {
-        super(model, platform);
+    constructor(platform) {
+        super(platform);
     }
     
     getAccessoriesParserInfo() {
@@ -12,14 +12,12 @@ class SingleSwitchParser extends DeviceParser {
         }
     }
 }
-
-// 支持的设备：单按钮墙壁开关，单按钮墙壁开关零火版
-SingleSwitchParser.modelName = ['ctrl_neutral1', 'ctrl_ln1', 'ctrl_ln1.aq1'];
+SingleSwitchParser.modelName = ['ctrl_neutral1'];
 module.exports = SingleSwitchParser;
 
 class SingleSwitchSwitchParser extends AccessoryParser {
-    constructor(model, platform, accessoryType) {
-        super(model, platform, accessoryType)
+    constructor(platform, accessoryType) {
+        super(platform, accessoryType)
     }
     
     getAccessoryCategory(deviceSid) {
@@ -97,7 +95,16 @@ class SingleSwitchSwitchParser extends AccessoryParser {
             
             if(onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
-                    var command = {cmd:"write",model:that.model,sid:deviceSid,data:{channel_0:(value ? 'on' : 'off')}};
+                    var model = that.platform.getDeviceModelBySid(deviceSid);
+                    var command = null;
+                    var proto_version_prefix = that.platform.getProtoVersionPrefixByProtoVersion(that.platform.getDeviceProtoVersionBySid(deviceSid));
+                    if(1 == proto_version_prefix) {
+                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"' + (value ? 'on' : 'off') + '", "key": "${key}"}"}';
+                    } else if(2 == proto_version_prefix) {
+                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_0":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
+                    } else {
+                    }
+                    
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);

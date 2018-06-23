@@ -1,22 +1,22 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
-class DuplexSwitchParser extends DeviceParser {
+class DuplexSwitchLNParser extends DeviceParser {
     constructor(platform) {
         super(platform);
     }
     
     getAccessoriesParserInfo() {
         return {
-            'DuplexSwitch_Switch_Left': DuplexSwitchSwitchLeftParser,
-            'DuplexSwitch_Switch_Right': DuplexSwitchSwitchRightParser
+            'DuplexSwitchLN_Switch_Left': DuplexSwitchLNSwitchLeftParser,
+            'DuplexSwitchLN_Switch_Right': DuplexSwitchLNSwitchRightParser
         }
     }
 }
-DuplexSwitchParser.modelName = ['ctrl_neutral2'];
-module.exports = DuplexSwitchParser;
+DuplexSwitchLNParser.modelName = ['ctrl_ln2', 'ctrl_ln2.aq1'];
+module.exports = DuplexSwitchLNParser;
 
-class DuplexSwitchSwitchBaseParser extends AccessoryParser {
+class DuplexSwitchLNSwitchBaseParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
     }
@@ -33,7 +33,7 @@ class DuplexSwitchSwitchBaseParser extends AccessoryParser {
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
-            'Model': 'Duplex Switch',
+            'Model': 'Duplex Switch LN',
             'SerialNumber': deviceSid
         };
     }
@@ -114,7 +114,7 @@ class DuplexSwitchSwitchBaseParser extends AccessoryParser {
     }
 }
 
-class DuplexSwitchSwitchLeftParser extends DuplexSwitchSwitchBaseParser {
+class DuplexSwitchLNSwitchLeftParser extends DuplexSwitchLNSwitchBaseParser {
     getOnCharacteristicValue(jsonObj, defaultValue) {
         var value = this.getValueFrJsonObjData(jsonObj, 'channel_0');
         if(value === 'on') {
@@ -136,12 +136,12 @@ class DuplexSwitchSwitchLeftParser extends DuplexSwitchSwitchBaseParser {
             command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_0":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
         } else {
         }
-
+        
         return command;
     }
 }
 
-class DuplexSwitchSwitchRightParser extends DuplexSwitchSwitchBaseParser {
+class DuplexSwitchLNSwitchRightParser extends DuplexSwitchLNSwitchBaseParser {
     getOnCharacteristicValue(jsonObj, defaultValue) {
         var value = this.getValueFrJsonObjData(jsonObj, 'channel_1');
         if(value === 'on') {
@@ -158,11 +158,12 @@ class DuplexSwitchSwitchRightParser extends DuplexSwitchSwitchBaseParser {
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_1":"' + (value ? 'on' : 'off') + '", "key": "${key}"}"}';
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"' + (value ? 'on' : 'off') + '", "key": "${key}"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_1":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_0":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
         } else {
         }
+        
         return command;
     }
 }

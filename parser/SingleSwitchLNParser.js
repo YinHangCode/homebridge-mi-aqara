@@ -1,22 +1,21 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
-class DuplexSwitchParser extends DeviceParser {
+class SingleSwitchLNParser extends DeviceParser {
     constructor(platform) {
         super(platform);
     }
     
     getAccessoriesParserInfo() {
         return {
-            'DuplexSwitch_Switch_Left': DuplexSwitchSwitchLeftParser,
-            'DuplexSwitch_Switch_Right': DuplexSwitchSwitchRightParser
+            'SingleSwitchLN_Switch': SingleSwitchLNSwitchParser
         }
     }
 }
-DuplexSwitchParser.modelName = ['ctrl_neutral2'];
-module.exports = DuplexSwitchParser;
+SingleSwitchLNParser.modelName = ['ctrl_ln1', 'ctrl_ln1.aq1'];
+module.exports = SingleSwitchLNParser;
 
-class DuplexSwitchSwitchBaseParser extends AccessoryParser {
+class SingleSwitchLNSwitchParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
     }
@@ -33,7 +32,7 @@ class DuplexSwitchSwitchBaseParser extends AccessoryParser {
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
-            'Model': 'Duplex Switch',
+            'Model': 'Single Switch LN',
             'SerialNumber': deviceSid
         };
     }
@@ -96,7 +95,16 @@ class DuplexSwitchSwitchBaseParser extends AccessoryParser {
             
             if(onCharacteristic.listeners('set').length == 0) {
                 onCharacteristic.on("set", function(value, callback) {
-                    var command = that.getWriteCommand(deviceSid, value);
+                    var model = that.platform.getDeviceModelBySid(deviceSid);
+                    var command = null;
+                    var proto_version_prefix = that.platform.getProtoVersionPrefixByProtoVersion(that.platform.getDeviceProtoVersionBySid(deviceSid));
+                    if(1 == proto_version_prefix) {
+                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"' + (value ? 'on' : 'off') + '", "key": "${key}"}}';
+                    } else if(2 == proto_version_prefix) {
+                        command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_0":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
+                    } else {
+                    }
+                    
                     if(that.platform.ConfigUtil.getAccessoryIgnoreWriteResult(deviceSid, that.accessoryType)) {
                         that.platform.sendWriteCommandWithoutFeedback(deviceSid, command);
                         that.callback2HB(deviceSid, this, callback, null);
@@ -112,9 +120,7 @@ class DuplexSwitchSwitchBaseParser extends AccessoryParser {
             }
         }
     }
-}
-
-class DuplexSwitchSwitchLeftParser extends DuplexSwitchSwitchBaseParser {
+    
     getOnCharacteristicValue(jsonObj, defaultValue) {
         var value = this.getValueFrJsonObjData(jsonObj, 'channel_0');
         if(value === 'on') {
@@ -124,45 +130,5 @@ class DuplexSwitchSwitchLeftParser extends DuplexSwitchSwitchBaseParser {
         } else {
             return defaultValue;
         }
-    }
-    
-    getWriteCommand(deviceSid, value) {
-        var model = this.platform.getDeviceModelBySid(deviceSid);
-        var command = null;
-        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
-        if(1 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"' + (value ? 'on' : 'off') + '", "key": "${key}"}}';
-        } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_0":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
-        } else {
-        }
-
-        return command;
-    }
-}
-
-class DuplexSwitchSwitchRightParser extends DuplexSwitchSwitchBaseParser {
-    getOnCharacteristicValue(jsonObj, defaultValue) {
-        var value = this.getValueFrJsonObjData(jsonObj, 'channel_1');
-        if(value === 'on') {
-            return true;
-        } else if(value === 'off') {
-            return false;
-        } else {
-            return defaultValue;
-        }
-    }
-    
-    getWriteCommand(deviceSid, value) {
-        var model = this.platform.getDeviceModelBySid(deviceSid);
-        var command = null;
-        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
-        if(1 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_1":"' + (value ? 'on' : 'off') + '", "key": "${key}"}"}';
-        } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_1":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
-        } else {
-        }
-        return command;
     }
 }
