@@ -288,7 +288,7 @@ detail:
 |11|DuplexButton86(86型无线双按钮开关)|DuplexButton86_StatelessProgrammableSwitch_Left<br>DuplexButton86_Switch_VirtualSinglePress_Left<br>DuplexButton86_StatelessProgrammableSwitch_Right<br>DuplexButton86_Switch_VirtualSinglePress_Right<br>DuplexButton86_StatelessProgrammableSwitch_Both<br>DuplexButton86_Switch_VirtualSinglePress_Both|
 |12|PlugBase(插座)|PlugBase_Outlet|
 |13|PlugBase86(86型墙壁插座)|PlugBase86_Outlet|
-|14|MagicSquare(魔方)|MagicSquare_StatelessProgrammableSwitch_Flip90<br>MagicSquare_StatelessProgrammableSwitch_Flip180<br>MagicSquare_StatelessProgrammableSwitch_Move<br>MagicSquareStatelessProgrammableSwitchTapTwiceParser<br>MagicSquare_StatelessProgrammableSwitch_ShakeAir<br>MagicSquare_StatelessProgrammableSwitch_Rotate<br>MagicSquare_Switch_VirtualFlip90<br>MagicSquare_Switch_VirtualFlip180<br>MagicSquare_Switch_VirtualMove<br>MagicSquare_Switch_VirtualTapTwice<br>MagicSquare_Switch_VirtualShakeAir|
+|14|MagicSquare(魔方)|MagicSquare_StatelessProgrammableSwitch_Flip90<br>MagicSquare_StatelessProgrammableSwitch_Flip180<br>MagicSquare_StatelessProgrammableSwitch_Move<br>MagicSquare_StatelessProgrammableSwitch_TapTwice<br>MagicSquare_StatelessProgrammableSwitch_ShakeAir<br>MagicSquare_StatelessProgrammableSwitch_Rotate<br>MagicSquare_Switch_VirtualFlip90<br>MagicSquare_Switch_VirtualFlip180<br>MagicSquare_Switch_VirtualMove<br>MagicSquare_Switch_VirtualTapTwice<br>MagicSquare_Switch_VirtualShakeAir|
 |15|SmokeDetector(烟雾报警器)|SmokeDetector_SmokeSensor|
 |16|NatgasDetector(天然气报警器)|NatgasDetector_SmokeSensor|
 |17|ElectricCurtain(电动窗帘)|ElectricCurtain_WindowCovering|
@@ -765,7 +765,9 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
-### 0.6.9 (2018-06-14)
+### 0.6.10 (2018-06-28)
+1.fixed bug that DuplexSwitchLN right switch not work.   
+### 0.6.9 (2018-06-23)
 1.fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
 2.fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
 3.support config gateway ip feature.   
