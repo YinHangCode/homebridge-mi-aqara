@@ -765,8 +765,9 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
-### 0.6.10 (2018-06-28)
+### 0.6.10 (2018-07-09)
 1.fixed bug that DuplexSwitchLN right switch not work.   
+2.fixed bug that sometimes Gateway, AcPartner and MotionSensor2 light senor no response.   
 ### 0.6.9 (2018-06-23)
 1.fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
 2.fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
