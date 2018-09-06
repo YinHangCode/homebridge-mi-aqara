@@ -770,138 +770,138 @@ echo [] > cachedAccessories
 2. fixed bug that sometimes Gateway, AcPartner and MotionSensor2 light senor no response.   
 3. fixed bug that MagicSquare Rotate StatelessProgrammableSwitch not work.   
 ### 0.6.9 (2018-06-23)
-1.fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
-2.fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
-3.support config gateway ip feature.   
+1. fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
+2. fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
+3. support config gateway ip feature.   
 ### 0.6.9_beta (2018-03-26)
-1.optimized some of the basic code to facilitate the subsequent support of new hardware.   
-2.supports aqara local network protocol 2.x version.   
-3.add support for lock device.   
-4.add support for acpartner accessory.   
+1. optimized some of the basic code to facilitate the subsequent support of new hardware.   
+2. supports aqara local network protocol 2.x version.   
+3. add support for lock device.   
+4. add support for acpartner accessory.   
 ### 0.6.8 (2018-01-21)
-1.fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
-2.fixed bug that it still show battery low power after replacing the battery.   
-3.fixed bug that TemperatureAndHumiditySensor and TemperatureAndHumiditySensor2 temperature sensor accessory can't show the negative number.   
-4.remove a duplicated function.   
-5.add the choice bindAddress feature.
+1. fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
+2. fixed bug that it still show battery low power after replacing the battery.   
+3. fixed bug that TemperatureAndHumiditySensor and TemperatureAndHumiditySensor2 temperature sensor accessory can't show the negative number.   
+4. remove a duplicated function.   
+5. add the choice bindAddress feature.
 ### 0.6.7 (2017-12-10)
-1.optimizing log content.   
+1. optimizing log content.   
 ### 0.6.6 (2017-12-10)
-1.fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
-2.fixed bug that sometimes Gateway and MotionSensor2 light senor no response.   
-3.fixed bug that global config not work in some cases.   
-4.add setting "ignoreWriteResult" feature.   
-5.remove the SingleButton86, DuplexButton86, MagicSquare redundant event action.   
+1. fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
+2. fixed bug that sometimes Gateway and MotionSensor2 light senor no response.   
+3. fixed bug that global config not work in some cases.   
+4. add setting "ignoreWriteResult" feature.   
+5. remove the SingleButton86, DuplexButton86, MagicSquare redundant event action.   
 ### 0.6.5 (2017-10-31)
-1.optimizing log content.   
-2.optimizing read/write device response timeout rules.   
-3.optimizing read/write device no response rules.   
-4.add gateway join permission switch accessory.   
-5.add setting disable "No Response" feature.   
+1. optimizing log content.   
+2. optimizing read/write device response timeout rules.   
+3. optimizing read/write device no response rules.   
+4. add gateway join permission switch accessory.   
+5. add setting disable "No Response" feature.   
 ### 0.6.4 (2017-10-27)
-1.add virtual switch accessory can trigger homekit click events.   
-2.optimizing log content.   
-3.optimizing HomeBridge startup read device info algorithm.   
+1. add virtual switch accessory can trigger homekit click events.   
+2. optimizing log content.   
+3. optimizing HomeBridge startup read device info algorithm.   
 ### 0.6.3 (2017-10-26)
-1.fixed bug that ElectricCurtain can't work.   
-2.remove synchronization value when homebridge call the get function(only electrify device) and add setting synchronization value feature.   
-3.add config Global mode.   
+1. fixed bug that ElectricCurtain can't work.   
+2. remove synchronization value when homebridge call the get function(only electrify device) and add setting synchronization value feature.   
+3. add config Global mode.   
 ### 0.6.2 (2017-10-25)
-1.fixed bug that MotionSensor motion sonser accessory status is error.   
-2.fixed bug that MotionSensor2 motion sonser accessory status is error.   
+1. fixed bug that MotionSensor motion sonser accessory status is error.   
+2. fixed bug that MotionSensor2 motion sonser accessory status is error.   
 ### 0.6.1 (2017-10-23)
-1.fixed bug that MotionSensor2 light sonser accessory value is error.   
+1. fixed bug that MotionSensor2 light sonser accessory value is error.   
 ### 0.6.0 (2017-10-22)
-1.refactoring code.   
-2.add feedback when control accessory.   
-3.synchronization value when homebridge call the get function. (only electrify device)   
-4.optimizing program structure, send fewer packets.   
-5.optimizing config item name, easier to read.   
-6.fixed some bug.   
-7.add Button(single press, double press) virtual switch accessory.   
-8.add Button2(single press, double press) virtual switch accessory.   
-9.add SingleButton86(single press) virtual switch accessory.   
-10.add DuplexButton86(left button single press, right button single press, both press) virtual switch accessory.   
-11.add MagicSquare(flip90, flip180, move, tapTwice, shakeAir) virtual switch accessory.   
+1. refactoring code.   
+2. add feedback when control accessory.   
+3. synchronization value when homebridge call the get function. (only electrify device)   
+4. optimizing program structure, send fewer packets.   
+5. optimizing config item name, easier to read.   
+6. fixed some bug.   
+7. add Button(single press, double press) virtual switch accessory.   
+8. add Button2(single press, double press) virtual switch accessory.   
+9. add SingleButton86(single press) virtual switch accessory.   
+10. add DuplexButton86(left button single press, right button single press, both press) virtual switch accessory.   
+11. add MagicSquare(flip90, flip180, move, tapTwice, shakeAir) virtual switch accessory.   
 ### 0.5.3 (2017-08-26)
-1.optimized code.   
+1. optimized code.   
 ### 0.5.2 (2017-08-23)
-1.fixed bug that gateway light brightness is 100 when it light up.   
+1. fixed bug that gateway light brightness is 100 when it light up.   
 ### 0.5.1 (2017-08-14)
-1.fixed bug that natgas detector is not alarm.   
+1. fixed bug that natgas detector is not alarm.   
 ### 0.5.0 (2017-08-13)
-1.add support for water detector accessory.   
-2.fixed bug that natgas detector is not alarm.   
-3.fixed bug that smoke detector is not alarm.   
+1. add support for water detector accessory.   
+2. fixed bug that natgas detector is not alarm.   
+3. fixed bug that smoke detector is not alarm.   
 ### 0.4.4 (2017-08-09)
-1.add log content that show plugin version when homebridge started.   
-2.fixed bug that run homebridge error there is no MiAqaraPlatform in config.json file.   
+1. add log content that show plugin version when homebridge started.   
+2. fixed bug that run homebridge error there is no MiAqaraPlatform in config.json file.   
 ### 0.4.3 (2017-08-01)
-1.fixed bug that gateway light sensor not support when value is 0;   
-2.fixed bug that motion sensor version 2 light sensor not support when value is 0;   
+1. fixed bug that gateway light sensor not support when value is 0;   
+2. fixed bug that motion sensor version 2 light sensor not support when value is 0;   
 ### 0.4.2 (2017-07-29)
-1.adjustment gateway light sensor value(subtract 279).   
-2.delete PlugBase, PlugBase86, SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN battery information.   
-3.add motion sensor version 2 light sensor battery information.   
-4.add setting accessory disable feature.   
-5.fixed bug that electric curtain can't work, but there is no current operation state information now.   
+1. adjustment gateway light sensor value(subtract 279).   
+2. delete PlugBase, PlugBase86, SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN battery information.   
+3. add motion sensor version 2 light sensor battery information.   
+4. add setting accessory disable feature.   
+5. fixed bug that electric curtain can't work, but there is no current operation state information now.   
 ### 0.4.1 (2017-07-26)
-1.code collation.   
+1. code collation.   
 ### 0.4.0 (2017-07-26)
-1.add support for electric curtain accessory.   
-2.add support for contact sensor version 2 accessory.   
-3.add support for motion sensor version 2 accessory.   
-4.add support for button version 2 accessory.   
-5.add support for temperature and humidity sensor version 2 accessory.   
-6.optimize log content.   
-7.add setting default name feature.   
-8.add setting default service type feature.   
-9.fixed motion sensor bug that wrong trigger when homebridge start.   
+1. add support for electric curtain accessory.   
+2. add support for contact sensor version 2 accessory.   
+3. add support for motion sensor version 2 accessory.   
+4. add support for button version 2 accessory.   
+5. add support for temperature and humidity sensor version 2 accessory.   
+6. optimize log content.   
+7. add setting default name feature.   
+8. add setting default service type feature.   
+9. fixed motion sensor bug that wrong trigger when homebridge start.   
 10.adjustment gateway light sensor value(subtract 300).   
 ### 0.3.3 (2017-06-16)
-1.add single button 86 long press event.   
-2.add duplex button 86 long press event.   
-3.changed button click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
-4.changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
-5.changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+1. add single button 86 long press event.   
+2. add duplex button 86 long press event.   
+3. changed button click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+4. changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+5. changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
 ### 0.3.2 (2017-06-15)
-1.fixed bug that duplex switch LN charging state.   
-2.fixed bug that single switch LN charging state.   
-3.fixed bug that single button 86 charging state.   
-4.changed button click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
-5.changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
-6.changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
-7.fixed bug that natgas detector is not alarm.   
-8.fixed bug that smoke detector is not alarm.   
+1. fixed bug that duplex switch LN charging state.   
+2. fixed bug that single switch LN charging state.   
+3. fixed bug that single button 86 charging state.   
+4. changed button click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+5. changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+6. changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+7. fixed bug that natgas detector is not alarm.   
+8. fixed bug that smoke detector is not alarm.   
 ### 0.3.1 (2017-06-14)
-1.code collation.   
+1. code collation.   
 ### 0.3.0 (2017-06-14)
-1.add support for single switch LN accessory.   
-2.add support for duplex switch LN accessory.   
-3.add support for plug base 86 accessory.   
-4.add support for smoke detector accessory.   
-5.add support for natgas detector accessory.   
+1. add support for single switch LN accessory.   
+2. add support for duplex switch LN accessory.   
+3. add support for plug base 86 accessory.   
+4. add support for smoke detector accessory.   
+5. add support for natgas detector accessory.   
 ### 0.2.1 (2017-06-14)
-1.change accessory registration mechanism, fixed bug that new accessory can't correlate associated with gateway.   
+1. change accessory registration mechanism, fixed bug that new accessory can't correlate associated with gateway.   
 ### 0.2.0 (2017-06-14)
-1.add support for duplex switch accessory.   
-2.add support for single button 86 accessory.   
-3.add support for duplex button 86 accessory.   
+1. add support for duplex switch accessory.   
+2. add support for single button 86 accessory.   
+3. add support for duplex button 86 accessory.   
 ### 0.1.0 (2017-06-13)
-1.add support for plug base accessory.   
-2.add support for magic square accessory.   
+1. add support for plug base accessory.   
+2. add support for magic square accessory.   
 ### 0.0.6 (2017-06-12)
-1.add some logs.
+1. add some logs.
 ### 0.0.5 (2017-06-08)
-1.fixed bug.
+1. fixed bug.
 ### 0.0.4 (2017-06-08)
-1.fixed bug.
+1. fixed bug.
 ### 0.0.3 (2017-06-08)
-1.add support for gateway accessory: light sensor, hue light.
+1. add support for gateway accessory: light sensor, hue light.
 ### 0.0.2 (2017-06-07)
-1.add support for single switch accessory.   
+1. add support for single switch accessory.   
 ### 0.0.1 (2017-06-07)
-1.supported contact sensor accessory.   
-2.supported motion sensor accessory.   
-3.supported button accessory.   
-4.supported temperature and humidity sensor accessory.   
+1. supported contact sensor accessory.   
+2. supported motion sensor accessory.   
+3. supported button accessory.   
+4. supported temperature and humidity sensor accessory.   
