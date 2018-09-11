@@ -206,8 +206,8 @@ The config supported are as follows:
 |2|[serviceType](#defaultvalue-servicetype-configuration)|String|set accessory type for Switch or Lightbulb. <br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.|"Switch"|"Switch"|"Lightbulb"|
 |3|[disable](#defaultvalue-disable-configuration)|Boolean|disable accessory|false|the accessories that do not need to be set to true, such as virtual press.|true|
 |4|[syncValue](#defaultvalue-syncvalue-configuration)|Boolean|accessory will synchronization value when homebridge call the get function, if it's true.|false|fasle|false|
-|4|[ignoreWriteResult](#defaultvalue-ignorewriteresult-configuration)|Boolean|if set to true, the result of control is not detected.|true|If your network is awful, it's recommended to be set true.|false|
-|4|[disableNoResponse](#defaultvalue-disablenoresponse-configuration)|Boolean|use jump back the last value to replace show NoResponse, you can set it true.|false|false|true|
+|5|[ignoreWriteResult](#defaultvalue-ignorewriteresult-configuration)|Boolean|if set to true, the result of control is not detected.|true|If your network is awful, it's recommended to be set true.|false|
+|6|[disableNoResponse](#defaultvalue-disablenoresponse-configuration)|Boolean|use jump back the last value to replace show NoResponse, you can set it true.|false|false|true|
 
 The rules are as follows:
 ```
