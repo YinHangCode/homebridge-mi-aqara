@@ -774,6 +774,7 @@ Obviously, this is not easy to use. So version 0.7.0 added http web manage(if yo
 }
 ```
 Config items description:   
+
 ||Name|Required|Value Type|Description|Recommended Value|Value Example|
 |:-:|:-|:-|:-|:-|:-|:-|
 |1|port|True|Integer|set manage web port.|11128|11128|
