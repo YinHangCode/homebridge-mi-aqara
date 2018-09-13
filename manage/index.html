@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+	<title>MiAqara Manage</title>
+    
+    <script type="text/javascript" src="easyui/jquery.min.js"></script>
+	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+    
+    <link rel="stylesheet" type="text/css" href="css/device_icon.css">
+    <link rel="stylesheet" type="text/css" href="css/icon.css">
+</head>
+<body>
+	<h2>MiAqara Manage</h2>
+	<p>
+        <a href='https://github.com/YinHangCode/homebridge-mi-aqara' target="_blank">HomeBridge-Mi-Aqara</a>  By 
+        <a href='https://github.com/YinHangCode' target="_blank">Mr.Yin</a> - QQ Group: 
+        <a href='https://shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d' target="_blank">107927710</a>
+    </p>
+    <div>
+        <div class="easyui-panel" title="Discovery Accessory" style="width:98%;height:90px;padding:10px;" data-options="iconCls:'icon-add'">
+            <a id="discoveryBtn" class="easyui-linkbutton" data-options="iconCls:'icon-search'">Discovery</a>
+            <a id="discoveryResult" ></a>
+        </div>
+    </div>
+    <br>
+	<div>
+        <table id="treegrid_list" title="Healthy Accessory" class="easyui-treegrid" style="width:98%;height:800px"></table>
+    </div>
+    <br>
+    <div>
+        <table id="grid_list" title="Orphan Accessory" class="easyui-datagrid" style="width:98%;height:300px"></table>
+    </div>
+    <script type="text/javascript">
+        var tgList = $('#treegrid_list');
+        var gList = $('#grid_list');
+
+		var treegrid_list_toolbar = [{
+			text:'Expand to Gateway',
+			iconCls:'icon-gateway',
+			handler: () => {
+                tgList.treegrid('collapseAll');
+            }
+		}, {
+			text:'Expand to Device',
+			iconCls:'icon-device',
+			handler: () => {
+                var gateways = tgList.treegrid('getRoots');
+                for(var gatewayIndex in gateways) {
+                    tgList.treegrid('expand', gateways[gatewayIndex].id);
+                    var devices = gateways[gatewayIndex].children;
+                    for(var deviceIndex in devices) {
+                        tgList.treegrid('collapse', devices[deviceIndex].id);
+                    }
+                }
+            }
+		}, {
+			text:'Expand to Accessory',
+			iconCls:'icon-accessory',
+			handler: () => {
+                tgList.treegrid('expandAll');
+            }
+		}, '-', {
+            text:'Refresh',
+			iconCls:'icon-reload',
+			handler: () => {
+                tgList.treegrid('reload');
+            }
+        }];
+        
+        function deleteAccessory(id, uuid) {
+            if (confirm("confirm deletion ?")) {
+                $('#deleteBtn' + id).linkbutton('disable');
+                $.ajax({
+                    url: "./deleteAccessory.action?uuid=" + uuid,
+                    async: true,
+                    dataType: 'json',
+                    timeout: 180000,
+                    type: 'get',
+                    data: null,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function(data, textStatus, jqXHR) {
+                        $('#deleteBtn' + id).linkbutton('enable');
+                        if(data['result'] == "success") {
+                            if(tgList.treegrid('find', id)) {
+                                tgList.treegrid('remove', id);
+                            } else if(gList.datagrid('find', id)) {
+                                gList.datagrid('remove', id);
+                            }
+                        }
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        console.info(XMLHttpRequest.status);
+                        console.info(XMLHttpRequest.readyState);
+                        console.info(textStatus);
+                        $('#deleteBtn' + id).linkbutton('enable');
+                    }
+               });
+            }
+        };
+        
+        function formatDuring(mss) {
+            var days = parseInt(mss / (1000 * 60 * 60 * 24));
+            var hours = parseInt((mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = parseInt((mss % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = (mss % (1000 * 60)) / 1000;
+            return (days > 0 ? days + "d" : "") + 
+                (hours > 0 ? hours + "h" : "")  + 
+                (minutes > 0 ? minutes + "m" : "") + 
+                seconds + "s";
+        }
+
+        $(() => {
+            tgList.treegrid({
+                url: '/healthyList.action',
+                method: 'get',
+                rownumbers: true,
+                idField: 'id',
+                iconCls: 'icon-ok',
+                treeField: 'name',
+                animate: true,
+                toolbar: treegrid_list_toolbar,
+                loadMsg:'loading...',
+                columns:[[
+                    { field:'name', title:'Name', width:300 },
+                    { field:'ip', title:'IP', width:80 },
+                    { field:'proto_version', title:'Protocol version', width:120 },
+                    { field:'model', title:'Model', width:200 },
+                    { field:'lastUpdateTime', title:'Last heartbeat', width:150, align:'right', formatter: (value, data) => {
+                        if(null != value && "" != value) {
+                            var d = new Date() - value;
+                            if (d > 1 * 60 * 60 * 1000) {
+                                return '<font style="color:red;">' + formatDuring(d) + " ago" + '</font>';
+                            } else {
+                                return formatDuring(d) + " ago";
+                            }
+                        }
+                    }},
+                    { field:'uuid', title:'UUID', width:300 },
+                    { field:'operation', title:'Operation', width:100, align:'center', formatter: (value, data) => {
+                        if(data['type'] == 'Accessory') {
+                            var btn = '<a id="deleteBtn' + data['id'] + '" class="deleteBtn" onclick="deleteAccessory(\'' + data['id'] + '\', \'' + data['uuid'] + '\')"></a>';
+                            return btn;
+                        }
+                    }}
+                ]],
+                onLoadSuccess: (row, data) => {
+                    var gateways = tgList.treegrid('getRoots');
+                    for(var gatewayIndex in gateways) {
+                        tgList.treegrid('update', {
+                            id: gateways[gatewayIndex].id,
+                            row: {
+                                iconCls: 'icon-device-' + gateways[gatewayIndex].deviceModel
+                            }
+                        });
+                        var devices = gateways[gatewayIndex].children;
+                        for(var deviceIndex in devices) {
+                            tgList.treegrid('update', {
+                                id: devices[deviceIndex].id,
+                                row: {
+                                    iconCls: 'icon-device-' + devices[deviceIndex].deviceModel
+                                }
+                            });
+                            var accessories = devices[deviceIndex].children;
+                            for(var accessoryIndex in accessories) {
+                                tgList.treegrid('update', {
+                                    id: accessories[accessoryIndex].id,
+                                    row: {
+                                        iconCls: 'icon-homekit'
+                                    }
+                                });
+                            }
+                        }
+                    }
+                    
+                    $('.deleteBtn').linkbutton({
+                        text: 'Delete',
+                        iconCls: 'icon-remove'
+                    });
+                }
+            });
+            
+            gList.datagrid({
+                url: '/orphanList.action',
+                method: 'get',
+                rownumbers: true,
+                idField: 'id',
+                iconCls: 'icon-no',
+                treeField: 'name',
+                loadMsg:'loading...',
+                columns:[[
+                    { field:'name', title:'Name', width:300 },
+                    { field:'uuid', title:'UUID', width:300 },
+                    { field:'operation', title:'Operation', width:100, align:'center', formatter: (value, data) => {
+                        if(data['type'] == 'Accessory') {
+                            var btn = '<a id="deleteBtn' + data['id'] + '" class="deleteBtn" onclick="deleteAccessory(\'' + data['id'] + '\', \'' + data['uuid'] + '\')"></a>';
+                            return btn;
+                        }
+                    }}
+                ]],
+                onLoadSuccess: (row, data) => {
+                    $('.deleteBtn').linkbutton({
+                        text: 'Delete',
+                        iconCls: 'icon-remove'
+                    });
+                }
+            });
+        });
+        
+        $('#discoveryBtn').bind('click', () => {
+            $('#discoveryBtn').linkbutton('disable');
+            $('#discoveryResult').html('loading');
+            
+            $.ajax({
+				url: "./discovery.action",
+				async: true,
+				dataType: 'json',
+				timeout: 180000,
+				type: 'get',
+				data: null,
+				processData: false,
+				contentType: false,
+				cache: false,
+				success: function(data, textStatus, jqXHR) {
+					$('#discoveryBtn').linkbutton('enable');
+                    $('#discoveryResult').html(data['result'] + ": " + data['date']);
+                    tgList.treegrid('reload');
+				},
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.info(XMLHttpRequest.status);
+                    console.info(XMLHttpRequest.readyState);
+                    console.info(textStatus);
+                    $('#discoveryBtn').linkbutton('enable');
+                    $('#discoveryResult').html('error');
+                }
+			});
+        });
+	</script>
+</body>
+
+</html>
+

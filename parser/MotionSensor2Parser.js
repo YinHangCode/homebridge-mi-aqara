@@ -142,8 +142,8 @@ class MotionSensor2LightSensorParser extends AccessoryParser {
         if(accessory) {
             var service = accessory.getService(that.Service.LightSensor);
             var currentAmbientLightLevelCharacteristic = service.getCharacteristic(that.Characteristic.CurrentAmbientLightLevel);
-            var value = that.getCurrentAmbientLightLevelCharacteristicValue(jsonObj, 0.0001);
-            if(value) {
+            var value = that.getCurrentAmbientLightLevelCharacteristicValue(jsonObj, null);
+            if(null != value) {
                 currentAmbientLightLevelCharacteristic.updateValue(value);
             }
             
@@ -152,8 +152,8 @@ class MotionSensor2LightSensorParser extends AccessoryParser {
                     currentAmbientLightLevelCharacteristic.on("get", function(callback) {
                         var command = '{"cmd":"read", "sid":"' + deviceSid + '"}';
                         that.platform.sendReadCommand(deviceSid, command).then(result => {
-                            var value = that.getCurrentAmbientLightLevelCharacteristicValue(result, 0.0001);
-                            if(value) {
+                            var value = that.getCurrentAmbientLightLevelCharacteristicValue(result, null);
+                            if(null != value) {
                                 callback(null, value);
                             } else {
                                 callback(new Error('get value fail: ' + result));

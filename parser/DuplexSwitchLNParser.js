@@ -158,9 +158,9 @@ class DuplexSwitchLNSwitchRightParser extends DuplexSwitchLNSwitchBaseParser {
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"' + (value ? 'on' : 'off') + '", "key": "${key}"}}';
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_1":"' + (value ? 'on' : 'off') + '", "key": "${key}"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_0":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"channel_1":"' + (value ? 'on' : 'off') + '"}], "key": "${key}"}';
         } else {
         }
         

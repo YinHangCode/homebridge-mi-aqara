@@ -12,6 +12,11 @@
             "f0b4299a5b2b": "2F92E7DA90C66B86",
             "f0b4299a77dd": "syu3oasva3uqd5qd"
         },
+        "bindAddress": "10.0.0.1",
+        "manage": {
+            "port": 11128,
+            "password": "107927710"
+        },
         "defaultValue": {
             "6409802da3b3": {
                 "Gateway_Lightbulb": {

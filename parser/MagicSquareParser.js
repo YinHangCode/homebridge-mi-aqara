@@ -187,7 +187,7 @@ class MagicSquareStatelessProgrammableSwitchRotateParser extends MagicSquareStat
         } else {
         }
         
-        if(null != value) {
+        if(value === 'rotate') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
             return defaultValue;
