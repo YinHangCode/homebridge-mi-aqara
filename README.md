@@ -101,6 +101,7 @@ npm install -g homebridge-mi-aqara
 |2|[gateways](#gateways-configuration)|True|Object|set gateway information.|{ "6409802da3b3": "02i44k56zrgg578b" }|
 |3|[bindAddress](#bindaddress-configuration)|False|String|specified network.|"10.0.0.1"|
 |4|[defaultValue](#defaultvalue-configuration)|False|Object|set device default value.||
+|5|[manage](#manage-configuration)|False|Object|open manage and manage configs.|{ "port": 11128, "password": "107927710" }|
 
 For more information about config, Please refer to file `sampleConfig.json`.   
 
@@ -751,6 +752,35 @@ Example:
 }
 ```  
    
+### manage configuration
+Before version 0.7.x, the addition and deletion of accessories are automatic. The rules are as follows:   
+**find new accessories every one hour, delete accessories which did not receive heartbeat over 7 days.**   
+Obviously, this is not easy to use. So version 0.7.0 added http web manage(if you do not set manage item, then http web manage is close.). config add these:   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "bindAddress": "10.0.0.1",
+        "manage": {
+            "port": 11128,
+            "password": "107927710"
+        },
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
+    }]
+}
+```
+Config items description:   
+||Name|Required|Value Type|Description|Recommended Value|Value Example|
+|:-:|:-|:-|:-|:-|:-|:-|
+|1|port|True|Integer|set manage web port.|11128|11128|
+|2|password|True|String|set manage web password.|"107927710"|"107927710"|
+    
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/httpWebManage.png)
+    
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
 SingleButton86/DuplexButton86(Left, Right, Both) StatelessProgrammableSwitch only support SinglePress.   
@@ -765,10 +795,12 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
-### 0.6.10 (2018-09-06)
+### 0.7.0 (2018-09-13)
 1. fixed bug that DuplexSwitchLN right switch not work.   
 2. fixed bug that sometimes Gateway, AcPartner and MotionSensor2 light senor no response.   
 3. fixed bug that MagicSquare Rotate StatelessProgrammableSwitch not work.   
+4. fixed bug that crash when auto remove accessory.   
+5. add http web manage.    
 ### 0.6.9 (2018-06-23)
 1. fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
 2. fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
