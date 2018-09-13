@@ -796,6 +796,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.7.1 (2018-09-14)
+1. fixed bug that delete orphan accessory list item fail in http web manage.   
 ### 0.7.0 (2018-09-13)
 1. fixed bug that DuplexSwitchLN right switch not work.   
 2. fixed bug that sometimes Gateway, AcPartner and MotionSensor2 light senor no response.   
