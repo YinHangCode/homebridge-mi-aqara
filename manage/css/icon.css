@@ -1,19 +1,19 @@
 .icon-gateway {
-	background:url('../images/icons/gateway.png') no-repeat center center;
+    background:url('../images/icons/gateway.png') no-repeat center center;
     background-size: 16px 16px;
 }
 
 .icon-device {
-	background:url('../images/icons/device.png') no-repeat center center;
+    background:url('../images/icons/device.png') no-repeat center center;
     background-size: 16px 16px;
 }
 
 .icon-accessory {
-	background:url('../images/icons/accessory.png') no-repeat center center;
+    background:url('../images/icons/accessory.png') no-repeat center center;
     background-size: 16px 16px;
 }
 
 .icon-homekit {
-	background:url('../images/icons/homekit.png') no-repeat center center;
+    background:url('../images/icons/homekit.png') no-repeat center center;
     background-size: 16px 16px;
 }
