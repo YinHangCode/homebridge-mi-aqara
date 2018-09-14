@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Cache-Control" content="no-cache">
     <meta http-equiv="Expires" content="0">
-	<title>MiAqara Manage</title>
+    <title>MiAqara Manage</title>
     
     <script type="text/javascript" src="easyui/jquery.min.js"></script>
-	<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
+    <script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="easyui/themes/icon.css">
     
     <link rel="stylesheet" type="text/css" href="css/device_icon.css">
     <link rel="stylesheet" type="text/css" href="css/icon.css">
 </head>
 <body>
-	<h2>MiAqara Manage</h2>
-	<p>
+    <h2>MiAqara Manage</h2>
+    <p>
         <a href='https://github.com/YinHangCode/homebridge-mi-aqara' target="_blank">HomeBridge-Mi-Aqara</a>  By 
         <a href='https://github.com/YinHangCode' target="_blank">Mr.Yin</a> - QQ Group: 
         <a href='https://shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d' target="_blank">107927710</a>
@@ -29,7 +29,7 @@
         </div>
     </div>
     <br>
-	<div>
+    <div>
         <table id="treegrid_list" title="Healthy Accessory" class="easyui-treegrid" style="width:98%;height:800px"></table>
     </div>
     <br>
@@ -40,16 +40,16 @@
         var tgList = $('#treegrid_list');
         var gList = $('#grid_list');
 
-		var treegrid_list_toolbar = [{
-			text:'Expand to Gateway',
-			iconCls:'icon-gateway',
-			handler: () => {
+        var treegrid_list_toolbar = [{
+            text:'Expand to Gateway',
+            iconCls:'icon-gateway',
+            handler: () => {
                 tgList.treegrid('collapseAll');
             }
-		}, {
-			text:'Expand to Device',
-			iconCls:'icon-device',
-			handler: () => {
+        }, {
+            text:'Expand to Device',
+            iconCls:'icon-device',
+            handler: () => {
                 var gateways = tgList.treegrid('getRoots');
                 for(var gatewayIndex in gateways) {
                     tgList.treegrid('expand', gateways[gatewayIndex].id);
@@ -59,16 +59,16 @@
                     }
                 }
             }
-		}, {
-			text:'Expand to Accessory',
-			iconCls:'icon-accessory',
-			handler: () => {
+        }, {
+            text:'Expand to Accessory',
+            iconCls:'icon-accessory',
+            handler: () => {
                 tgList.treegrid('expandAll');
             }
-		}, '-', {
+        }, '-', {
             text:'Refresh',
-			iconCls:'icon-reload',
-			handler: () => {
+            iconCls:'icon-reload',
+            handler: () => {
                 tgList.treegrid('reload');
             }
         }];
@@ -219,20 +219,20 @@
             $('#discoveryResult').html('loading');
             
             $.ajax({
-				url: "./discovery.action",
-				async: true,
-				dataType: 'json',
-				timeout: 180000,
-				type: 'get',
-				data: null,
-				processData: false,
-				contentType: false,
-				cache: false,
-				success: function(data, textStatus, jqXHR) {
-					$('#discoveryBtn').linkbutton('enable');
+                url: "./discovery.action",
+                async: true,
+                dataType: 'json',
+                timeout: 180000,
+                type: 'get',
+                data: null,
+                processData: false,
+                contentType: false,
+                cache: false,
+                success: function(data, textStatus, jqXHR) {
+                    $('#discoveryBtn').linkbutton('enable');
                     $('#discoveryResult').html(data['result'] + ": " + data['date']);
                     tgList.treegrid('reload');
-				},
+                },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     console.info(XMLHttpRequest.status);
                     console.info(XMLHttpRequest.readyState);
@@ -240,9 +240,9 @@
                     $('#discoveryBtn').linkbutton('enable');
                     $('#discoveryResult').html('error');
                 }
-			});
+            });
         });
-	</script>
+    </script>
 </body>
 
 </html>
