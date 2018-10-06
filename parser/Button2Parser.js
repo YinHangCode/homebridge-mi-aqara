@@ -16,7 +16,7 @@ class Button2Parser extends DeviceParser {
         }
     }
 }
-Button2Parser.modelName = ['sensor_switch', 'sensor_switch.aq2'];
+Button2Parser.modelName = ['sensor_switch', 'sensor_switch.aq2', 'sensor_switch.aq3'];
 module.exports = Button2Parser;
 
 class Button2StatelessProgrammableSwitchParser extends AccessoryParser {

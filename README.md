@@ -72,7 +72,7 @@ Aqara is a ZigBee gateway with a few sensors.
 |17|ElectricCurtain(电动窗帘)|curtain|
 |18|ContactSensor2(门磁感应第二代)|sensor_magnet.aq2|
 |19|MotionSensor2(人体感应第二代)|sensor_motion.aq2|
-|20|Button2(按钮第二代)|sensor_switch<br>sensor_switch.aq2|
+|20|Button2(按钮第二代)|sensor_switch<br>sensor_switch.aq2<br>sensor_switch.aq3|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|
 |22|WaterDetector(水浸传感器)|sensor_wleak.aq1|
 |23|Lock(门锁)|lock.aq1|
@@ -796,6 +796,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.7.2 (2018-10-xx)
+1. add support for Button2 'sensor_switch.aq3' type.   
 ### 0.7.1 (2018-09-14)
 1. fixed bug that delete orphan accessory list item fail in http web manage.   
 ### 0.7.0 (2018-09-13)
