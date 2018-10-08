@@ -12,11 +12,11 @@ class Button2Parser extends DeviceParser {
             'Button2_StatelessProgrammableSwitch': Button2StatelessProgrammableSwitchParser,
             'Button2_Switch_VirtualSinglePress': Button2SwitchVirtualSinglePressParser,
             'Button2_Switch_VirtualDoublePress': Button2SwitchVirtualDoublePressParser
-            // 'Button_Switch_VirtualLongPress': ButtonSwitchVirtualLongPressParser
+            // 'Button_Switch_VirtualLongPress': Button2SwitchVirtualLongPressParser
         }
     }
 }
-Button2Parser.modelName = ['sensor_switch', 'sensor_switch.aq2', 'sensor_switch.aq3'];
+Button2Parser.modelName = ['sensor_switch.aq2'];
 module.exports = Button2Parser;
 
 class Button2StatelessProgrammableSwitchParser extends AccessoryParser {
@@ -97,7 +97,7 @@ class Button2SwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
-            'Model': 'Button',
+            'Model': 'Button 2',
             'SerialNumber': deviceSid
         };
     }
@@ -124,9 +124,9 @@ class Button2SwitchVirtualSinglePressParser extends Button2SwitchVirtualBasePres
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"click"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"click"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"click"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"click"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -155,9 +155,9 @@ class Button2SwitchVirtualDoublePressParser extends Button2SwitchVirtualBasePres
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"double_click"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"double_click"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"double_click"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"double_click"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -186,9 +186,9 @@ class Button2SwitchVirtualDoublePressParser extends Button2SwitchVirtualBasePres
         // var command = null;
         // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         // if(1 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"long_click_press"}}"';
+            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"long_click_press"}}';
         // } else if(2 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"long_click_press"}]}"';
+            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"long_click_press"}]}';
         // } else {
         // }
         // var newObj = JSON.parse(command);
