@@ -78,9 +78,9 @@ Aqara is a ZigBee gateway with a few sensors.
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|
 |22|WaterDetector(水浸传感器)|sensor_wleak.aq1|
 |23|Lock(门锁)|lock.aq1|
-|24|AcPartner(空调伴侣第三代)|acpartner.v3|
-|25|Button3(按钮第三代)|sensor_switch.aq3|
-|26|DuplexButton862(86型无线双按钮开关第二代)|remote.b286acn01|
+|24|AcPartner(空调伴侣升级版)|acpartner.v3|
+|25|Button3(按钮第二代升级版)|sensor_switch.aq3|
+|26|DuplexButton862(86型无线双按钮开关升级版)|remote.b286acn01|
 
 
 ## Pre-Requirements
@@ -303,9 +303,9 @@ detail:
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
 |23|Lock(门锁)|Lock_MotionSensor<br>Lock_MotionSensor_{UserID}|
-|24|AcPartner(空调伴侣第三代)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
-|25|Button3(按钮第三代)|Button3_StatelessProgrammableSwitch<br>Button3_StatelessProgrammableSwitch_Shake<br>Button3_Switch_VirtualSinglePress<br>Button3_Switch_VirtualDoublePress<br>Button3_Switch_VirtualShare|
-|26|DuplexButton862(86型无线双按钮开关第二代)|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
+|24|AcPartner(空调伴侣升级版)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
+|25|Button3(按钮第二代升级版)|Button3_StatelessProgrammableSwitch<br>Button3_StatelessProgrammableSwitch_Shake<br>Button3_Switch_VirtualSinglePress<br>Button3_Switch_VirtualDoublePress<br>Button3_Switch_VirtualShare|
+|26|DuplexButton862(86型无线双按钮开关升级版|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
 
 
 About Global:   
