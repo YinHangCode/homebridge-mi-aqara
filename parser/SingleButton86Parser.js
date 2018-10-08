@@ -127,9 +127,9 @@ class SingleButton86SwitchVirtualSinglePressParser extends SingleButton86SwitchV
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"click"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"click"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"click"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"click"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -158,9 +158,9 @@ class SingleButton86SwitchVirtualDoublePressParser extends SingleButton86SwitchV
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"double_click"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"double_click"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"double_click"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"double_click"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -189,9 +189,9 @@ class SingleButton86SwitchVirtualDoublePressParser extends SingleButton86SwitchV
         // var command = null;
         // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
         // if(1 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"long_click_press"}}"';
+            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"long_click_press"}}';
         // } else if(2 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"long_click_press"}]}"';
+            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"long_click_press"}]}';
         // } else {
         // }
         // var newObj = JSON.parse(command);
