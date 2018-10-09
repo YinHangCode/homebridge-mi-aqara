@@ -2,30 +2,30 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 const SwitchVirtualBasePressParser = require('./SwitchVirtualBasePressParser');
 
-class DuplexButton86Parser extends DeviceParser {
+class DuplexButton862Parser extends DeviceParser {
     constructor(platform) {
         super(platform);
     }
     
     getAccessoriesParserInfo() {
         return {
-            'DuplexButton86_StatelessProgrammableSwitch_Left': DuplexButton86StatelessProgrammableSwitchLeftParser,
-            'DuplexButton86_Switch_VirtualSinglePress_Left': DuplexButton86SwitchVirtualSinglePressLeftParser,
-         // 'DuplexButton86_Switch_VirtualDoublePress_Left': DuplexButton86SwitchVirtualDoublePressLeftParser,
-         // 'DuplexButton86_Switch_VirtualLongPress_Left': DuplexButton86SwitchVirtualLongPressLeftParser,
-            'DuplexButton86_StatelessProgrammableSwitch_Right': DuplexButton86StatelessProgrammableSwitchRightParser,
-            'DuplexButton86_Switch_VirtualSinglePress_Right': DuplexButton86SwitchVirtualSinglePressRightParser,
-         // 'DuplexButton86_Switch_VirtualDoublePress_Right': DuplexButton86SwitchVirtualDoublePressRightParser,
-         // 'DuplexButton86_Switch_VirtualLongPress_Right': DuplexButton86SwitchVirtualLongPressRightParser,
-            'DuplexButton86_StatelessProgrammableSwitch_Both': DuplexButton86StatelessProgrammableSwitchBothParser,
-            'DuplexButton86_Switch_VirtualSinglePress_Both': DuplexButton86SwitchVirtualSinglePressBothPressParser
+            'DuplexButton862_StatelessProgrammableSwitch_Left': DuplexButton862StatelessProgrammableSwitchLeftParser,
+            'DuplexButton862_Switch_VirtualSinglePress_Left': DuplexButton862SwitchVirtualSinglePressLeftParser,
+            'DuplexButton862_Switch_VirtualDoublePress_Left': DuplexButton862SwitchVirtualDoublePressLeftParser,
+         // 'DuplexButton862_Switch_VirtualLongPress_Left': DuplexButton862SwitchVirtualLongPressLeftParser,
+            'DuplexButton862_StatelessProgrammableSwitch_Right': DuplexButton862StatelessProgrammableSwitchRightParser,
+            'DuplexButton862_Switch_VirtualSinglePress_Right': DuplexButton862SwitchVirtualSinglePressRightParser,
+            'DuplexButton862_Switch_VirtualDoublePress_Right': DuplexButton862SwitchVirtualDoublePressRightParser,
+         // 'DuplexButton862_Switch_VirtualLongPress_Right': DuplexButton862SwitchVirtualLongPressRightParser,
+            'DuplexButton862_StatelessProgrammableSwitch_Both': DuplexButton862StatelessProgrammableSwitchBothParser,
+            'DuplexButton862_Switch_VirtualSinglePress_Both': DuplexButton862SwitchVirtualSinglePressBothPressParser
         }
     }
 }
-DuplexButton86Parser.modelName = ['86sw2', 'sensor_86sw2.aq1', 'sensor_86sw2'];
-module.exports = DuplexButton86Parser;
+DuplexButton862Parser.modelName = ['remote.b286acn01'];
+module.exports = DuplexButton862Parser;
 
-class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParser {
+class DuplexButton862StatelessProgrammableSwitchBaseParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
     }
@@ -37,7 +37,7 @@ class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParse
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
-            'Model': 'Duplex Button 86',
+            'Model': 'Duplex Button 86 2',
             'SerialNumber': deviceSid
         };
     }
@@ -68,7 +68,7 @@ class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParse
             var service = accessory.getService(that.Service.StatelessProgrammableSwitch);
             var programmableSwitchEventCharacteristic = service.getCharacteristic(that.Characteristic.ProgrammableSwitchEvent);
             programmableSwitchEventCharacteristic.setProps({
-                validValues: [0]
+                validValues: [0, 1]
             });
             var value = that.getProgrammableSwitchEventCharacteristicValue(jsonObj, null);
             if(null != value) {
@@ -80,7 +80,7 @@ class DuplexButton86StatelessProgrammableSwitchBaseParser extends AccessoryParse
     }
 }
 
-class DuplexButton86StatelessProgrammableSwitchLeftParser extends DuplexButton86StatelessProgrammableSwitchBaseParser {
+class DuplexButton862StatelessProgrammableSwitchLeftParser extends DuplexButton862StatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
         var value = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
@@ -104,7 +104,7 @@ class DuplexButton86StatelessProgrammableSwitchLeftParser extends DuplexButton86
     }
 }
 
-class DuplexButton86StatelessProgrammableSwitchRightParser extends DuplexButton86StatelessProgrammableSwitchBaseParser {
+class DuplexButton862StatelessProgrammableSwitchRightParser extends DuplexButton862StatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
         var value = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(jsonObj['sid']));
@@ -128,29 +128,49 @@ class DuplexButton86StatelessProgrammableSwitchRightParser extends DuplexButton8
     }
 }
 
-class DuplexButton86StatelessProgrammableSwitchBothParser extends DuplexButton86StatelessProgrammableSwitchBaseParser {
+class DuplexButton862StatelessProgrammableSwitchBothParser extends DuplexButton862StatelessProgrammableSwitchBaseParser {
     getProgrammableSwitchEventCharacteristicValue(jsonObj, defaultValue) {
         var value = this.getValueFrJsonObjData(jsonObj, 'dual_channel');
         
-        if(value === 'both_click') {
+        if(value === 'both_click' || value === 'click') {
             return this.Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS;
         } else {
             return defaultValue;
         }
     }
+    
+    parserAccessories(jsonObj) {
+        var that = this;
+        var deviceSid = jsonObj['sid'];
+        var uuid = that.getAccessoryUUID(deviceSid);
+        var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
+        if(accessory) {
+            var service = accessory.getService(that.Service.StatelessProgrammableSwitch);
+            var programmableSwitchEventCharacteristic = service.getCharacteristic(that.Characteristic.ProgrammableSwitchEvent);
+            programmableSwitchEventCharacteristic.setProps({
+                validValues: [0]
+            });
+            var value = that.getProgrammableSwitchEventCharacteristicValue(jsonObj, null);
+            if(null != value) {
+                programmableSwitchEventCharacteristic.updateValue(value);
+            }
+            
+            that.parserBatteryService(accessory, jsonObj);
+        }
+    }
 }
 
-class DuplexButton86SwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
+class DuplexButton862SwitchVirtualBasePressParser extends SwitchVirtualBasePressParser {
     getAccessoryInformation(deviceSid) {
         return {
             'Manufacturer': 'Aqara',
-            'Model': 'Duplex Button 86',
+            'Model': 'Duplex Button 86 2',
             'SerialNumber': deviceSid
         };
     }
 }
 
-class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
+class DuplexButton862SwitchVirtualSinglePressLeftParser extends DuplexButton862SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         var model = this.platform.getDeviceModelBySid(deviceSid);
         var command = null;
@@ -181,38 +201,38 @@ class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86Swi
     }
 }
 
-// class DuplexButton86SwitchVirtualDoublePressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
-    // getWriteCommand(deviceSid, value) {
-        // var model = this.platform.getDeviceModelBySid(deviceSid);
-        // var command = null;
-        // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
-        // if(1 == proto_version_prefix) {
-            // command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"double_click", "key": "${key}"}}';
-        // } else if(2 == proto_version_prefix) {
-            // command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"button_0":"double_click"}], "key": "${key}"}';
-        // } else {
-        // }
+class DuplexButton862SwitchVirtualDoublePressLeftParser extends DuplexButton862SwitchVirtualBasePressParser {
+    getWriteCommand(deviceSid, value) {
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_0":"double_click", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"button_0":"double_click"}], "key": "${key}"}';
+        } else {
+        }
         
-        // return command;
-    // }
+        return command;
+    }
     
-    // doSomething(jsonObj) {
-        // var deviceSid = jsonObj['sid'];
-        // var model = this.platform.getDeviceModelBySid(deviceSid);
-        // var command = null;
-        // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
-        // if(1 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"double_click"}}';
-        // } else if(2 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"double_click"}]}';
-        // } else {
-        // }
-        // var newObj = JSON.parse(command);
-        // this.platform.ParseUtil.parserAccessories(newObj);
-    // }
-// }
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_0":"double_click"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_0":"double_click"}]}';
+        } else {
+        }
+        var newObj = JSON.parse(command);
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
+}
 
-// class DuplexButton86SwitchVirtualLongPressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
+// class DuplexButton862SwitchVirtualLongPressLeftParser extends DuplexButton862SwitchVirtualBasePressParser {
     // getWriteCommand(deviceSid, value) {
         // var model = this.platform.getDeviceModelBySid(deviceSid);
         // var command = null;
@@ -243,7 +263,7 @@ class DuplexButton86SwitchVirtualSinglePressLeftParser extends DuplexButton86Swi
     // }
 // }
 
-class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86SwitchVirtualBasePressParser {
+class DuplexButton862SwitchVirtualSinglePressRightParser extends DuplexButton862SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         var model = this.platform.getDeviceModelBySid(deviceSid);
         var command = null;
@@ -274,38 +294,38 @@ class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86Sw
     }
 }
 
-// class DuplexButton86SwitchVirtualDoublePressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
-    // getWriteCommand(deviceSid, value) {
-        // var model = this.platform.getDeviceModelBySid(deviceSid);
-        // var command = null;
-        // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
-        // if(1 == proto_version_prefix) {
-            // command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_1":"double_click", "key": "${key}"}}';
-        // } else if(2 == proto_version_prefix) {
-            // command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"button_1":"double_click"}], "key": "${key}"}';
-        // } else {
-        // }
+class DuplexButton862SwitchVirtualDoublePressRightParser extends DuplexButton862SwitchVirtualBasePressParser {
+    getWriteCommand(deviceSid, value) {
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","data":{"channel_1":"double_click", "key": "${key}"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"write","model":"' + model + '","sid":"' + deviceSid + '","params":[{"button_1":"double_click"}], "key": "${key}"}';
+        } else {
+        }
         
-        // return command;
-    // }
+        return command;
+    }
     
-    // doSomething(jsonObj) {
-        // var deviceSid = jsonObj['sid'];
-        // var model = this.platform.getDeviceModelBySid(deviceSid);
-        // var command = null;
-        // var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
-        // if(1 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_1":"double_click"}}';
-        // } else if(2 == proto_version_prefix) {
-            // command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_1":"double_click"}]}';
-        // } else {
-        // }
-        // var newObj = JSON.parse(command);
-        // this.platform.ParseUtil.parserAccessories(newObj);
-    // }
-// }
+    doSomething(jsonObj) {
+        var deviceSid = jsonObj['sid'];
+        var model = this.platform.getDeviceModelBySid(deviceSid);
+        var command = null;
+        var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
+        if(1 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"channel_1":"double_click"}}';
+        } else if(2 == proto_version_prefix) {
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"button_1":"double_click"}]}';
+        } else {
+        }
+        var newObj = JSON.parse(command);
+        this.platform.ParseUtil.parserAccessories(newObj);
+    }
+}
 
-// class DuplexButton86SwitchVirtualLongPressLeftParser extends DuplexButton86SwitchVirtualBasePressParser {
+// class DuplexButton862SwitchVirtualLongPressRightParser extends DuplexButton862SwitchVirtualBasePressParser {
     // getWriteCommand(deviceSid, value) {
         // var model = this.platform.getDeviceModelBySid(deviceSid);
         // var command = null;
@@ -336,7 +356,7 @@ class DuplexButton86SwitchVirtualSinglePressRightParser extends DuplexButton86Sw
     // }
 // }
 
-class DuplexButton86SwitchVirtualSinglePressBothPressParser extends DuplexButton86SwitchVirtualBasePressParser {
+class DuplexButton862SwitchVirtualSinglePressBothPressParser extends DuplexButton862SwitchVirtualBasePressParser {
     getWriteCommand(deviceSid, value) {
         var model = this.platform.getDeviceModelBySid(deviceSid);
         var command = null;

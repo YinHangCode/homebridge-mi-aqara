@@ -49,6 +49,8 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/WaterDetector.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Lock.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/AcPartner.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button3.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexButton862.jpg)
 
 ## Supported Devices
 ||Device Name|Protocol Model Value|
@@ -56,7 +58,7 @@ Aqara is a ZigBee gateway with a few sensors.
 |1|Gateway(网关)|gateway<br>gateway.v3|
 |2|ContactSensor(门磁感应)|magnet<br>sensor_magnet|
 |3|MotionSensor(人体感应)|motion|
-|4|Button(按钮)|switch|
+|4|Button(按钮)|switch<br>sensor_switch|
 |5|TemperatureAndHumiditySensor(温度湿度传感器)|sensor_ht|
 |6|SingleSwitch(单按钮墙壁开关)|ctrl_neutral1|
 |7|DuplexSwitch(双按钮墙壁开关)|ctrl_neutral2|
@@ -72,11 +74,13 @@ Aqara is a ZigBee gateway with a few sensors.
 |17|ElectricCurtain(电动窗帘)|curtain|
 |18|ContactSensor2(门磁感应第二代)|sensor_magnet.aq2|
 |19|MotionSensor2(人体感应第二代)|sensor_motion.aq2|
-|20|Button2(按钮第二代)|sensor_switch<br>sensor_switch.aq2|
+|20|Button2(按钮第二代)|sensor_switch.aq2|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|
 |22|WaterDetector(水浸传感器)|sensor_wleak.aq1|
 |23|Lock(门锁)|lock.aq1|
-|24|AcPartner(空调伴侣)|acpartner.v3|
+|24|AcPartner(空调伴侣升级版)|acpartner.v3|
+|25|Button3(按钮第二代升级版)|sensor_switch.aq3|
+|26|DuplexButton862(86型无线双按钮开关升级版)|remote.b286acn01|
 
 
 ## Pre-Requirements
@@ -299,7 +303,10 @@ detail:
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|TemperatureAndHumiditySensor2_TemperatureSensor<br>TemperatureAndHumiditySensor2_HumiditySensor|
 |22|WaterDetector(水浸传感器)|WaterDetector_LeakSensor|
 |23|Lock(门锁)|Lock_MotionSensor<br>Lock_MotionSensor_{UserID}|
-|24|AcPartner(空调伴侣)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
+|24|AcPartner(空调伴侣升级版)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
+|25|Button3(按钮第二代升级版)|Button3_StatelessProgrammableSwitch<br>Button3_StatelessProgrammableSwitch_Shake<br>Button3_Switch_VirtualSinglePress<br>Button3_Switch_VirtualDoublePress<br>Button3_Switch_VirtualShare|
+|26|DuplexButton862(86型无线双按钮开关升级版)|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
+
 
 About Global:   
 Some similar configurations and repeated multiple copies are boring things. So I provided a global writing method.   
@@ -796,6 +803,10 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.7.2 (2018-10-xx)
+1. fixed bug that move 'sensor_switch' type form Button2 to Button.   
+2. add support for Button3(sensor_switch.aq3).   
+3. add support for DuplexButton862(remote.b286acn01).   
 ### 0.7.1 (2018-09-14)
 1. fixed bug that delete orphan accessory list item fail in http web manage.   
 ### 0.7.0 (2018-09-13)

@@ -226,9 +226,9 @@ class MagicSquareSwitchVirtualFlip90Parser extends MagicSquareSwitchVirtualBaseP
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"flip90"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"flip90"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"flip90"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"flip90"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -257,9 +257,9 @@ class MagicSquareSwitchVirtualFlip180Parser extends MagicSquareSwitchVirtualBase
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"flip180"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"flip180"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"flip180"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"flip180"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -288,9 +288,9 @@ class MagicSquareSwitchVirtualMoveParser extends MagicSquareSwitchVirtualBasePar
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"move"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"move"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"move"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"move"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -319,9 +319,9 @@ class MagicSquareSwitchVirtualTapTwiceParser extends MagicSquareSwitchVirtualBas
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"tap_twice"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"tap_twice"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"tap_twice"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"tap_twice"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
@@ -350,9 +350,9 @@ class MagicSquareSwitchVirtualShakeAirParser extends MagicSquareSwitchVirtualBas
         var command = null;
         var proto_version_prefix = this.platform.getProtoVersionPrefixByProtoVersion(this.platform.getDeviceProtoVersionBySid(deviceSid));
         if(1 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"shake_air"}}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "data":{"status":"shake_air"}}';
         } else if(2 == proto_version_prefix) {
-            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"shake_air"}]}"';
+            command = '{"cmd":"report","model":"' + model + '","sid":"' + deviceSid + '", "params":[{"cube_status":"shake_air"}]}';
         } else {
         }
         var newObj = JSON.parse(command);
