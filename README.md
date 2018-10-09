@@ -803,7 +803,7 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
-### 0.7.2 (2018-10-xx)
+### 0.7.2 (2018-10-09)
 1. fixed bug that move 'sensor_switch' type form Button2 to Button.   
 2. add support for Button3(sensor_switch.aq3).   
 3. add support for DuplexButton862(remote.b286acn01).   
