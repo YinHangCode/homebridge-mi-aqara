@@ -127,3 +127,8 @@
     background:url('../images/deviceIcons/DuplexButton862.png') no-repeat center center;
     background-size: 16px 16px;
 }
+
+.icon-device-VibrationSensor {
+    background:url('../images/deviceIcons/Vibration.png') no-repeat center center;
+    background-size: 16px 16px;
+}
