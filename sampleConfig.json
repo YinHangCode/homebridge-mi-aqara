@@ -243,6 +243,17 @@
                 "Lock_MotionSensor_196608": {
                     "name": "Card"
                 }
+            },
+            "158d0001000025": {
+                "VibrationSensor_MotionSensor_Vibrate": {
+                    "name": "Vibrate"
+                },
+                "VibrationSensor_MotionSensor_Tilt": {
+                    "name": "Tilt"
+                },
+                "VibrationSensor_MotionSensor_FreeFall": {
+                    "name": "FreeFall"
+                }
             }
         }
     }]

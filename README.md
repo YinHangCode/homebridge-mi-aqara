@@ -51,6 +51,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/AcPartner.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button3.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexButton862.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Vibration.jpg)
 
 ## Supported Devices
 ||Device Name|Protocol Model Value|
@@ -81,6 +82,7 @@ Aqara is a ZigBee gateway with a few sensors.
 |24|AcPartner(空调伴侣升级版)|acpartner.v3|
 |25|Button3(按钮第二代升级版)|sensor_switch.aq3|
 |26|DuplexButton862(86型无线双按钮开关升级版)|remote.b286acn01|
+|27|VibrationSensor(动静贴)|vibration|
 
 
 ## Pre-Requirements
@@ -306,6 +308,7 @@ detail:
 |24|AcPartner(空调伴侣升级版)|AcPartner_LightSensor<br>AcPartner_Switch_JoinPermission|
 |25|Button3(按钮第二代升级版)|Button3_StatelessProgrammableSwitch<br>Button3_StatelessProgrammableSwitch_Shake<br>Button3_Switch_VirtualSinglePress<br>Button3_Switch_VirtualDoublePress<br>Button3_Switch_VirtualShare|
 |26|DuplexButton862(86型无线双按钮开关升级版)|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
+|27|VibrationSensor(动静贴)|VibrationSensor_MotionSensor_Vibrate<br>VibrationSensor_MotionSensor_Tilt<br>VibrationSensor_MotionSensor_FreeFall|
 
 
 About Global:   
@@ -803,6 +806,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.7.3 (2018-10-27)
+1. add support for VibrationSensor.   
 ### 0.7.2 (2018-10-09)
 1. fixed bug that move 'sensor_switch' type form Button2 to Button.   
 2. add support for Button3(sensor_switch.aq3).   
