@@ -846,7 +846,7 @@ plugin will send these topic:
 plugin will accept these topic:   
 1. `/homebridge-mi-aqara/write`: write device.   
 about write key, send the ${key} is okay, this plugin will automatically calculate the key value, for example:   
-`{"cmd": "write", "model": "ctrl_neutral2", "sid": "158d00014a1bcd", "params": [{"channel_0": "off"}],"key": "${key}"}`
+`{"cmd": "write", "model": "ctrl_neutral2", "sid": "158d00014a1bcd", "params": [{"channel_0": "off"}], "key": "${key}"}`
     
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
