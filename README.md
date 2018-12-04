@@ -836,9 +836,9 @@ Config items description:
     
 plugin will send these topic:   
 1. `/homebridge-mi-aqara`: all message.   
-2. `/homebridge-mi-aqara/{cmd}`: all message after {cmd} filter.   
-3. `/homebridge-mi-aqara/{sid}`: all message after {sid} filter.   
-4. `/homebridge-mi-aqara/{sid}/{cmd}`: all message after {sid} and {cmd} filter.   
+2. `/homebridge-mi-aqara/{cmd}`: all message after `{cmd}` filter.   
+3. `/homebridge-mi-aqara/{sid}`: all message after `{sid}` filter.   
+4. `/homebridge-mi-aqara/{sid}/{cmd}`: all message after `{sid}` and `{cmd}` filter.   
    
 `{cmd}` is iam/get_id_list_ack/discovery_rsp/write_ack/write_rsp/read_ack/read_rsp/report.   
 `{sid}` is device's sid.   
