@@ -839,12 +839,13 @@ plugin will send these topic:
 2. `/homebridge-mi-aqara/{cmd}`: all message after {cmd} filter.   
 3. `/homebridge-mi-aqara/{sid}`: all message after {sid} filter.   
 4. `/homebridge-mi-aqara/{sid}/{cmd}`: all message after {sid} and {cmd} filter.   
+   
 `{cmd}` is iam/get_id_list_ack/discovery_rsp/write_ack/write_rsp/read_ack/read_rsp/report.   
 `{sid}` is device's sid.   
    
-plugin accept these topic:   
+plugin will accept these topic:   
 1. `/homebridge-mi-aqara/write`: write device.   
-about write key, Send the ${key} is okay, this plugin will automatically calculate the key value, for example:   
+about write key, send the ${key} is okay, this plugin will automatically calculate the key value, for example:   
 ```
 {"cmd": "write", "model": "ctrl_neutral2", "sid": "158d00014a1bcd", "params": [{"channel_0": "off"}],"key": "${key}"}
 ```
