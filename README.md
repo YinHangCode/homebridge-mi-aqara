@@ -8,10 +8,10 @@ Thanks for
 [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), 
 [licuhui](https://github.com/licuhui), 
 [攀旺智能](https://pwzn.taobao.com/), 
-[瀚思彼岸论坛](https://bbs.hassbian.com/), 
 [magaHH](https://github.com/magaHH), 
 [isundaylee](https://github.com/isundaylee), 
 [ileler](https://github.com/ileler), 
+[myriky](https://github.com/myriky), 
 all other developer and testers.   
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
