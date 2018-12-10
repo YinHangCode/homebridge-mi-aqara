@@ -8,6 +8,8 @@ const express = require('express');
 const session = require("express-session");
 const bodyParser = require('body-parser');
 
+const mqtt = require("mqtt");
+
 const packageFile = require("./package.json");
 const LogUtil = require('./lib/LogUtil');
 const ConfigUtil = require('./lib/ConfigUtil');
@@ -25,6 +27,8 @@ const serverAqaraLANProtocolSocket = dgram.createSocket({
 const serverAqaraLANProtocolMulticastAddress = '224.0.0.50';
 const serverAqaraLANProtocolMulticastPort = 4321;
 const serverAqaraLANProtocolServerPort = 9898;
+
+const serverMQTTClientPrefix = "/homebridge-mi-aqara";
 
 var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
 
@@ -62,6 +66,7 @@ function MiAqaraPlatform(log, config, api) {
     this._promises = {};
     this.initServerAqaraLANProtocol();
     this.initServerMiAqaraManage();
+    this.initServerMQTTClient();
 
     this.doRestThings(api);
     
@@ -194,6 +199,49 @@ MiAqaraPlatform.prototype.initServerAqaraLANProtocol = function() {
     serverAqaraLANProtocolSocket.on('message', this.parseMessage.bind(this));
 
     serverAqaraLANProtocolSocket.bind(serverAqaraLANProtocolServerPort);
+}
+
+MiAqaraPlatform.prototype.initServerMQTTClient = function() {
+    var that = this;
+    
+    var mqttCfg = that.ConfigUtil.getMQTTConfig();
+    if(mqttCfg) {
+        var mqttHost = "mqtt://" + (mqttCfg && mqttCfg['server'] || "127.0.0.1");
+        var mqttUsername = mqttCfg && mqttCfg['username'] || "mqtt";
+        var mqttPassword = mqttCfg && mqttCfg['password'] || "mqtt";
+        var mqttOptions = {
+            clientId: 'mqttjs_' + Math.random().toString(16).substr(2, 8),
+            username: mqttUsername,
+            password: mqttPassword
+        };
+        try {
+            that.mqttClient = mqtt.connect(mqttHost, mqttOptions);
+            that.mqttClient.subscribe(serverMQTTClientPrefix + "/write");
+            that.mqttClient.on('message', (topic, message) => {
+                if(topic === serverMQTTClientPrefix + "/write") {
+                    try {
+                        var msgObj = JSON.parse(message);
+                        var msg = message.toString();
+
+                        var cmd = msgObj['cmd'];
+                        var sid = msgObj['sid'];
+                        if(cmd === "write" && sid) {
+                            that.sendWriteCommandWithoutFeedback(sid, msg, {});
+                            that.log.debug("(MQTT)(Revc Success)Topic: " + topic + ", Message: " + message);
+                        } else {
+                            that.log.error("(MQTT)(Revc Fail: cmd or sid is empty)Topic: " + topic + ", Message: " + message);
+                        }
+                    } catch (ex) {
+                        that.log.error("(MQTT)(Revc Fail: " + ex + ")Topic: " + topic + ", Message: " + message);
+                    }
+                }
+            });
+            that.log.info('MQTT client connect success.');
+        } catch(e) {
+            that.mqttClient = null;
+            that.log.error('MQTT client connect fail: ' + e);
+        }
+    }
 }
 
 MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
@@ -340,10 +388,39 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
     }
 }
 
-MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
+MiAqaraPlatform.prototype.sendMQTTMessage4ParseMessage = function(msg, rinfo) {
+    var that = this;
+    
+    var jsonObj = JSON.parse(msg);
+    var cmd = jsonObj['cmd'];
+    var sid = jsonObj['sid'];
+    
+    // delete this filter if you need heartbeat
+    if (cmd === 'heartbeat') {
+        return;
+    }
+    
+    that.mqttClient.publish(serverMQTTClientPrefix, msg);
+    that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + ", Message: " + msg);
+    
+    that.mqttClient.publish(serverMQTTClientPrefix + "/" + cmd, msg);
+    that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + "/" + cmd + ", Message: " + msg);
+    
+    if(sid) {
+        that.mqttClient.publish(serverMQTTClientPrefix + "/" + sid, msg);
+        that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + "/" + sid + ", Message: " + msg);
+        
+        that.mqttClient.publish(serverMQTTClientPrefix + "/" + sid + "/" + cmd, msg);
+        that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + "/" + sid + "/" + cmd + ", Message: " + msg);
+    }
+}
+
+MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
     var that = this;
 
-//  that.log.debug(msg);
+    //  that.log.debug(msg);
+    
+    // check message
     var jsonObj;
     try {
         jsonObj = JSON.parse(msg);
@@ -352,6 +429,12 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo){
         return;
     }
     
+    // send mqtt message
+    if(that.mqttClient) {
+        that.sendMQTTMessage4ParseMessage(msg, rinfo);
+    }
+    
+    // parse message
     var cmd = jsonObj['cmd'];
     if (cmd === 'iam' || cmd === 'virtual_iam') {
         that.log.debug("[Revc]" + msg);

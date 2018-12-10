@@ -105,9 +105,10 @@ npm install -g homebridge-mi-aqara
 |:-:|:-|:-|:-|:-|:-|
 |1|platform|True|String||It must be 'MiAqaraPlatform'|
 |2|[gateways](#gateways-configuration)|True|Object|set gateway information.|{ "6409802da3b3": "02i44k56zrgg578b" }|
-|3|[bindAddress](#bindaddress-configuration)|False|String|specified network.|"10.0.0.1"|
+|3|[bindAddress](#bindaddress-configuration)|False|String|specified network.|"10.0.1.1"|
 |4|[defaultValue](#defaultvalue-configuration)|False|Object|set device default value.||
 |5|[manage](#manage-configuration)|False|Object|open manage and manage configs.|{ "port": 11128, "password": "107927710" }|
+|6|[mqtt](#mqtt-configuration)|False|Object|open mqtt and mqtt configs.|{ "username": "mqtt", "password": "107927710" }|
 
 For more information about config, Please refer to file `sampleConfig.json`.   
 
@@ -193,7 +194,7 @@ If your device(which running homebridge) has multiple network, please add the bi
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "bindAddress": "10.0.0.1",
+        "bindAddress": "10.0.1.1",
         "gateways": {
             "6409802da3b3": "02i44k56zrgg578b",
             "f0b4299a5b2b": "2F92E7DA90C66B86",
@@ -770,7 +771,6 @@ Obviously, this is not easy to use. So version 0.7.0 added http web manage(if yo
 {
     "platforms": [{
         "platform": "MiAqaraPlatform",
-        "bindAddress": "10.0.0.1",
         "manage": {
             "port": 11128,
             "password": "107927710"
@@ -792,6 +792,62 @@ Config items description:
     
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/httpWebManage.png)
     
+### mqtt configuration
+config add these:   
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "mqtt": {
+        },
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
+    }]
+}
+```
+Or
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "mqtt": {
+            "server": "10.0.1.1",
+            "username": "mqtt",
+            "password": "mqtt"
+        },
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
+    }]
+}
+```
+Config items description:   
+
+||Name|Required|Value Type|Description|Default Value|Value Example|
+|:-:|:-|:-|:-|:-|:-|:-|
+|1|server|False|String|set mqtt server ip.|"127.0.0.1"|"10.0.1.1"|
+|2|username|False|String|set mqtt username.|"mqtt"|"mqtt"|
+|3|password|False|String|set mqtt password.|"mqtt"|"mqtt"|
+    
+plugin will send these topic:   
+1. `/homebridge-mi-aqara`: all message.   
+2. `/homebridge-mi-aqara/{cmd}`: all message after `{cmd}` filter.   
+3. `/homebridge-mi-aqara/{sid}`: all message after `{sid}` filter.   
+4. `/homebridge-mi-aqara/{sid}/{cmd}`: all message after `{sid}` and `{cmd}` filter.   
+   
+`{cmd}` is iam/get_id_list_ack/discovery_rsp/write_ack/write_rsp/read_ack/read_rsp/report.   
+`{sid}` is device's sid.   
+   
+plugin will accept these topic:   
+1. `/homebridge-mi-aqara/write`: write device.   
+about write key, send the `${key}` is okay, this plugin will automatically calculate the key value, for example:   
+`{"cmd": "write", "model": "ctrl_neutral2", "sid": "158d00014a1bcd", "params": [{"channel_0": "off"}], "key": "${key}"}`
+    
 ## Some explanation
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
 SingleButton86/DuplexButton86(Left, Right, Both) StatelessProgrammableSwitch only support SinglePress.   
@@ -806,6 +862,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.8.0 (2018-11-04)
+1. add mqtt support.   
 ### 0.7.3 (2018-10-27)
 1. add support for VibrationSensor.   
 ### 0.7.2 (2018-10-09)
@@ -819,7 +877,7 @@ echo [] > cachedAccessories
 2. fixed bug that sometimes Gateway, AcPartner and MotionSensor2 light senor no response.   
 3. fixed bug that MagicSquare Rotate StatelessProgrammableSwitch not work.   
 4. fixed bug that crash when auto remove accessory.   
-5. add http web manage.    
+5. add http web manage.   
 ### 0.6.9 (2018-06-23)
 1. fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
 2. fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
