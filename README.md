@@ -2,9 +2,9 @@
 [![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
 [![npm version](https://img.shields.io/badge/releases-0.8.0-blue.svg)](https://github.com/YinHangCode/homebridge-mi-aqara)
 [![npm version](https://img.shields.io/badge/dev-0.8.0-yellow.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/tree/dev)
-[![npm version](https://img.shields.io/badge/donate-AliPay-yellow.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Donate-AliPay.jpg)
-[![npm version](https://img.shields.io/badge/donate-WeChat-yellow.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Donate-WeChat.jpg)
-[![npm version](https://img.shields.io/badge/donate-PayPal-yellow.svg)](https://www.paypal.me/yhdeserteagle)
+[![npm version](https://img.shields.io/badge/donate-AliPay-green.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Donate-AliPay.jpg)
+[![npm version](https://img.shields.io/badge/donate-WeChat-green.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Donate-WeChat.jpg)
+[![npm version](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.me/yhdeserteagle)
 
 homebridge plugin for XiaoMi Aqara plugin.   
 
