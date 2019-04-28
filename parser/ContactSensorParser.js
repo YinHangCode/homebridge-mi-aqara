@@ -1,5 +1,7 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
+const EveUtil = require('../lib/EveUtil.js');
+const moment = require('moment');
 
 class ContactSensorParser extends DeviceParser {
     constructor(platform) {
@@ -18,6 +20,13 @@ module.exports = ContactSensorParser;
 class ContactSensorContactSensorParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
+        
+        this.FakeGatoHistoryService = require('fakegato-history')(platform.api);        
+        this.HBpath = platform.api.user.storagePath()+'/accessories';
+        this.log = platform.log.log
+        
+        //EVE
+        EveUtil.registerWith(platform.api.hap);
     }
     
     getAccessoryCategory(deviceSid) {
@@ -57,9 +66,64 @@ class ContactSensorContactSensorParser extends AccessoryParser {
         if(accessory) {
             var service = accessory.getService(that.Service.ContactSensor);
             var contactSensorStateCharacteristic = service.getCharacteristic(that.Characteristic.ContactSensorState);
+            
+            if(!service.testCharacteristic(that.Characteristic.LastActivation))
+              service.addCharacteristic(that.Characteristic.LastActivation);
+              
+            if(!service.testCharacteristic(that.Characteristic.TimesOpened))
+              service.addCharacteristic(that.Characteristic.TimesOpened);
+              
+            if(!service.testCharacteristic(that.Characteristic.OpenDuration))
+              service.addCharacteristic(that.Characteristic.OpenDuration);
+              
+            if(!service.testCharacteristic(that.Characteristic.ClosedDuration))
+              service.addCharacteristic(that.Characteristic.ClosedDuration);
+            
             var value = that.getContactSensorStateCharacteristicValue(jsonObj, null);
+            
+            if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
+
+            this.historyService = new this.FakeGatoHistoryService('door', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              this.historyService.log = this.log;
+            }
+            
             if(null != value) {
                 contactSensorStateCharacteristic.updateValue(value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
+                
+                value = value ? 0 : 1;
+                
+                if(value && !accessory.context.cacheValue){
+                
+                  accessory.context.timesOpened = accessory.context.timesOpened ? accessory.context.timesOpened : 0;
+                  
+                  accessory.context.timesOpened += 1;
+                
+                  accessory.context.cacheValue = true;
+                  
+                  let lastActivation = moment().unix() - this.historyService.getInitialTime();          
+                  let closeDuration = moment().unix() - this.historyService.getInitialTime();
+                
+                  service.getCharacteristic(that.Characteristic.LastActivation)
+                    .updateValue(lastActivation);
+                  
+                  service.getCharacteristic(that.Characteristic.ClosedDuration)
+                    .updateValue(closeDuration);
+                  
+                  service.getCharacteristic(that.Characteristic.TimesOpened)
+                    .updateValue(accessory.context.timesOpened);
+                
+                }
+                
+                if(!value && accessory.context.cacheValue){
+                  accessory.context.cacheValue = false;
+                  
+                  let openDuration = moment().unix() - this.historyService.getInitialTime();
+                  
+                  service.getCharacteristic(that.Characteristic.OpenDuration)
+                    .updateValue(openDuration);
+                }
+                
+                this.historyService.addEntry({time: moment().unix(), status:value});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
