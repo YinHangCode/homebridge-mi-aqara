@@ -1,5 +1,6 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
+const moment = require('moment');
 
 class TemperatureAndHumiditySensor2Parser extends DeviceParser {
     constructor(platform) {
@@ -20,6 +21,10 @@ module.exports = TemperatureAndHumiditySensor2Parser;
 class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
+        
+        this.FakeGatoHistoryService = require('fakegato-history')(platform.api);        
+        this.HBpath = platform.api.user.storagePath()+'/accessories';
+        this.log = platform.log.log
     }
     
     getAccessoryCategory(deviceSid) {
@@ -63,9 +68,17 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
                 maxValue: 80,
                 minValue: -40
             });
+            
+           if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
+
+            this.historyService = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              this.historyService.log = this.log;
+            }
+            
             var value = that.getCurrentTemperatureCharacteristicValue(jsonObj, null);
             if(null != value) {
                 currentTemperatureCharacteristic.updateValue(value);
+                this.historyService.addEntry({time: moment().unix(), temp:value, pressure:0, humidity:0});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
@@ -100,6 +113,10 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
 class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
+        
+        this.FakeGatoHistoryService = require('fakegato-history')(platform.api);        
+        this.HBpath = platform.api.user.storagePath()+'/accessories';
+        this.log = platform.log.log
     }
     
     getAccessoryCategory(deviceSid) {
@@ -139,9 +156,17 @@ class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser 
         if(accessory) {
             var service = accessory.getService(that.Service.HumiditySensor);
             var currentRelativeHumidityCharacteristic = service.getCharacteristic(that.Characteristic.CurrentRelativeHumidity);
+            
+           if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
+
+            this.historyService = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              this.historyService.log = this.log;
+            }
+            
             var value = that.getCurrentRelativeHumidityCharacteristicValue(jsonObj, null);
             if(null != value) {
                 currentRelativeHumidityCharacteristic.updateValue(value);
+                this.historyService.addEntry({time: moment().unix(), temp:0, pressure:0, humidity:value});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
