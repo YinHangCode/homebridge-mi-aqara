@@ -3,6 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const EveUtil = require('../lib/EveUtil.js');
 const moment = require('moment');
 
+const history = [];
+
 class MotionSensor2Parser extends DeviceParser {
     constructor(platform) {
         super(platform);
@@ -89,11 +91,13 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
               .on('set', (value, callback) => callback())
               .updateValue(5);
             
-           if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
-
-            this.historyService = new this.FakeGatoHistoryService('motion', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              this.historyService.log = this.log;
-            }
+           if(!history[accessory.displayName]){
+            
+              history[accessory.displayName] = new this.FakeGatoHistoryService('door', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              
+              history[accessory.displayName].log = this.log;
+          
+            } 
             
             var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
             if(null != value) {
@@ -103,7 +107,7 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
                 
                   this.cacheValue = true;
                 
-                  let lastActivation = moment().unix() - this.historyService.getInitialTime();
+                  let lastActivation = moment().unix() - history[accessory.displayName].getInitialTime();
                   service.getCharacteristic(that.Characteristic.LastActivation)
                   .updateValue(lastActivation);
                 
@@ -111,10 +115,8 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
                 
                 if(!value)
                   this.cacheValue = false;
-                  
-                value = value ? 1 : 0;
                 
-                this.historyService.addEntry({time: moment().unix(), status:value});
+                history[accessory.displayName].addEntry({time: moment().unix(), status:value});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
