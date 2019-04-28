@@ -867,6 +867,8 @@ mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak
 echo [] > cachedAccessories   
 
 ## Version Logs
+### 0.8.1 (2019-04-28)
+1. add fakegato-history. 
 ### 0.8.0 (2018-11-04)
 1. add mqtt support.   
 ### 0.7.3 (2018-10-27)
