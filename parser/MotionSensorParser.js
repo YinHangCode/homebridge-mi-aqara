@@ -1,5 +1,7 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
+const EveUtil = require('../lib/EveUtil.js');
+const moment = require('moment');
 
 class MotionSensorParser extends DeviceParser {
     constructor(platform) {
@@ -18,6 +20,14 @@ module.exports = MotionSensorParser;
 class MotionSensorMotionSensorParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
+        
+        this.FakeGatoHistoryService = require('fakegato-history')(platform.api);        
+        this.HBpath = platform.api.user.storagePath()+'/accessories';
+        this.log = platform.log.log
+        
+        //EVE
+        EveUtil.registerWith(platform.api.hap);
+        
     }
     
     getAccessoryCategory(deviceSid) {
@@ -57,9 +67,50 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
         if(accessory) {
             var service = accessory.getService(that.Service.MotionSensor);
             var motionDetectedCharacteristic = service.getCharacteristic(that.Characteristic.MotionDetected);
+            
+            if(!service.testCharacteristic(that.Characteristic.LastActivation))
+              service.addCharacteristic(that.Characteristic.LastActivation);
+              
+            if(!service.testCharacteristic(that.Characteristic.Sensitivity))
+              service.addCharacteristic(that.Characteristic.Sensitivity);
+              
+            service.getCharacteristic(that.Characteristic.Sensitivity)
+              .on('get', callback => callback(null, 0))
+              .on('set', (value, callback) => callback())
+              .updateValue(0);
+              
+            if(!service.testCharacteristic(that.Characteristic.Duration))
+              service.addCharacteristic(that.Characteristic.Duration);
+              
+            service.getCharacteristic(that.Characteristic.Duration)
+              .on('get', callback => callback(null, 5))
+              .on('set', (value, callback) => callback())
+              .updateValue(5);
+            
+           if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
+
+            this.historyService = new this.FakeGatoHistoryService('motion', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              this.historyService.log = this.log;
+            }
+            
             var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
             if(null != value) {
                 motionDetectedCharacteristic.updateValue(value);
+                
+                if(value && !accessory.context.cacheValue){
+                
+                  accessory.context.cacheValue = true;
+                
+                  let lastActivation = moment().unix() - this.historyService.getInitialTime();
+                  service.getCharacteristic(that.Characteristic.LastActivation)
+                  .updateValue(lastActivation);
+                
+                }
+                
+                if(!value)
+                  accessory.context.cacheValue = false;
+                
+                this.historyService.addEntry({time: moment().unix(), status:value});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
