@@ -1,5 +1,5 @@
 {
-  "name": "homebridge-mi-aqara",
+  "name": "homebridge-mi-aqara-fakegato",
   "version": "0.8.0", 
   "description": "XiaoMi Aqara plugins for HomeBridge(https://github.com/nfarina/homebridge).",
   "license": "GPL",
@@ -22,6 +22,8 @@
     "body-parser": "1.18.3",
     "express": "4.16.3",
     "express-session": "1.15.6",
-    "mqtt": "2.18.0"
+    "mqtt": "2.18.0",
+    "fakegato-history": "0.5.3",
+    "moment": "2.24.0"
   }
 }
