@@ -2,6 +2,8 @@ const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 const moment = require('moment');
 
+const history = [];
+
 class TemperatureAndHumiditySensorParser extends DeviceParser {
     constructor(platform) {
         super(platform);
@@ -69,16 +71,18 @@ class TemperatureAndHumiditySensorTemperatureSensorParser extends AccessoryParse
                 minValue: -40
             });
             
-            if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
-
-            this.historyService = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              this.historyService.log = this.log;
-            }
+            if(!history[accessory.displayName]){
+            
+              history[accessory.displayName] = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              
+              history[accessory.displayName].log = this.log;
+          
+            } 
             
             var value = that.getCurrentTemperatureCharacteristicValue(jsonObj, null);
             if(null != value) {
                 currentTemperatureCharacteristic.updateValue(value);
-                this.historyService.addEntry({time: moment().unix(), temp:value, pressure:0, humidity:0});
+                history[accessory.displayName].addEntry({time: moment().unix(), temp:value, pressure:0, humidity:0});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
@@ -158,16 +162,19 @@ class TemperatureAndHumiditySensorHumiditySensorParser extends AccessoryParser {
             var service = accessory.getService(that.Service.HumiditySensor);
             var currentRelativeHumidityCharacteristic = service.getCharacteristic(that.Characteristic.CurrentRelativeHumidity);
             
-           if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
-
-            this.historyService = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              this.historyService.log = this.log;
-            }
+           if(!history[accessory.displayName]){
+            
+              history[accessory.displayName] = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              
+              history[accessory.displayName].log = this.log;
+          
+            } 
             
             var value = that.getCurrentRelativeHumidityCharacteristicValue(jsonObj, null);
             if(null != value) {
                 currentRelativeHumidityCharacteristic.updateValue(value);
-                this.historyService.addEntry({time: moment().unix(), temp:0, pressure:0, humidity:value});
+
+                history[accessory.displayName].addEntry({time: moment().unix(), temp:0, pressure:0, humidity:value});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
