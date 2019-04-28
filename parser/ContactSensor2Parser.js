@@ -3,6 +3,8 @@ const AccessoryParser = require('./AccessoryParser');
 const EveUtil = require('../lib/EveUtil.js');
 const moment = require('moment');
 
+const history = [];
+
 class ContactSensor2Parser extends DeviceParser {
     constructor(platform) {
         super(platform);
@@ -81,11 +83,13 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
             
             var value = that.getContactSensorStateCharacteristicValue(jsonObj, null);
             
-            if(!this.historyService || (this.historyService && this.historyService.displayName.split(' History')[0] !== accessory.displayName)){
-
-            this.historyService = new this.FakeGatoHistoryService('door', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              this.historyService.log = this.log;
-            }
+            if(!history[accessory.displayName]){
+            
+              history[accessory.displayName] = new this.FakeGatoHistoryService('door', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
+              
+              history[accessory.displayName].log = this.log;
+          
+            } 
             
             if(null != value) {
                 contactSensorStateCharacteristic.updateValue(value ? that.Characteristic.ContactSensorState.CONTACT_DETECTED : that.Characteristic.ContactSensorState.CONTACT_NOT_DETECTED);
@@ -100,8 +104,8 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
                 
                   accessory.context.cacheValue = true;
                   
-                  let lastActivation = moment().unix() - this.historyService.getInitialTime();          
-                  let closeDuration = moment().unix() - this.historyService.getInitialTime();
+                  let lastActivation = moment().unix() - history[accessory.displayName].getInitialTime();          
+                  let closeDuration = moment().unix() - history[accessory.displayName].getInitialTime();
                 
                   service.getCharacteristic(that.Characteristic.LastActivation)
                     .updateValue(lastActivation);
@@ -117,13 +121,13 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
                 if(!value && accessory.context.cacheValue){
                   accessory.context.cacheValue = false;
                   
-                  let openDuration = moment().unix() - this.historyService.getInitialTime();
+                  let openDuration = moment().unix() - history[accessory.displayName].getInitialTime();
                   
                   service.getCharacteristic(that.Characteristic.OpenDuration)
                     .updateValue(openDuration);
                 }
                 
-                this.historyService.addEntry({time: moment().unix(), status:value});
+                history[accessory.displayName].addEntry({time: moment().unix(), status:value});
             }
             
             if(that.platform.ConfigUtil.getAccessorySyncValue(deviceSid, that.accessoryType)) {
