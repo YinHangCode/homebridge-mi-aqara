@@ -111,6 +111,8 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
                 
                 if(!value)
                   this.cacheValue = false;
+                  
+                value = value ? 1 : 0;
                 
                 this.historyService.addEntry({time: moment().unix(), status:value});
             }
