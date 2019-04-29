@@ -73,8 +73,7 @@ class TemperatureAndHumiditySensor2TemperatureSensorParser extends AccessoryPars
             
            if(!history[accessory.displayName]){
             
-              history[accessory.displayName] = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              
+              history[accessory.displayName] = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});              
               history[accessory.displayName].log = this.log;
           
             }
@@ -163,8 +162,7 @@ class TemperatureAndHumiditySensor2HumiditySensorParser extends AccessoryParser 
             
            if(!history[accessory.displayName]){
             
-              history[accessory.displayName] = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              
+              history[accessory.displayName] = new this.FakeGatoHistoryService('weather', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});             
               history[accessory.displayName].log = this.log;
           
             } 
