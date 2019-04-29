@@ -49,12 +49,6 @@ class ContactSensorContactSensorParser extends AccessoryParser {
         
         var service = new that.Service.ContactSensor(accessoryName);
         service.getCharacteristic(that.Characteristic.ContactSensorState);
-        
-        service.addCharacteristic(that.Characteristic.LastActivation);
-        service.addCharacteristic(that.Characteristic.TimesOpened);
-        service.addCharacteristic(that.Characteristic.OpenDuration);
-        service.addCharacteristic(that.Characteristic.ClosedDuration);
-        
         result.push(service);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
