@@ -50,11 +50,6 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
         
         var service = new that.Service.MotionSensor(accessoryName);
         service.getCharacteristic(that.Characteristic.MotionDetected);
-        
-        service.addCharacteristic(that.Characteristic.LastActivation);
-        service.addCharacteristic(that.Characteristic.Sensitivity);
-        service.addCharacteristic(that.Characteristic.Duration);
-        
         result.push(service);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
@@ -73,6 +68,7 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
             var service = accessory.getService(that.Service.MotionSensor);
+            
             var motionDetectedCharacteristic = service.getCharacteristic(that.Characteristic.MotionDetected);              
             var sensitivityCharacteristic = service.getCharacteristic(that.Characteristic.Sensitivity);              
             var durationCharacteristic = service.getCharacteristic(that.Characteristic.Duration);
