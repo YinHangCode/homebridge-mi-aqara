@@ -50,6 +50,11 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
         
         var service = new that.Service.MotionSensor(accessoryName);
         service.getCharacteristic(that.Characteristic.MotionDetected);
+        
+        service.addCharacteristic(that.Characteristic.LastActivation);
+        service.addCharacteristic(that.Characteristic.Sensitivity);
+        service.addCharacteristic(that.Characteristic.Duration);
+        
         result.push(service);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
@@ -68,33 +73,18 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
         var accessory = that.platform.AccessoryUtil.getByUUID(uuid);
         if(accessory) {
             var service = accessory.getService(that.Service.MotionSensor);
-            var motionDetectedCharacteristic = service.getCharacteristic(that.Characteristic.MotionDetected);
+            var motionDetectedCharacteristic = service.getCharacteristic(that.Characteristic.MotionDetected);              
+            var sensitivityCharacteristic = service.getCharacteristic(that.Characteristic.Sensitivity);              
+            var durationCharacteristic = service.getCharacteristic(that.Characteristic.Duration);
             
-            if(!service.testCharacteristic(that.Characteristic.LastActivation))
-              service.addCharacteristic(that.Characteristic.LastActivation);
-              
-            if(!service.testCharacteristic(that.Characteristic.Sensitivity))
-              service.addCharacteristic(that.Characteristic.Sensitivity);
-              
-            service.getCharacteristic(that.Characteristic.Sensitivity)
-              .on('get', callback => callback(null, 0))
-              .on('set', (value, callback) => callback())
-              .updateValue(0);
-              
-            if(!service.testCharacteristic(that.Characteristic.Duration))
-              service.addCharacteristic(that.Characteristic.Duration);
-              
-            service.getCharacteristic(that.Characteristic.Duration)
-              .on('get', callback => callback(null, 5))
-              .on('set', (value, callback) => callback())
-              .updateValue(5);
+            sensitivityCharacteristic.updateValue(0);
+            durationCharacteristic.updateValue(5);
             
-           if(!history[accessory.displayName]){
-            
-              history[accessory.displayName] = new this.FakeGatoHistoryService('motion', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              
-              history[accessory.displayName].log = this.log;
-          
+           if(!history[accessory.displayName]){            
+
+              history[accessory.displayName] = new this.FakeGatoHistoryService('motion', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});              
+              history[accessory.displayName].log = this.log;          
+
             } 
             
             var value = that.getMotionDetectedCharacteristicValue(jsonObj, null);
@@ -113,6 +103,8 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
                 
                 if(!value)
                   accessory.context.cacheValue = false;
+                  
+                value = value ? 1 : 0;
            
                 history[accessory.displayName].addEntry({time: moment().unix(), status:value});
             }
@@ -134,6 +126,23 @@ class MotionSensorMotionSensorParser extends AccessoryParser {
                         });
                     });
                 }
+                
+                if (sensitivityCharacteristic.listeners('get').length == 0) {
+                    sensitivityCharacteristic.on('get', callback => callback(null, 0));
+                }
+                
+                if (sensitivityCharacteristic.listeners('set').length == 0) {
+                    sensitivityCharacteristic.on('set', (value, callback) => callback());
+                }
+                
+                if (durationCharacteristic.listeners('get').length == 0) {
+                    durationCharacteristic.on('get', callback => callback(null, 5));
+                }
+                
+                if (durationCharacteristic.listeners('set').length == 0) {
+                    durationCharacteristic.on('set', (value, callback) => callback());
+                }
+                
             }
             
             that.parserBatteryService(accessory, jsonObj);
