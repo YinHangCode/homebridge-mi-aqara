@@ -49,6 +49,12 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
         
         var service = new that.Service.ContactSensor(accessoryName);
         service.getCharacteristic(that.Characteristic.ContactSensorState);
+        
+        service.addCharacteristic(that.Characteristic.LastActivation);
+        service.addCharacteristic(that.Characteristic.TimesOpened);
+        service.addCharacteristic(that.Characteristic.OpenDuration);
+        service.addCharacteristic(that.Characteristic.ClosedDuration);
+        
         result.push(service);
         
         var batteryService  = new that.Service.BatteryService(accessoryName);
@@ -69,24 +75,11 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
             var service = accessory.getService(that.Service.ContactSensor);
             var contactSensorStateCharacteristic = service.getCharacteristic(that.Characteristic.ContactSensorState);
             
-            if(!service.testCharacteristic(that.Characteristic.LastActivation))
-              service.addCharacteristic(that.Characteristic.LastActivation);
-              
-            if(!service.testCharacteristic(that.Characteristic.TimesOpened))
-              service.addCharacteristic(that.Characteristic.TimesOpened);
-              
-            if(!service.testCharacteristic(that.Characteristic.OpenDuration))
-              service.addCharacteristic(that.Characteristic.OpenDuration);
-              
-            if(!service.testCharacteristic(that.Characteristic.ClosedDuration))
-              service.addCharacteristic(that.Characteristic.ClosedDuration);
-            
             var value = that.getContactSensorStateCharacteristicValue(jsonObj, null);
             
             if(!history[accessory.displayName]){
             
-              history[accessory.displayName] = new this.FakeGatoHistoryService('door', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});
-              
+              history[accessory.displayName] = new this.FakeGatoHistoryService('door', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});              
               history[accessory.displayName].log = this.log;
           
             } 
@@ -98,10 +91,8 @@ class ContactSensor2ContactSensorParser extends AccessoryParser {
                 
                 if(value && !accessory.context.cacheValue){
                 
-                  accessory.context.timesOpened = accessory.context.timesOpened ? accessory.context.timesOpened : 0;
-                  
-                  accessory.context.timesOpened += 1;
-                
+                  accessory.context.timesOpened = accessory.context.timesOpened ? accessory.context.timesOpened : 0;                  
+                  accessory.context.timesOpened += 1;                
                   accessory.context.cacheValue = true;
                   
                   let lastActivation = moment().unix() - history[accessory.displayName].getInitialTime();          
