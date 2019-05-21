@@ -80,7 +80,7 @@ class MotionSensor2MotionSensorParser extends AccessoryParser {
             
            if(!history[accessory.displayName]){
             
-              history[accessory.displayName] = new this.FakeGatoHistoryService('door', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});              
+              history[accessory.displayName] = new this.FakeGatoHistoryService('motion', accessory, {storage:'fs',path:this.HBpath, disableTimer: false, disableRepeatLastData:false});              
               history[accessory.displayName].log = this.log;
           
             } 
