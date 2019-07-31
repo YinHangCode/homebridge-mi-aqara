@@ -57,6 +57,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button3.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexButton862.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Vibration.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtainHagl04.jpg)
 
 ## Supported Devices
 ||Device Name|Protocol Model Value|
@@ -88,6 +89,7 @@ Aqara is a ZigBee gateway with a few sensors.
 |25|Button3(按钮第二代升级版)|sensor_switch.aq3|
 |26|DuplexButton862(86型无线双按钮开关升级版)|remote.b286acn01|
 |27|VibrationSensor(动静贴)|vibration|
+|28|ElectricCurtainHagl04(电动窗帘锂电池版)|curtain.hagl04|
 
 
 ## Pre-Requirements
@@ -315,7 +317,7 @@ detail:
 |25|Button3(按钮第二代升级版)|Button3_StatelessProgrammableSwitch<br>Button3_StatelessProgrammableSwitch_Shake<br>Button3_Switch_VirtualSinglePress<br>Button3_Switch_VirtualDoublePress<br>Button3_Switch_VirtualShare|
 |26|DuplexButton862(86型无线双按钮开关升级版)|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
 |27|VibrationSensor(动静贴)|VibrationSensor_MotionSensor_Vibrate<br>VibrationSensor_MotionSensor_Tilt<br>VibrationSensor_MotionSensor_FreeFall|
-
+|28|ElectricCurtainHagl04(电动窗帘锂电池版)|ElectricCurtainHagl04_WindowCovering|
 
 About Global:   
 Some similar configurations and repeated multiple copies are boring things. So I provided a global writing method.   
