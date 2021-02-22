@@ -66,7 +66,7 @@ Aqara is a ZigBee gateway with a few sensors.
 |3|MotionSensor(人体感应)|motion|
 |4|Button(按钮)|switch<br>sensor_switch|
 |5|TemperatureAndHumiditySensor(温度湿度传感器)|sensor_ht|
-|6|SingleSwitch(单按钮墙壁开关)|ctrl_neutral1|
+|6|SingleSwitch(单按钮墙壁开关)|_neutractrll1|
 |7|DuplexSwitch(双按钮墙壁开关)|ctrl_neutral2|
 |8|SingleSwitchLN(单按钮墙壁开关零火版)|ctrl_ln1<br>ctrl_ln1.aq1|
 |9|DuplexSwitchLN(双按钮墙壁开关零火版)|ctrl_ln2<br>ctrl_ln2.aq1|

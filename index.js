@@ -2,7 +2,7 @@ const dgram = require('dgram');
 const crypto = require('crypto');
 
 const fs = require('fs');
-const path=require('path');
+const path = require('path');
 
 const express = require('express');
 const session = require("express-session");
@@ -32,13 +32,13 @@ const serverMQTTClientPrefix = "/homebridge-mi-aqara";
 
 var PlatformAccessory, Accessory, Service, Characteristic, UUIDGen;
 
-module.exports = function(homebridge) {
+module.exports = function (homebridge) {
     PlatformAccessory = homebridge.platformAccessory;
     Accessory = homebridge.hap.Accessory;
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
     UUIDGen = homebridge.hap.uuid;
-    
+
     homebridge.registerPlatform("homebridge-mi-aqara", "MiAqaraPlatform", MiAqaraPlatform, true);
 }
 
@@ -46,32 +46,32 @@ function MiAqaraPlatform(log, config, api) {
     if (null == config) {
         return;
     }
-    
+
     // Initialize
     this.Accessory = Accessory;
     this.PlatformAccessory = PlatformAccessory;
     this.Service = Service;
     this.Characteristic = Characteristic;
     this.UUIDGen = UUIDGen;
-    
+
     this.api = api;
     this.log = new LogUtil(null, log);
     this.ConfigUtil = new ConfigUtil(config);
-    
+
     this.GatewayUtil = new GatewayUtil();
     this.DeviceUtil = new DeviceUtil();
     this.AccessoryUtil = new AccessoryUtil();
     this.ParseUtil = new ParseUtil(this);
-    
+
     this._promises = {};
     this.initServerAqaraLANProtocol();
     this.initServerMiAqaraManage();
     this.initServerMQTTClient();
 
     this.doRestThings(api);
-    
+
     this.log.info("**************************************************************");
-    this.log.info("           MiAqaraPlatform v"+packageFile.version+" By YinHang");
+    this.log.info("           MiAqaraPlatform v" + packageFile.version + " By YinHang");
     this.log.info("  GitHub: https://github.com/YinHangCode/homebridge-mi-aqara  ");
     this.log.info("                                         QQ Group: 107927710  ");
     this.log.info("**************************************************************");
@@ -84,31 +84,31 @@ function MiAqaraPlatform(log, config, api) {
     }
 }
 
-MiAqaraPlatform.prototype.configureAccessory = function(accessory) {
+MiAqaraPlatform.prototype.configureAccessory = function (accessory) {
     var that = this;
-    
+
     accessory.reachable = true;
-    accessory.on('identify', function(paired, callback) {
+    accessory.on('identify', function (paired, callback) {
         that.log.debug(accessory.displayName + " Identify!!!");
     });
 
-    if(that.AccessoryUtil) {
+    if (that.AccessoryUtil) {
         that.AccessoryUtil.add(accessory);
     }
 }
 
-MiAqaraPlatform.prototype.doRestThings = function(api) {
+MiAqaraPlatform.prototype.doRestThings = function (api) {
     var that = this;
     if (api) {
         that.api = api;
 
-        that.api.on('didFinishLaunching', function() {
+        that.api.on('didFinishLaunching', function () {
             that.sendWhoisCommand();
 
             setInterval(() => {
                 that.sendWhoisCommand();
             }, 1 * 60 * 60 * 1000);
-            
+
             setInterval(() => {
                 that.autoRemoveAccessory();
             }, 1 * 60 * 60 * 1000);
@@ -118,75 +118,75 @@ MiAqaraPlatform.prototype.doRestThings = function(api) {
     }
 }
 
-MiAqaraPlatform.prototype.deleteDisableAccessories = function(sid, model) {
+MiAqaraPlatform.prototype.deleteDisableAccessories = function (sid, model) {
     var that = this;
     var accessoriesToRemove = [];
-    
+
     var uuids = that.ParseUtil.getAccessoriesUUID(sid, model);
-    for(var accessoryType in uuids) {
-        if(that.ConfigUtil.getAccessoryDisable(sid, accessoryType)) {
+    for (var accessoryType in uuids) {
+        if (that.ConfigUtil.getAccessoryDisable(sid, accessoryType)) {
             var accessory = that.AccessoryUtil.getByUUID(uuids[accessoryType]);
-            if(accessory) {
+            if (accessory) {
                 accessoriesToRemove.push(accessory);
             }
         }
     }
-    
+
     if (accessoriesToRemove.length > 0) {
         that.unregisterPlatformAccessories(accessoriesToRemove);
     }
 }
 
-MiAqaraPlatform.prototype.autoRemoveAccessory = function() {
+MiAqaraPlatform.prototype.autoRemoveAccessory = function () {
     var that = this;
     var accessoriesToRemove = [];
-    
+
     const autoRemoveDelta = 7 * 24 * 60 * 60 * 1000;
     var autoRemoveDevice = that.DeviceUtil.getAutoRemoveDevice(autoRemoveDelta);
-    for(var sid in autoRemoveDevice) {
+    for (var sid in autoRemoveDevice) {
         var device = autoRemoveDevice[sid];
         var deviceModel = device.model;
         var uuids = that.ParseUtil.getAccessoriesUUID(sid, deviceModel);
-        for(var accessoryType in uuids) {
+        for (var accessoryType in uuids) {
             var accessory = that.AccessoryUtil.getByUUID(uuids[accessoryType]);
-            if(accessory) {
+            if (accessory) {
                 accessoriesToRemove.push(accessory);
             }
         }
         that.DeviceUtil.remove(sid);
     }
-    
+
     if (accessoriesToRemove.length > 0) {
         that.unregisterPlatformAccessories(accessoriesToRemove);
-        
+
     }
 }
 
-MiAqaraPlatform.prototype.sendWhoisCommand = function() {
+MiAqaraPlatform.prototype.sendWhoisCommand = function () {
     var that = this;
     var hosts = that.ConfigUtil.getHosts();
     var gateways = that.ConfigUtil.getGateways();
-    if(Object.getOwnPropertyNames(hosts).length > 0) {
+    if (Object.getOwnPropertyNames(hosts).length > 0) {
         for (var key in hosts) {
             var vMsg = '{"cmd":"virtual_iam","sid":"' + key + '","port":"' + hosts[key]['port'] + '","ip":"' + hosts[key]['ip'] + '"}';
             that.parseMessage(vMsg, null);
         }
     }
-    if(Object.getOwnPropertyNames(hosts).length < Object.getOwnPropertyNames(gateways).length) {
+    if (Object.getOwnPropertyNames(hosts).length < Object.getOwnPropertyNames(gateways).length) {
         var whoisCommand = '{"cmd": "whois"}';
         that.log.debug("[Send]" + whoisCommand);
         serverAqaraLANProtocolSocket.send(whoisCommand, 0, whoisCommand.length, serverAqaraLANProtocolMulticastPort, serverAqaraLANProtocolMulticastAddress);
     }
 }
 
-MiAqaraPlatform.prototype.initServerAqaraLANProtocol = function() {
+MiAqaraPlatform.prototype.initServerAqaraLANProtocol = function () {
     var that = this;
-    
+
     // err - Error object, https://nodejs.org/api/errors.html
     serverAqaraLANProtocolSocket.on('error', (err) => {
         that.log.error('error, msg - %s, stack - %s\n', err.message, err.stack);
     });
-    
+
     serverAqaraLANProtocolSocket.on('listening', () => {
         if (null == that.ConfigUtil.getBindAddress()) {
             serverAqaraLANProtocolSocket.addMembership(serverAqaraLANProtocolMulticastAddress);
@@ -201,11 +201,11 @@ MiAqaraPlatform.prototype.initServerAqaraLANProtocol = function() {
     serverAqaraLANProtocolSocket.bind(serverAqaraLANProtocolServerPort);
 }
 
-MiAqaraPlatform.prototype.initServerMQTTClient = function() {
+MiAqaraPlatform.prototype.initServerMQTTClient = function () {
     var that = this;
-    
+
     var mqttCfg = that.ConfigUtil.getMQTTConfig();
-    if(mqttCfg) {
+    if (mqttCfg) {
         var mqttHost = "mqtt://" + (mqttCfg && mqttCfg['server'] || "127.0.0.1");
         var mqttUsername = mqttCfg && mqttCfg['username'] || "mqtt";
         var mqttPassword = mqttCfg && mqttCfg['password'] || "mqtt";
@@ -218,14 +218,14 @@ MiAqaraPlatform.prototype.initServerMQTTClient = function() {
             that.mqttClient = mqtt.connect(mqttHost, mqttOptions);
             that.mqttClient.subscribe(serverMQTTClientPrefix + "/write");
             that.mqttClient.on('message', (topic, message) => {
-                if(topic === serverMQTTClientPrefix + "/write") {
+                if (topic === serverMQTTClientPrefix + "/write") {
                     try {
                         var msgObj = JSON.parse(message);
                         var msg = message.toString();
 
                         var cmd = msgObj['cmd'];
                         var sid = msgObj['sid'];
-                        if(cmd === "write" && sid) {
+                        if (cmd === "write" && sid) {
                             that.sendWriteCommandWithoutFeedback(sid, msg, {});
                             that.log.debug("(MQTT)(Revc Success)Topic: " + topic + ", Message: " + message);
                         } else {
@@ -237,19 +237,19 @@ MiAqaraPlatform.prototype.initServerMQTTClient = function() {
                 }
             });
             that.log.info('MQTT client connect success.');
-        } catch(e) {
+        } catch (e) {
             that.mqttClient = null;
             that.log.error('MQTT client connect fail: ' + e);
         }
     }
 }
 
-MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
+MiAqaraPlatform.prototype.initServerMiAqaraManage = function () {
     var that = this;
 
     var serverMiAqaraManagePassword = that.ConfigUtil.getManagePassword();
     var serverMiAqaraManagePort = that.ConfigUtil.getManagePort();
-    if(serverMiAqaraManagePort && serverMiAqaraManagePassword) {
+    if (serverMiAqaraManagePort && serverMiAqaraManagePassword) {
         const serverMiAqaraManageHttp = express();
         serverMiAqaraManageHttp.use(session({
             secret: '***cb01fb4a-b6fb-11e8-96f8-529269fb1459_homebridge-mi-aqara_by_Mr.Yin_-_QQ_Group:107927710_c355a982-b6fb-11e8-96f8-529269fb1459*',
@@ -260,16 +260,16 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
             },
             rolling: true // 只要页面由刷新，session值就会被保存，如果为false则只要半小时以后不管有没有操作，session都会消失
         }));
-        
+
         serverMiAqaraManageHttp.use('/login', express.static(path.join(__dirname, './manage/login/')));
-        
+
         serverMiAqaraManageHttp.get('*', (request, response) => {
             try {
                 var url = request.url;
-                if(request.session.isLogin) {
-                    if(url === '/healthyList.action') {
+                if (request.session.isLogin) {
+                    if (url === '/healthyList.action') {
                         var result = [];
-                        for(var gatewaySid in that.GatewayUtil.getAll()) {
+                        for (var gatewaySid in that.GatewayUtil.getAll()) {
                             var gateway = that.GatewayUtil.getBySid(gatewaySid);
                             var resultItem = {};
                             resultItem['type'] = 'Gateway';
@@ -279,9 +279,9 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
                             resultItem['proto_version'] = gateway['proto_version'];
                             resultItem['deviceModel'] = that.ParseUtil.getByModelName(gateway['model']);
                             var gChildren = [];
-                            for(var deviceSid in that.DeviceUtil.getAll()) {
+                            for (var deviceSid in that.DeviceUtil.getAll()) {
                                 var device = that.DeviceUtil.getBySid(deviceSid);
-                                if(device['gatewaySid'] == gatewaySid) {
+                                if (device['gatewaySid'] == gatewaySid) {
                                     var deviceItem = {};
                                     deviceItem['type'] = 'Device';
                                     deviceItem['id'] = 'Device_' + deviceSid;
@@ -291,9 +291,9 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
                                     deviceItem['deviceModel'] = that.ParseUtil.getByModelName(device['model']);
                                     var dChildren = [];
                                     var uuids = that.ParseUtil.getAccessoriesUUID(deviceSid, device['model']);
-                                    for(var accessoryType in uuids) {
+                                    for (var accessoryType in uuids) {
                                         var accessory = that.AccessoryUtil.getByUUID(uuids[accessoryType]);
-                                        if(accessory) {
+                                        if (accessory) {
                                             var accessoryItem = {};
                                             accessoryItem['type'] = 'Accessory';
                                             accessoryItem['id'] = 'Accessory_' + accessory.UUID;
@@ -309,40 +309,40 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
                             resultItem['children'] = gChildren;
                             result.push(resultItem);
                         }
-                        response.writeHead(200, {'Content-type': 'application/json;charset=utf-8'});
+                        response.writeHead(200, { 'Content-type': 'application/json;charset=utf-8' });
                         response.write(JSON.stringify(result));
                         response.end();
-                    } else if(url.indexOf("/discovery.action?") == 0) {
+                    } else if (url.indexOf("/discovery.action?") == 0) {
                         that.sendWhoisCommand();
-                        response.writeHead(200, {'Content-type': 'application/json;charset=utf-8'});
+                        response.writeHead(200, { 'Content-type': 'application/json;charset=utf-8' });
                         response.write('{"result": "success", "date": "' + new Date().Format("yyyy-MM-dd hh:mm:ss") + '"}');
                         response.end();
-                    } else if(url.indexOf("/deleteAccessory.action?") == 0) {
+                    } else if (url.indexOf("/deleteAccessory.action?") == 0) {
                         var uuid = request.query.uuid;
                         var accessory = that.AccessoryUtil.getByUUID(uuid);
-                        if(accessory) {
+                        if (accessory) {
                             that.unregisterPlatformAccessories([accessory]);
-                            response.writeHead(200, {'Content-type': 'application/json;charset=utf-8'});
+                            response.writeHead(200, { 'Content-type': 'application/json;charset=utf-8' });
                             response.write('{"result": "success", "date": "' + new Date().Format("yyyy-MM-dd hh:mm:ss") + '"}');
                             response.end();
                         } else {
-                            response.writeHead(200, {'Content-type': 'application/json;charset=utf-8'});
+                            response.writeHead(200, { 'Content-type': 'application/json;charset=utf-8' });
                             response.write('{"result": "fail", "date": "' + new Date().Format("yyyy-MM-dd hh:mm:ss") + '"}');
                             response.end();
                         }
-                    } else if(url === '/orphanList.action') {
+                    } else if (url === '/orphanList.action') {
                         var accessories = JSON.parse(JSON.stringify(that.AccessoryUtil.getAll()));
-                        for(var deviceSid in that.DeviceUtil.getAll()) {
+                        for (var deviceSid in that.DeviceUtil.getAll()) {
                             var device = that.DeviceUtil.getBySid(deviceSid);
                             var uuids = that.ParseUtil.getAccessoriesUUID(deviceSid, device['model']);
-                            for(var accessoryType in uuids) {
-                                if(accessories[uuids[accessoryType]]) {
+                            for (var accessoryType in uuids) {
+                                if (accessories[uuids[accessoryType]]) {
                                     delete accessories[uuids[accessoryType]];
                                 }
                             }
                         }
                         var result = [];
-                        for(var uuid in accessories) {
+                        for (var uuid in accessories) {
                             var accessory = accessories[uuid];
                             var accessoryItem = {};
                             accessoryItem['type'] = 'Accessory';
@@ -351,12 +351,12 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
                             accessoryItem['uuid'] = accessory.UUID;
                             result.push(accessoryItem);
                         }
-                        response.writeHead(200, {'Content-type': 'application/json;charset=utf-8'});
+                        response.writeHead(200, { 'Content-type': 'application/json;charset=utf-8' });
                         response.write(JSON.stringify(result));
                         response.end();
                     } else {
                         var file = path.join(__dirname, './manage/' + url);
-                        if(fs.existsSync(file)) {
+                        if (fs.existsSync(file)) {
                             response.sendFile(file);
                         } else {
                             response.status(404).end('404');
@@ -365,14 +365,14 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
                 } else {
                     response.redirect('/login/login.html');
                 }
-            } catch(err) {
+            } catch (err) {
                 that.log.error(err);
             }
         });
-        
-        serverMiAqaraManageHttp.post('/login.action', bodyParser.urlencoded({extended: false}), (request, response) => {
+
+        serverMiAqaraManageHttp.post('/login.action', bodyParser.urlencoded({ extended: false }), (request, response) => {
             var requestPassword = request.body['password'];
-            if(serverMiAqaraManagePassword == requestPassword) {
+            if (serverMiAqaraManagePassword == requestPassword) {
                 request.session.isLogin = true;
                 response.redirect('/index.html');
             } else {
@@ -388,38 +388,38 @@ MiAqaraPlatform.prototype.initServerMiAqaraManage = function() {
     }
 }
 
-MiAqaraPlatform.prototype.sendMQTTMessage4ParseMessage = function(msg, rinfo) {
+MiAqaraPlatform.prototype.sendMQTTMessage4ParseMessage = function (msg, rinfo) {
     var that = this;
-    
+
     var jsonObj = JSON.parse(msg);
     var cmd = jsonObj['cmd'];
     var sid = jsonObj['sid'];
-    
+
     // delete this filter if you need heartbeat
     if (cmd === 'heartbeat') {
         return;
     }
-    
+
     that.mqttClient.publish(serverMQTTClientPrefix, msg);
     that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + ", Message: " + msg);
-    
+
     that.mqttClient.publish(serverMQTTClientPrefix + "/" + cmd, msg);
     that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + "/" + cmd + ", Message: " + msg);
-    
-    if(sid) {
+
+    if (sid) {
         that.mqttClient.publish(serverMQTTClientPrefix + "/" + sid, msg);
         that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + "/" + sid + ", Message: " + msg);
-        
+
         that.mqttClient.publish(serverMQTTClientPrefix + "/" + sid + "/" + cmd, msg);
         that.log.debug("(MQTT)(Send Success)Topic: " + serverMQTTClientPrefix + "/" + sid + "/" + cmd + ", Message: " + msg);
     }
 }
 
-MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
+MiAqaraPlatform.prototype.parseMessage = function (msg, rinfo) {
     var that = this;
 
     //  that.log.debug(msg);
-    
+
     // check message
     var jsonObj;
     try {
@@ -428,24 +428,24 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
         that.log.error("Bad msg: " + msg);
         return;
     }
-    
+
     // send mqtt message
-    if(that.mqttClient) {
+    if (that.mqttClient) {
         that.sendMQTTMessage4ParseMessage(msg, rinfo);
     }
-    
+
     // parse message
     var cmd = jsonObj['cmd'];
     if (cmd === 'iam' || cmd === 'virtual_iam') {
         that.log.debug("[Revc]" + msg);
         var gatewaySid = jsonObj['sid'];
-        if(that.ConfigUtil.isConfigGateway(gatewaySid)) {
-            if(that.ConfigUtil.isHostGateway(gatewaySid) && cmd != 'virtual_iam') {
+        if (that.ConfigUtil.isConfigGateway(gatewaySid)) {
+            if (that.ConfigUtil.isHostGateway(gatewaySid) && cmd != 'virtual_iam') {
                 return;
             }
-            
+
             var gateway = that.GatewayUtil.getBySid(gatewaySid);
-            if(!gateway) {
+            if (!gateway) {
                 // add gateway
                 gateway = {
                     sid: gatewaySid,
@@ -454,36 +454,36 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
                     port: jsonObj['port'] // rinfo.port,
                 }
                 gateway = that.GatewayUtil.addOrUpdate(gatewaySid, gateway);
-            
+
                 // add device
-                if(!that.DeviceUtil.getBySid(gatewaySid)) {
+                if (!that.DeviceUtil.getBySid(gatewaySid)) {
                     var gatewayDevice = {
                         sid: gatewaySid,
                         gatewaySid: gatewaySid,
                         lastUpdateTime: Date.now()
                     }
                     that.DeviceUtil.addOrUpdate(gatewaySid, gatewayDevice);
-                    
+
                     var command1 = '{"cmd":"read", "sid":"' + gatewaySid + '"}';
-                    that.sendReadCommand(gatewaySid, command1, {timeout: 0.5 * 60 * 1000, retryCount: 12}).then(result => {
-                        that.DeviceUtil.addOrUpdate(result['sid'], {model: result['model']});
+                    that.sendReadCommand(gatewaySid, command1, { timeout: 0.5 * 60 * 1000, retryCount: 12 }).then(result => {
+                        that.DeviceUtil.addOrUpdate(result['sid'], { model: result['model'] });
                         var createAccessories = that.ParseUtil.getCreateAccessories(result);
                         that.registerPlatformAccessories(createAccessories);
                         that.ParseUtil.parserAccessories(result);
-                        
+
                         that.deleteDisableAccessories(result['sid'], result['model']);
-                        
+
                         // set gateway proto_version
                         var proto_version = null;
                         try {
-                            if('read_ack' === result['cmd']) {
+                            if ('read_ack' === result['cmd']) {
                                 var data = result['data'];
                                 proto_version = data && JSON.parse(data)['proto_version'];
-                            } else if('read_rsp' === result['cmd']) {
+                            } else if ('read_rsp' === result['cmd']) {
                                 var params = result['params'];
-                                if(params) {
-                                    for(var i in params) {
-                                        if(params[i]['proto_version']) {
+                                if (params) {
+                                    for (var i in params) {
+                                        if (params[i]['proto_version']) {
                                             proto_version = params[i]['proto_version'];
                                             break;
                                         }
@@ -491,57 +491,63 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
                                 }
                             } else {
                             }
-                            
+
                             gateway = that.GatewayUtil.addOrUpdate(gatewaySid, {
                                 proto_version: proto_version,
                                 model: result['model']
                             });
-                            
+
                             // send list cmd
                             var listCmd = that.getCmdListByProtoVersion(proto_version);
-                            if(listCmd) {
+                            if (listCmd) {
                                 that.log.debug("[Send]" + listCmd);
                                 serverAqaraLANProtocolSocket.send(listCmd, 0, listCmd.length, jsonObj['port'], jsonObj['ip']);
+                                setInterval(() => {
+                                    serverAqaraLANProtocolSocket.send(listCmd, 0, listCmd.length, jsonObj['port'], jsonObj['ip']);
+                                }, 5 * 1000);
                             }
-                        } catch(e) {
+                        } catch (e) {
                             that.log.debug(e);
                         }
-                    }).catch(function(err) {
+                    }).catch(function (err) {
                         that.DeviceUtil.remove(gatewaySid);
                         that.log.error(err);
                     });
-                } 
+                }
             } else {
                 // send list cmd
                 var proto_version = gateway['proto_version'];
                 var listCmd = that.getCmdListByProtoVersion(proto_version);
-                if(listCmd) {
+                if (listCmd) {
                     that.log.debug("[Send]" + listCmd);
                     serverAqaraLANProtocolSocket.send(listCmd, 0, listCmd.length, jsonObj['port'], jsonObj['ip']);
+                    setInterval(() => {
+                        serverAqaraLANProtocolSocket.send(listCmd, 0, listCmd.length, jsonObj['port'], jsonObj['ip']);
+                    }, 5 * 1000);
                 }
             }
         }
     } else if (cmd === 'get_id_list_ack' || cmd === 'discovery_rsp') {
         that.log.debug("[Revc]" + msg);
         var gatewaySid = jsonObj['sid'];
-        
+
         // update gateway token
         var gateway = that.GatewayUtil.getBySid(gatewaySid);
-        if(gateway) {
-            that.GatewayUtil.addOrUpdate(gatewaySid, {token: jsonObj['token']});
-        
+        if (gateway) {
+            that.GatewayUtil.addOrUpdate(gatewaySid, { token: jsonObj['token'] });
+
             // add gateway sub device
             var deviceSids = that.getDeviceListByJsonObj(jsonObj, gateway.proto_version);
             var index = 0;
             var sendInterval = setInterval(() => {
-                if(index >= deviceSids.length) {
+                if (index >= deviceSids.length) {
                     that.log.debug("read gateway(" + gatewaySid + ") device list finished. size: " + index);
                     clearInterval(sendInterval);
                     return;
                 }
-                
+
                 var deviceSid = deviceSids[index];
-                if(!that.DeviceUtil.getBySid(deviceSid)) {
+                if (!that.DeviceUtil.getBySid(deviceSid)) {
                     var device = {
                         sid: deviceSid,
                         gatewaySid: gatewaySid,
@@ -550,38 +556,38 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
                     }
                     that.DeviceUtil.addOrUpdate(deviceSid, device);
                 }
-                
+
                 var command2 = '{"cmd":"read", "sid":"' + deviceSid + '"}';
-                that.sendReadCommand(deviceSid, command2, {timeout: 3 * 1000, retryCount: 12}).then(result => {
-                    that.DeviceUtil.addOrUpdate(result['sid'], {model: result['model']});
+                that.sendReadCommand(deviceSid, command2, { timeout: 3 * 1000, retryCount: 12 }).then(result => {
+                    that.DeviceUtil.addOrUpdate(result['sid'], { model: result['model'] });
                     var createAccessories = that.ParseUtil.getCreateAccessories(result);
                     that.registerPlatformAccessories(createAccessories);
                     that.ParseUtil.parserAccessories(result);
-                    
+
                     that.deleteDisableAccessories(result['sid'], result['model']);
-                }).catch(function(err) {
+                }).catch(function (err) {
                     that.DeviceUtil.remove(deviceSid);
                     that.log.error(err);
                 });
-                
+
                 index++;
             }, 50);
         }
     } else if (cmd === 'heartbeat') {
-//      that.log.debug("[Revc]" + msg);
+        that.log.debug("[Revc]" + msg);
         var model = jsonObj['model'];
         var sid = jsonObj['sid'];
-        
+
         if (that.ParseUtil.isGatewayModel(model)) {
-            that.GatewayUtil.update(sid, {token: jsonObj['token']});
+            that.GatewayUtil.update(sid, { token: jsonObj['token'] });
         }
 
         var device = that.DeviceUtil.getBySid(sid);
-        if(device) {
+        if (device) {
             var newLastUpdateTime = Date.now();
-//          that.log.debug("update device: " + sid + ", lastUpdateTime " + device.lastUpdateTime + " to " + newLastUpdateTime);
-            that.DeviceUtil.update(sid, {lastUpdateTime: newLastUpdateTime});
-            if(!that.ParseUtil.isGatewayModel(model) && (jsonObj['data'] || jsonObj['params'])) {
+            //          that.log.debug("update device: " + sid + ", lastUpdateTime " + device.lastUpdateTime + " to " + newLastUpdateTime);
+            that.DeviceUtil.update(sid, { lastUpdateTime: newLastUpdateTime });
+            if (!that.ParseUtil.isGatewayModel(model) && (jsonObj['data'] || jsonObj['params'])) {
                 that.ParseUtil.parserAccessories(jsonObj);
             }
         } else {
@@ -589,14 +595,14 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
     } else if (cmd === 'write_ack' || cmd === 'write_rsp') {
         var msgTag = 'write_' + jsonObj['sid'];
         const p = that.getPromises(msgTag);
-        if(!p) {
+        if (!p) {
             that.log.warn("[Revc]" + msg);
             return;
         } else {
             that.log.debug("[Revc]" + msg);
-            if(jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
+            if (jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
                 p.reject(new Error(JSON.parse(jsonObj['data'])['error']));
-            } else if(jsonObj['data'] && jsonObj['data'].indexOf('\"unknown\"') > -1 && jsonObj['data'].indexOf('\"on\"') == -1 && jsonObj['data'].indexOf('\"off\"') == -1) {
+            } else if (jsonObj['data'] && jsonObj['data'].indexOf('\"unknown\"') > -1 && jsonObj['data'].indexOf('\"on\"') == -1 && jsonObj['data'].indexOf('\"off\"') == -1) {
                 p.reject(new Error(jsonObj['data']));
             } else {
                 p.resolve(jsonObj);
@@ -605,14 +611,14 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
     } else if (cmd === 'read_ack' || cmd === 'read_rsp') {
         var msgTag = 'read_' + jsonObj['sid'];
         const p = that.getPromises(msgTag);
-        if(!p) {
+        if (!p) {
             that.log.warn("[Revc]" + msg);
             return;
         } else {
             that.log.debug("[Revc]" + msg);
-            if(jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
+            if (jsonObj['data'] && jsonObj['data'].indexOf('error') > -1) {
                 p.reject(new Error(JSON.parse(jsonObj['data'])['error']));
-            // } else if(jsonObj['data'] && jsonObj['data'].indexOf('unknown') > -1) {
+                // } else if(jsonObj['data'] && jsonObj['data'].indexOf('unknown') > -1) {
                 // p.reject(new Error(jsonObj['data']));
             } else {
                 p.resolve(jsonObj);
@@ -626,73 +632,73 @@ MiAqaraPlatform.prototype.parseMessage = function(msg, rinfo) {
     }
 }
 
-MiAqaraPlatform.prototype.getProtoVersionPrefixByProtoVersion = function(proto_version) {
-    if(proto_version) {
+MiAqaraPlatform.prototype.getProtoVersionPrefixByProtoVersion = function (proto_version) {
+    if (proto_version) {
         var dotIndex = proto_version.indexOf('.');
-        if(dotIndex > 0) {
+        if (dotIndex > 0) {
             return proto_version.substring(0, dotIndex);
         }
     }
-    
+
     return null;
 }
 
-MiAqaraPlatform.prototype.getCmdListByProtoVersion = function(proto_version) {
+MiAqaraPlatform.prototype.getCmdListByProtoVersion = function (proto_version) {
     var listCmd = null;
     var proto_version_prefix = this.getProtoVersionPrefixByProtoVersion(proto_version);
-    if(1 == proto_version_prefix) {
+    if (1 == proto_version_prefix) {
         listCmd = '{"cmd":"get_id_list"}';
-    } else if(2 == proto_version_prefix) {
+    } else if (2 == proto_version_prefix) {
         listCmd = '{"cmd":"discovery"}';
     } else {
     }
-    
+
     return listCmd;
 }
 
-MiAqaraPlatform.prototype.getDeviceListByJsonObj = function(jsonObj, proto_version) {
+MiAqaraPlatform.prototype.getDeviceListByJsonObj = function (jsonObj, proto_version) {
     var deviceList = [];
     var proto_version_prefix = this.getProtoVersionPrefixByProtoVersion(proto_version);
-    if(1 == proto_version_prefix) {
+    if (1 == proto_version_prefix) {
         deviceList = JSON.parse(jsonObj['data']);
-    } else if(2 == proto_version_prefix) {
-        for(var i in jsonObj['dev_list']) {
+    } else if (2 == proto_version_prefix) {
+        for (var i in jsonObj['dev_list']) {
             deviceList.push(jsonObj['dev_list'][i]['sid']);
         }
     } else {
     }
-    
+
     return deviceList;
 }
 
-MiAqaraPlatform.prototype.getDeviceProtoVersionBySid = function(sid) {
+MiAqaraPlatform.prototype.getDeviceProtoVersionBySid = function (sid) {
     var that = this;
     var device = that.DeviceUtil.getBySid(sid);
-    if(device) {
+    if (device) {
         var gateway = that.GatewayUtil.getBySid(device.gatewaySid);
-        if(gateway) {
+        if (gateway) {
             return gateway.proto_version;
         }
     }
-    
+
     return null;
 }
 
-MiAqaraPlatform.prototype.getDeviceModelBySid = function(sid) {
+MiAqaraPlatform.prototype.getDeviceModelBySid = function (sid) {
     var that = this;
     var device = that.DeviceUtil.getBySid(sid);
-    if(device) {
+    if (device) {
         return device.model;
     }
-    
+
     return null;
 }
 
-MiAqaraPlatform.prototype.getPromises = function(msgTag) {
+MiAqaraPlatform.prototype.getPromises = function (msgTag) {
     var resultTag = null;
-    for(var promisesTag in this._promises) {
-        if(promisesTag.indexOf(msgTag) > -1) {
-            if(null == resultTag || Number(resultTag.slice(resultTag.indexOf('_t')+2)) > Number(promisesTag.slice(promisesTag.indexOf('_t')+2))) {
+    for (var promisesTag in this._promises) {
+        if (promisesTag.indexOf(msgTag) > -1) {
+            if (null == resultTag || Number(resultTag.slice(resultTag.indexOf('_t') + 2)) > Number(promisesTag.slice(promisesTag.indexOf('_t') + 2))) {
                 resultTag = promisesTag;
             }
         }
@@ -700,7 +706,7 @@ MiAqaraPlatform.prototype.getPromises = function(msgTag) {
     return this._promises[resultTag];
 }
 
-Date.prototype.Format = function(fmt) {
+Date.prototype.Format = function (fmt) {
     var o = {
         "M+": this.getMonth() + 1, //月份 
         "d+": this.getDate(), //日 
@@ -712,18 +718,18 @@ Date.prototype.Format = function(fmt) {
     };
     if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     for (var k in o)
-    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
 
-MiAqaraPlatform.prototype.getPromisesTagSerialNumber = function() {
-    if(null == this.PromisesTagSerialNumber) {
+MiAqaraPlatform.prototype.getPromisesTagSerialNumber = function () {
+    if (null == this.PromisesTagSerialNumber) {
         this.PromisesTagSerialNumber = {
             time: new Date().Format("yyyyMMddhhmmss"),
             num: 0
         }
     } else {
-        if(new Date().Format("yyyyMMddhhmmss") != this.PromisesTagSerialNumber.time) {
+        if (new Date().Format("yyyyMMddhhmmss") != this.PromisesTagSerialNumber.time) {
             this.PromisesTagSerialNumber.time = new Date().Format("yyyyMMddhhmmss");
             this.PromisesTagSerialNumber.num = 0;
         }
@@ -731,35 +737,35 @@ MiAqaraPlatform.prototype.getPromisesTagSerialNumber = function() {
     return this.PromisesTagSerialNumber.time + (this.PromisesTagSerialNumber.num++);
 }
 
-MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options) {
+MiAqaraPlatform.prototype.sendCommand = function (ip, port, msgTag, msg, options) {
     var that = this;
     return new Promise((resolve, reject) => {
-        if(!that.PromisesSendCommand) {
+        if (!that.PromisesSendCommand) {
             that.PromisesSendCommand = {};
         }
-        
+
         const triggerCorrelationPromises = (fun, res) => {
             var promisesSendCommands = that.PromisesSendCommand[ip + port + msg];
-            if(promisesSendCommands) {
+            if (promisesSendCommands) {
                 promisesSendCommands = promisesSendCommands.concat();
                 delete that.PromisesSendCommand[ip + port + msg];
-                promisesSendCommands.forEach(function(promisesSendCommand, index, arr) {
+                promisesSendCommands.forEach(function (promisesSendCommand, index, arr) {
                     const p = that._promises[promisesSendCommand];
-                    if(p) {
+                    if (p) {
                         p[fun](res);
                     }
                 });
             }
         }
-        
+
         let retryLeft = (options && options.retryCount) || 3;
         const send = () => {
-            retryLeft --;
+            retryLeft--;
             that.log.debug("[Send]" + msg);
             serverAqaraLANProtocolSocket.send(msg, 0, msg.length, port, ip, err => err && reject(err));
         }
         const _sendTimeout = setInterval(() => {
-            if(retryLeft > 0) {
+            if (retryLeft > 0) {
                 send();
             } else {
                 clearInterval(_sendTimeout);
@@ -769,7 +775,7 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options)
                 reject(err);
             }
         }, (options && options.timeout) || 1 * 1000);
-            
+
         that._promises[msgTag] = {
             resolve: res => {
                 clearInterval(_sendTimeout);
@@ -784,8 +790,8 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options)
                 reject(err);
             }
         };
-        
-        if(that.PromisesSendCommand[ip + port + msg]) {
+
+        if (that.PromisesSendCommand[ip + port + msg]) {
             that.PromisesSendCommand[ip + port + msg].push(msgTag);
         } else {
             that.PromisesSendCommand[ip + port + msg] = [];
@@ -794,7 +800,7 @@ MiAqaraPlatform.prototype.sendCommand = function(ip, port, msgTag, msg, options)
     })
 }
 
-MiAqaraPlatform.prototype.sendReadCommand = function(deviceSid, command, options) {
+MiAqaraPlatform.prototype.sendReadCommand = function (deviceSid, command, options) {
     var that = this;
     return new Promise((resolve, reject) => {
         var device = that.DeviceUtil.getBySid(deviceSid);
@@ -802,63 +808,65 @@ MiAqaraPlatform.prototype.sendReadCommand = function(deviceSid, command, options
         var msgTag = 'read_' + deviceSid + "_t" + that.getPromisesTagSerialNumber();
         that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
             resolve(result);
-        }).catch(function(err) {
+        }).catch(function (err) {
             // that.log.error(err);
             reject(err);
         });
     })
 }
 
-MiAqaraPlatform.prototype.sendWriteCommand = function(deviceSid, command, options) {
+MiAqaraPlatform.prototype.sendWriteCommand = function (deviceSid, command, options) {
     var that = this;
     return new Promise((resolve, reject) => {
         var device = that.DeviceUtil.getBySid(deviceSid);
         var gateway = that.GatewayUtil.getBySid(device.gatewaySid);
-        
+
         var cipher = crypto.createCipheriv('aes-128-cbc', that.ConfigUtil.getGatewayPasswordByGatewaySid(gateway['sid']), iv);
         var gatewayToken = gateway['token'];
         var key = cipher.update(gatewayToken, "ascii", "hex");
         cipher.final('hex'); // Useless data, don't know why yet.
-        
+
         command = command.replace('${key}', key);
         var msgTag = 'write_' + deviceSid + "_t" + that.getPromisesTagSerialNumber();
         that.sendCommand(gateway.ip, gateway.port, msgTag, command, options).then(result => {
             resolve(result);
-        }).catch(function(err) {
+        }).catch(function (err) {
             // that.log.error(err);
             reject(err);
         });
     })
 }
 
-MiAqaraPlatform.prototype.sendWriteCommandWithoutFeedback = function(deviceSid, command, options) {
+MiAqaraPlatform.prototype.sendWriteCommandWithoutFeedback = function (deviceSid, command, options) {
     var that = this;
     var device = that.DeviceUtil.getBySid(deviceSid);
     var gateway = that.GatewayUtil.getBySid(device.gatewaySid);
-    
+
     var cipher = crypto.createCipheriv('aes-128-cbc', that.ConfigUtil.getGatewayPasswordByGatewaySid(gateway['sid']), iv);
     var gatewayToken = gateway['token'];
     var key = cipher.update(gatewayToken, "ascii", "hex");
     cipher.final('hex'); // Useless data, don't know why yet.
-    
+
     command = command.replace('${key}', key);
+    that.log.debug("[Token]" + gateway['token']);
+    that.log.debug("[Key]" + key);
     that.log.debug("[Send]" + command);
     serverAqaraLANProtocolSocket.send(command, 0, command.length, gateway.port, gateway.ip, err => err && reject(err));
 }
 
-MiAqaraPlatform.prototype.registerPlatformAccessories = function(accessories) {
+MiAqaraPlatform.prototype.registerPlatformAccessories = function (accessories) {
     var that = this;
     that.api.registerPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessories);
-    accessories.forEach(function(accessory, index, arr) {
+    accessories.forEach(function (accessory, index, arr) {
         that.log.info("create accessory - UUID: " + accessory.UUID);
         that.AccessoryUtil.add(accessory);
     });
 }
 
-MiAqaraPlatform.prototype.unregisterPlatformAccessories = function(accessories) {
+MiAqaraPlatform.prototype.unregisterPlatformAccessories = function (accessories) {
     var that = this;
     that.api.unregisterPlatformAccessories("homebridge-mi-aqara", "MiAqaraPlatform", accessories);
-    accessories.forEach(function(accessory, index, arr) {
+    accessories.forEach(function (accessory, index, arr) {
         that.log.info("delete accessory - UUID: " + accessory.UUID);
         that.AccessoryUtil.remove(accessory.UUID);
     });
