@@ -36,8 +36,8 @@ all other developer and testers.
 **Note: According to aqara local network protocol use UDP port 9898, please notice the relevant configuration of firewall.**   
 **注意: 绿米的局域网协议使用的是UDP的9898端口，请配置好防火墙的相关配置。**   
    
-**Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories) and update [configuration](#configuration) file content.**   
-**注意: 0.5.x版本升级到0.6.x版本必须[清空注册设备信息](#clear-register-accessories)并且更新[配置文件](#configuration)内容.**   
+**Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories清除注册配件) and update [configuration](#configuration配置说明) file content.**   
+**注意: 0.5.x版本升级到0.6.x版本必须[清空注册设备信息](#clear-register-accessories清除注册配件)并且更新[配置文件](#configuration配置说明)内容.**   
    
 **Note: About AcPartner, This project only provides gateway functionality. If you want the use air conditioning function, please refer to the project for [homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner).**   
 **注意: 有关空调伴侣，这个项目只提供网关的功能，如果你需要使用空调的功能，请参考项目[homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner)。**   
