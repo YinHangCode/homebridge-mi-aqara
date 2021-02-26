@@ -552,8 +552,9 @@ It also provides a higher level of way, the following three kinds of writing are
 }
 ```
 
-### defaultValue name configuration
-If you want to specify the default name of the device, add a mapping table to your config.json like this.
+### defaultValue name configuration(默认值 名称配置)
+If you want to specify the default name of the device, add a mapping table to your config.json like this:   
+如果你想给设备指定名称，可以像这样配置：   
 ```
 {
     "platforms": [{
@@ -590,10 +591,13 @@ If you want to specify the default name of the device, add a mapping table to yo
 }
 ```
 
-### defaultValue serviceType configuration
-If you like to use Light Bulb type for Light Switch to make grandma Siri happy, like snOOrz, you can set the following in the config.   
+### defaultValue serviceType configuration(默认值 类型配置)
+If you like to use Light Bulb type for Light Switch to make grandma Siri happy, like snOOrz, you can set the following in the config:   
+如果你想用灯泡类型来替换开关类型使你的奶奶开心，就像snoorz那样，你可以像如下这样设置：   
 Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.   
+目前只支持：单火线单键墙壁开关，单火线双键墙壁开关，零火单键墙壁开关，零火双键墙壁开关。   
 **If you changed serviceType config, Please [clear register accessories](#clear-register-accessories).**   
+**如果你修改过配件类型配置, 请[清除注册配件](#clear-register-accessories).**   
 ```
 {
     "platforms": [{
@@ -635,8 +639,9 @@ Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwit
 }
 ```
 
-### defaultValue disable configuration
+### defaultValue disable configuration(默认值 隐藏配件配置)
 If you want to disable accessories, you can add disable attribute to config.   
+如果你想隐藏一些配件，你可以增加disable属性到你的配置。   
 ```
 {
     "platforms": [{
@@ -693,10 +698,13 @@ If you want to disable accessories, you can add disable attribute to config.
 }
 ```
 
-### defaultValue syncValue configuration
+### defaultValue syncValue configuration(默认值 同步值配置)
 If you want to accessory value exact, you can set syncValue is true.   
+如果您想要附件值精确，您可以设置syncValue为true。   
 when syncValue is true, accessory will synchronization value when homebridge call the get function. At the same time, it's going to waste more time.   
+当syncValue为true时，附件将在homebridge调用get函数时同步一次值。同时，也会浪费更多的时间。   
 when syncValue is false, accessory will use the device last reported value. It's going to respond quickly.   
+当syncValue为false时，附件将使用设备上次报告的值。它会很快做出反应。   
 ```
 {
     "platforms": [{
@@ -719,9 +727,11 @@ when syncValue is false, accessory will use the device last reported value. It's
 }
 ```
 
-### defaultValue ignoreWriteResult configuration
+### defaultValue ignoreWriteResult configuration(默认值 忽略控制反馈配置)
 If you control device always timeout, but in fact it's already working.   
+如果你控制设备时总是显示超时，但事实上设备已经被控制了。   
 you can set ignoreWriteResult is true.   
+您可以将ignoreWriteResult设置为true。   
 ```
 {
     "platforms": [{
@@ -749,9 +759,11 @@ you can set ignoreWriteResult is true.
    
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/syncValue.png)
    
-### defaultValue disableNoResponse configuration
+### defaultValue disableNoResponse configuration(默认值 隐藏未响应状态配置)
 If you don't like "No Response", you can set disableNoResponse is true.   
+如果你像渣渣米那样不喜欢设备显示“无响应”，可以将disableoresponse设置为true。   
 When the device is no pesponse and disableNoResponse is true, the accessory value will auto jump back to before the control.   
+当设备无响应且disableNoResponse为设为true时，配件的值将自动跳回控制前的值。   
 ```
 {
     "platforms": [{
@@ -777,8 +789,9 @@ When the device is no pesponse and disableNoResponse is true, the accessory valu
 }
 ```
 
-### defaultValue other configuration
-If you want to use Aqara lock,you need add some configuration like this:   
+### defaultValue other configuration(默认值 其它配置)
+If you want to use Aqara lock, you need add some configuration like this:   
+如果你使用门锁，你需要增加如下配置：   
 ```
 {
     "platforms": [{
@@ -805,13 +818,17 @@ If you want to use Aqara lock,you need add some configuration like this:
 }
 ```
 `{UserID}` is user identification from lock.   
+`{UserID}` 是来自锁的用户标识。   
 The value can get from `Aqara Lock Plugin` in `MIHOME` APP. The user ID contains the ID type.   
+该值可以从“米家”应用程序中的“门锁插件”获取。用户ID包含ID类型。   
 The integer value obtained by dividing the user ID by 65536 is the ID type. The ID type value is:   
-1 fingerprint   
-2 password   
-3 proximity card   
-5 check-in password   
+通过将用户ID除以65536而获得的整数值是ID类型。ID类型值为：   
+1. fingerprint 指纹   
+2. password 密码   
+3. proximity card 卡   
+5. check-in password 登记密码   
 Example:   
+例子：   
 ```
 {
     "platforms": [{
@@ -841,10 +858,13 @@ Example:
 }
 ```  
    
-### manage configuration
+### manage configuration(设备WEB管理界面配置)
 Before version 0.7.x, the addition and deletion of accessories are automatic. The rules are as follows:   
+在版本0.7.x之前，附件的添加和删除是自动的。规则如下：   
 **find new accessories every one hour, delete accessories which did not receive heartbeat over 7 days.**   
+**每1小时查找一次新配件，删除7天内未收到心跳的配件**   
 Obviously, this is not easy to use. So version 0.7.0 added http web manage(if you do not set manage item, then http web manage is close.). config add these:   
+显然，这并不容易使用。所以版本0.7.0添加了HTTP Web 管理(如果您没有设置管理项，那么Web管理默认是关闭的)。若要开启，配置添加这些：   
 ```
 {
     "platforms": [{
@@ -861,17 +881,18 @@ Obviously, this is not easy to use. So version 0.7.0 added http web manage(if yo
     }]
 }
 ```
-Config items description:   
+Config items description(配置项描述):   
 
-||Name|Required|Value Type|Description|Recommended Value|Value Example|
+||Name<br>名称|Required<br>是否必填|Value Type<br>值的数据类型|Description<br>功能描述|Recommended Value<br>建议值|Value Example<br>值举例|
 |:-:|:-|:-|:-|:-|:-|:-|
-|1|port|True|Integer|set manage web port.|11128|11128|
-|2|password|True|String|set manage web password.|"107927710"|"107927710"|
+|1|port|True<br>是|Integer<br>整型|set manage web port.<br>设置web管理的端口号。|11128|11128|
+|2|password|True<br>是|String<br>字符串|set manage web password.<br>设置web管理的访问密码。|"107927710"|"107927710"|
     
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/httpWebManage.png)
     
-### mqtt configuration
+### mqtt configuration(MQTT配置)
 config add these:   
+配置增加这些：   
 ```
 {
     "platforms": [{
@@ -886,7 +907,8 @@ config add these:
     }]
 }
 ```
-Or
+Or   
+或   
 ```
 {
     "platforms": [{
@@ -904,29 +926,32 @@ Or
     }]
 }
 ```
-Config items description:   
+Config items description(配置项描述):   
 
-||Name|Required|Value Type|Description|Default Value|Value Example|
+||Name<br>名称|Required<br>是否必填|Value Type<br>值的数据类型|Description<br>功能描述|Default Value<br>默认值|Value Example<br>值举例|
 |:-:|:-|:-|:-|:-|:-|:-|
-|1|server|False|String|set mqtt server ip.|"127.0.0.1"|"10.0.1.1"|
-|2|username|False|String|set mqtt username.|"mqtt"|"mqtt"|
-|3|password|False|String|set mqtt password.|"mqtt"|"mqtt"|
+|1|server|False<br>否|String<br>字符串|set mqtt server ip.<br>设置mqtt服务器的地址|"127.0.0.1"|"10.0.1.1"|
+|2|username|False<br>否|String<br>字符串|set mqtt username.<br>设置mqtt的用户名|"mqtt"|"mqtt"|
+|3|password|False<br>否|String<br>字符串|set mqtt password.<br>设置mqtt的密码|"mqtt"|"mqtt"|
     
 plugin will send these topic:   
-1. `/homebridge-mi-aqara`: all message.   
-2. `/homebridge-mi-aqara/{cmd}`: all message after `{cmd}` filter.   
-3. `/homebridge-mi-aqara/{sid}`: all message after `{sid}` filter.   
-4. `/homebridge-mi-aqara/{sid}/{cmd}`: all message after `{sid}` and `{cmd}` filter.   
+插件会发送如下主题:   
+1. `/homebridge-mi-aqara`: all message. 所有信息。   
+2. `/homebridge-mi-aqara/{cmd}`: all message after `{cmd}` filter. 所有信息并按cmd过滤。   
+3. `/homebridge-mi-aqara/{sid}`: all message after `{sid}` filter. 所有信息并按sid过滤。   
+4. `/homebridge-mi-aqara/{sid}/{cmd}`: all message after `{sid}` and `{cmd}` filter.所有信息并按cmd和sid过滤。   
    
 `{cmd}` is iam/get_id_list_ack/discovery_rsp/write_ack/write_rsp/read_ack/read_rsp/report.   
 `{sid}` is device's sid.   
    
 plugin will accept these topic:   
-1. `/homebridge-mi-aqara/write`: write device.   
+插件会接受如下主题：   
+1. `/homebridge-mi-aqara/write`: write device. 控制设备。   
 about write key, send the `${key}` is okay, this plugin will automatically calculate the key value, for example:   
+关于控制密钥，直接发送 `${key}` 即可，程序会自动填写计算好的key值。例子如下：   
 `{"cmd": "write", "model": "ctrl_neutral2", "sid": "158d00014a1bcd", "params": [{"channel_0": "off"}], "key": "${key}"}`
     
-## Some explanation
+## Some explanation(一些说明)
 Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, LongPress.   
 SingleButton86/DuplexButton86(Left, Right, Both) StatelessProgrammableSwitch only support SinglePress.   
 MagicSquare(Flip90, Flip180, Move, TapTwice, ShakeAir, Rotate) StatelessProgrammableSwitch only support SinglePress.   
