@@ -986,137 +986,240 @@ echo [] > cachedAccessories
 增加web管理功能。   
 ### 0.6.9 (2018-06-23)
 1. fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
+修复了默认值不支持按钮二代，人体传感器二代，门磁传感器二代，86墙壁插座的一些问题。   
 2. fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
+修复了人体传感器一代在局域网协议2.x版本下不能正常工作的问题。   
 3. support config gateway ip feature.   
+增加通过配置指定网关IP的功能。   
 ### 0.6.9_beta (2018-03-26)
 1. optimized some of the basic code to facilitate the subsequent support of new hardware.   
+优化了一些基本代码，便于后续对新硬件的支持。   
 2. supports aqara local network protocol 2.x version.   
+支持2.x版本的局域网协议。   
 3. add support for lock device.   
+增加对门锁设备的支持。   
 4. add support for acpartner accessory.   
+增加对空调伴侣设备的支持。   
 ### 0.6.8 (2018-01-21)
 1. fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
+修复了某些时候零火双键墙壁开关和单火线双键墙壁开关没有响应的问题。   
 2. fixed bug that it still show battery low power after replacing the battery.   
+修复了电池设备提示低电量后更换电池后仍然提示低电量的问题。   
 3. fixed bug that TemperatureAndHumiditySensor and TemperatureAndHumiditySensor2 temperature sensor accessory can't show the negative number.   
+修复了温湿度传感器一代和温湿度传感器二代的温度配件的值不能显示负数的问题。   
 4. remove a duplicated function.   
-5. add the choice bindAddress feature.
+删除一些过时的函数。   
+5. add the choice bindAddress feature.   
+增加多网络环境下指定网络的功能。   
 ### 0.6.7 (2017-12-10)
 1. optimizing log content.   
+优化日志内容。   
 ### 0.6.6 (2017-12-10)
 1. fixed bug that sometimes DuplexSwitchLN and DuplexSwitch no response.   
+修复了某些时候零火双键墙壁开关和单火线双键墙壁开关没有响应的问题。   
 2. fixed bug that sometimes Gateway and MotionSensor2 light senor no response.   
+修复了某些时候网关和人体传感器二代没有响应的问题。   
 3. fixed bug that global config not work in some cases.   
+修复了全局配置不工作的一些问题。   
 4. add setting "ignoreWriteResult" feature.   
+增加忽略写入结果检测的功能。   
 5. remove the SingleButton86, DuplexButton86, MagicSquare redundant event action.   
+删除单键86墙贴，双键86墙贴，魔方中一些冗余的动作。   
 ### 0.6.5 (2017-10-31)
 1. optimizing log content.   
-2. optimizing read/write device response timeout rules.   
+优化日志内容。   
+2. optimizing read/write device response timeout rules.    
+优化读写设备响应超时的规则。   
 3. optimizing read/write device no response rules.   
+优化读写设备未响应的判定规则。   
 4. add gateway join permission switch accessory.   
+增加网关添加新设备功能的按钮配件。   
 5. add setting disable "No Response" feature.   
+增加隐藏未响应的功能。   
 ### 0.6.4 (2017-10-27)
 1. add virtual switch accessory can trigger homekit click events.   
+增加虚拟按钮来触发homekit单击事件。   
 2. optimizing log content.   
+优化日志内容。   
 3. optimizing HomeBridge startup read device info algorithm.   
+优化插件启动时读取网关设备信息的方式。
 ### 0.6.3 (2017-10-26)
 1. fixed bug that ElectricCurtain can't work.   
+修复了电动窗帘不工作的问题。   
 2. remove synchronization value when homebridge call the get function(only electrify device) and add setting synchronization value feature.   
+删除了常电设备当homebridge调用get方法自动同步值的功能。
 3. add config Global mode.   
+增加全局配置模式。   
 ### 0.6.2 (2017-10-25)
 1. fixed bug that MotionSensor motion sonser accessory status is error.   
+修复了人体传感器一代状态错误的问题。   
 2. fixed bug that MotionSensor2 motion sonser accessory status is error.   
+修复了人体传感器二代状态错误的问题。   
 ### 0.6.1 (2017-10-23)
 1. fixed bug that MotionSensor2 light sonser accessory value is error.   
+修复了人体传感器二代亮度配件值的一些错误问题。   
 ### 0.6.0 (2017-10-22)
 1. refactoring code.   
+重构代码。   
 2. add feedback when control accessory.   
+增加设备控制时的反馈。   
 3. synchronization value when homebridge call the get function. (only electrify device)   
+当homebridge调用get方法时，同步设备当前最新的值(仅常电设备)。   
 4. optimizing program structure, send fewer packets.   
+优化程序结构，发送更少的网络数据包。   
 5. optimizing config item name, easier to read.   
+优化了配置项目名称。   
 6. fixed some bug.   
+修复了一些问题。   
 7. add Button(single press, double press) virtual switch accessory.   
+增加按钮一代(单击，双击)的虚拟开关配件。   
 8. add Button2(single press, double press) virtual switch accessory.   
+增加按钮二代(单击，双击)的虚拟开关配件。   
 9. add SingleButton86(single press) virtual switch accessory.   
+增加单键86墙贴(单击)的虚拟开关配件。   
 10. add DuplexButton86(left button single press, right button single press, both press) virtual switch accessory.   
+增加双键86墙贴(左键单击，右键单击，左右键同时单击)的虚拟开关配件。   
 11. add MagicSquare(flip90, flip180, move, tapTwice, shakeAir) virtual switch accessory.   
+增加魔方(旋转90度，旋转180度，移动，双击，摇晃)的虚拟开关配件。   
 ### 0.5.3 (2017-08-26)
 1. optimized code.   
+优化代码。   
 ### 0.5.2 (2017-08-23)
 1. fixed bug that gateway light brightness is 100 when it light up.   
+修复了当网关的夜灯打开亮度就被重置为100的问题。   
 ### 0.5.1 (2017-08-14)
 1. fixed bug that natgas detector is not alarm.   
+修复了天然气传感器不报警的问题。   
 ### 0.5.0 (2017-08-13)
 1. add support for water detector accessory.   
+增加水浸传感器的支持。   
 2. fixed bug that natgas detector is not alarm.   
+修复了天然气传感器不报警的问题。   
 3. fixed bug that smoke detector is not alarm.   
+增加了天然气报警器的支持。   
 ### 0.4.4 (2017-08-09)
 1. add log content that show plugin version when homebridge started.   
+增加了homebridge启动时显示插件版本的日志内容。   
 2. fixed bug that run homebridge error there is no MiAqaraPlatform in config.json file.   
+修复了当config.json中没有MiAqaraPlatform相关配置时运行homebridge错误的问题。   
 ### 0.4.3 (2017-08-01)
-1. fixed bug that gateway light sensor not support when value is 0;   
-2. fixed bug that motion sensor version 2 light sensor not support when value is 0;   
+1. fixed bug that gateway light sensor not support when value is 0.   
+修复了当网关的亮度传感器值为0时配件显示不支持的问题。   
+2. fixed bug that motion sensor version 2 light sensor not support when value is 0.   
+修复了当人体传感器二代的亮度传感器值为0时配件显示不支持的问题。   
 ### 0.4.2 (2017-07-29)
 1. adjustment gateway light sensor value(subtract 279).   
+调整网关的亮度照传感器值(减去279)。   
 2. delete PlugBase, PlugBase86, SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN battery information.   
+删除插座，墙壁插座，单火线单键墙壁开关，单火线双键墙壁开关，零火单键墙壁开关，零火双键的墙壁开关的电池信息。   
 3. add motion sensor version 2 light sensor battery information.   
+增加人体传感器二代的亮度传感器中电池信息。   
 4. add setting accessory disable feature.   
+增加隐藏配件的功能。   
 5. fixed bug that electric curtain can't work, but there is no current operation state information now.   
+修正了电动窗帘不能工作的问题，但是现在没有当前的操作状态信息。   
 ### 0.4.1 (2017-07-26)
 1. code collation.   
+代码整理。   
 ### 0.4.0 (2017-07-26)
 1. add support for electric curtain accessory.   
+增加了电动窗帘的支持。   
 2. add support for contact sensor version 2 accessory.   
+增加了门磁传感器二代的支持。   
 3. add support for motion sensor version 2 accessory.   
+增加了人体传感器二代的支持。   
 4. add support for button version 2 accessory.   
+增加了按钮二代的支持。   
 5. add support for temperature and humidity sensor version 2 accessory.   
+增加了温湿度传感器二代的支持。   
 6. optimize log content.   
+优化日志内容。   
 7. add setting default name feature.   
+增加默认名称的功能。   
 8. add setting default service type feature.   
+增加默认配件类型的功能。   
 9. fixed motion sensor bug that wrong trigger when homebridge start.   
+修正了homebridge启动时错误触发的人体传感器的问题。   
 10.adjustment gateway light sensor value(subtract 300).   
+调整网关的亮度传感器值(减去300)。   
 ### 0.3.3 (2017-06-16)
 1. add single button 86 long press event.   
+增加单键86墙贴长按事件。   
 2. add duplex button 86 long press event.   
+增加双键86墙贴长按事件。   
 3. changed button click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+修改按钮一代单击事件由Characteristic.ProgrammableSwitchEvent.CLICK到Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS。   
 4. changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+修改单键86墙贴单击事件由Characteristic.ProgrammableSwitchEvent.CLICK到Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS。   
 5. changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.CLICK back to Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS.   
+修改双键86墙贴单击事件由Characteristic.ProgrammableSwitchEvent.CLICK到Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS。   
 ### 0.3.2 (2017-06-15)
 1. fixed bug that duplex switch LN charging state.   
+修复了双键零火墙壁开关充电状态显示错误的问题。   
 2. fixed bug that single switch LN charging state.   
+修复了单键零火墙壁开关充电状态显示错误的问题。   
 3. fixed bug that single button 86 charging state.   
+修复了单键86墙贴充电状态显示错误的问题。   
 4. changed button click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+修改按钮一代单击事件由Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS到Characteristic.ProgrammableSwitchEvent.CLICK。   
 5. changed single button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+修改单键86墙贴单击事件由Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS到Characteristic.ProgrammableSwitchEvent.CLICK。   
 6. changed duplex button 86 click event value from Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS to Characteristic.ProgrammableSwitchEvent.CLICK.   
+修改双键86墙贴单击事件由Characteristic.ProgrammableSwitchEvent.SINGLE_PRESS到Characteristic.ProgrammableSwitchEvent.CLICK。   
 7. fixed bug that natgas detector is not alarm.   
+修复了天然气传感器不报警的问题。   
 8. fixed bug that smoke detector is not alarm.   
+修复了烟雾传感器不报警的问题。   
 ### 0.3.1 (2017-06-14)
 1. code collation.   
+代码整理。   
 ### 0.3.0 (2017-06-14)
 1. add support for single switch LN accessory.   
+增加了零火单键墙壁开关的支持。  
 2. add support for duplex switch LN accessory.   
+增加了零火双键墙壁开关的支持。  
 3. add support for plug base 86 accessory.   
+增加了墙壁插座的支持。   
 4. add support for smoke detector accessory.   
+增加了烟雾报警器的支持。   
 5. add support for natgas detector accessory.   
+增加了天然气报警器的支持。   
 ### 0.2.1 (2017-06-14)
 1. change accessory registration mechanism, fixed bug that new accessory can't correlate associated with gateway.   
+更改附件注册机制，修复了新附件无法与网关关联的错误。   
 ### 0.2.0 (2017-06-14)
 1. add support for duplex switch accessory.   
+增加了单火线双键墙壁开关的支持。  
 2. add support for single button 86 accessory.   
+增加了单键86墙贴的支持。  
 3. add support for duplex button 86 accessory.   
+增加了双键86墙贴的支持。  
 ### 0.1.0 (2017-06-13)
 1. add support for plug base accessory.   
+增加了插座的支持。  
 2. add support for magic square accessory.   
+增加了魔方的支持。  
 ### 0.0.6 (2017-06-12)
-1. add some logs.
+1. add some logs.   
+增加了一些日志。   
 ### 0.0.5 (2017-06-08)
-1. fixed bug.
+1. fixed bug.   
+修复了一些问题。   
 ### 0.0.4 (2017-06-08)
-1. fixed bug.
+1. fixed bug.   
+修复了一些问题。   
 ### 0.0.3 (2017-06-08)
-1. add support for gateway accessory: light sensor, hue light.
+1. add support for gateway accessory: light sensor, hue light.   
+增加了网关配件：亮度传感器，彩色灯泡。   
 ### 0.0.2 (2017-06-07)
 1. add support for single switch accessory.   
+增加了单火线单键墙壁开关的支持。   
 ### 0.0.1 (2017-06-07)
 1. supported contact sensor accessory.   
+增加了门磁传感器一代的支持。   
 2. supported motion sensor accessory.   
+增加了人体传感器一代的支持。   
 3. supported button accessory.   
+增加了按钮一代的支持。   
 4. supported temperature and humidity sensor accessory.   
+增加了温湿度传感器一代的支持。   
