@@ -104,22 +104,30 @@ all other developer and testers.
 |28|ElectricCurtainHagl04(电动窗帘锂电池版)|curtain.hagl04|
 
 
-## Pre-Requirements
-1. Make sure your IOS version is ios11 or later.   
+## Pre-Requirements<br>要求
+1. Make sure your IOS version is IOS11 or later.   
+确保你的IOS设备版本高于IOS11。   
 2. Make sure you have gateway v2 or acpartner v3. gateway v1 has limited space so can't support this feature.   
+确保你的小米网关是二代版本/空调伴侣是三代。小米网关一代不支持此插件。   
 3. Update gateway firmware to **1.4.1_155.0143(gateway v2)**, **1.4.1_148.019(acpartner v3)** or later.   
-
-## Installation
+确保你的网关的固件版本高于**1.4.1_155.0143(小米网关二代)**, **1.4.1_148.019(空调伴侣三代)**   
+   
+   
+## Installation<br>安装
 1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).   
+安装HomeBridge，请参考如下：[README](https://github.com/nfarina/homebridge/blob/master/README.md)。   
 If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
+如果你使用树莓派安装，可以参考文章：[在树莓派运行HomeBridge](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
 2. Make sure you can see HomeBridge in your iOS devices, if not, please go back to step 1.   
-3. Download homebridge-mi-aqara to your HomeBridge path or installation through NPM:
+确保在你的IOS设备的家挺app中添加设备里能看到HomeBridge的桥，如果看不到请重复第一步。   
+3. Download homebridge-mi-aqara to your HomeBridge path or installation through NPM:   
+下载homebridge-mi-aqara插件到你的HomeBridge上，使用如下NPM命令安装：   
 ```
 npm install -g homebridge-mi-aqara
 ```
    
 
-## Configuration
+## Configuration<br>配置
 ||Name|Required|Value Type|Description|Value Example|
 |:-:|:-|:-|:-|:-|:-|
 |1|platform|True|String||It must be 'MiAqaraPlatform'|
