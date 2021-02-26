@@ -1,7 +1,7 @@
 # homebridge-mi-aqara
 [![npm version](https://badge.fury.io/js/homebridge-mi-aqara.svg)](https://badge.fury.io/js/homebridge-mi-aqara)
-[![npm version](https://img.shields.io/badge/releases-0.8.0-blue.svg)](https://github.com/YinHangCode/homebridge-mi-aqara)
-[![npm version](https://img.shields.io/badge/dev-0.8.0-yellow.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/tree/dev)
+[![npm version](https://img.shields.io/badge/releases-0.8.1-blue.svg)](https://github.com/YinHangCode/homebridge-mi-aqara)
+[![npm version](https://img.shields.io/badge/dev-0.8.1-yellow.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/tree/dev)
 [![npm version](https://img.shields.io/badge/donate-AliPay-green.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Donate-AliPay.jpg)
 [![npm version](https://img.shields.io/badge/donate-WeChat-green.svg)](https://github.com/YinHangCode/homebridge-mi-aqara/blob/master/images/Donate-WeChat.jpg)
 [![npm version](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.me/yhdeserteagle)
@@ -18,6 +18,10 @@ Thanks for
 [isundaylee](https://github.com/isundaylee), 
 [ileler](https://github.com/ileler), 
 [myriky](https://github.com/myriky), 
+[Runc2333](https://github.com/Runc2333), 
+[yangliu](https://github.com/yangliu), 
+[wonderfullay](https://github.com/wonderfullay), 
+[BrianHenryIE](https://github.com/BrianHenryIE), 
 all other developer and testers.   
 感谢 
 [nfarina](https://github.com/nfarina)([homebridge](https://github.com/nfarina/homebridge)的作者), 
@@ -28,7 +32,11 @@ all other developer and testers.
 [isundaylee](https://github.com/isundaylee), 
 [ileler](https://github.com/ileler), 
 [myriky](https://github.com/myriky), 
-以及所有的开发者和测试者.   
+[Runc2333](https://github.com/Runc2333), 
+[yangliu](https://github.com/yangliu), 
+[wonderfullay](https://github.com/wonderfullay), 
+[BrianHenryIE](https://github.com/BrianHenryIE), 
+以及每一位开发者和测试者.   
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**   
 **注意: 我只有一部分设备, 所以一些设备没有得到充分的测试。 如果你发现Bug，请提交到 [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 或 [QQ群: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)。**   
@@ -69,7 +77,7 @@ all other developer and testers.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button3.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexButton862.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Vibration.jpg)
-![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtainHagl04.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtainBattery.jpg)
 
 ## Supported Devices(支持的设备)
 ||Device Name<br>设备名称|Protocol Model Value<br>协议Model值|
@@ -101,7 +109,7 @@ all other developer and testers.
 |25|Button3(按钮第二代升级版)|sensor_switch.aq3|
 |26|DuplexButton862(86型无线双按钮开关升级版)|remote.b286acn01|
 |27|VibrationSensor(动静贴)|vibration|
-|28|ElectricCurtainHagl04(电动窗帘锂电池版)|curtain.hagl04|
+|28|ElectricCurtainBattery(电动窗帘锂电池版)|curtain.hagl04|
 
 
 ## Pre-Requirements(前置要求)
@@ -131,11 +139,13 @@ npm install -g homebridge-mi-aqara
 ||Name<br>名称|Required<br>是否必填|Value Type<br>值的数据类型|Description<br>功能描述|Value Example<br>参考值|
 |:-:|:-|:-|:-|:-|:-|
 |1|platform|True<br>是|String<br>字符串||It must be 'MiAqaraPlatform'<br>必须写'MiAqaraPlatform'|
-|2|[gateways](#gateways-configuration)|True<br>是|Object<br>对象|set gateway information.<br>网关的信息|{ "6409802da3b3": "02i44k56zrgg578b" }|
-|3|[bindAddress](#bindaddress-configuration)|False<br>否|String<br>字符串|specified network.<br>指定工作网络|"10.0.1.1"|
-|4|[defaultValue](#defaultvalue-configuration)|False<br>否|Object<br>对象|set device default value.<br>默认值的配置||
-|5|[manage](#manage-configuration)|False<br>否|Object<br>对象|open manage and manage configs.<br>管理页面的配置|{ "port": 11128, "password": "107927710" }|
-|6|[mqtt](#mqtt-configuration)|False<br>否|Object<br>对象|open mqtt and mqtt configs.<br>mqtt相关配置|{ "username": "mqtt", "password": "107927710" }|
+|2|[gateways](#gateways-configuration网关配置)|True<br>是|Object<br>对象|set gateway information.<br>网关的信息|{ "6409802da3b3": "02i44k56zrgg578b" }|
+|3|[bindAddress](#bindaddress-configuration监听地址配置)|False<br>否|String<br>字符串|specified network.<br>指定工作网络|"10.0.1.1"|
+|4|[sendWhoisCmdInterval](#sendWhoisCmdInterval-configuration自动发送whois命令间隔时间配置)|False<br>否|Integer<br>整型|set send whois cmd interval.<br>设置多久自动发送一次whois命令|3600000|
+|5|[autoRemoveAccessoryInterval](#autoRemoveAccessoryInterval-configuration自动删除配件检测间隔时间配置)|False<br>否|Integer<br>整型|set auto remove accessory interval.<br>指定自动删除配件检测间隔时间|3600000|
+|6|[defaultValue](#defaultvalue-configuration默认值配置)|False<br>否|Object<br>对象|set device default value.<br>默认值的配置||
+|7|[manage](#manage-configuration设备web管理界面配置)|False<br>否|Object<br>对象|open manage and manage configs.<br>管理页面的配置|{ "port": 11128, "password": "107927710" }|
+|8|[mqtt](#mqtt-configurationmqtt配置)|False<br>否|Object<br>对象|open mqtt and mqtt configs.<br>mqtt相关配置|{ "username": "mqtt", "password": "107927710" }|
    
 For more information about config, Please refer to file `sampleConfig.json`.   
 有关配置，可以参考配置文件 `sampleConfig.json`。   
@@ -270,6 +280,46 @@ If your device(which running homebridge) has multiple network, please add the bi
 }
 ```
 
+### sendWhoisCmdInterval configuration(自动发送whois命令间隔时间配置)
+If this configuration item is not to configure, it will be send whois command every hour by default.   
+如果该配置项不填写，默认情况下，每小时发送一次。   
+If your network has some problems and you can't receive the heartbeat packet, you can use send whois command to replace the heartbeat function. If you use it in this way, you can set the value of the configuration item to 5 seconds, that is 5000. example:   
+如果你的网络有一些问题，无法收到心跳包，那么你可以使用发送a来替代心跳功能，如果这样使用，可以将配置项的值设为5秒，即5000，例子如下：    
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "bindAddress": "10.0.1.1",
+        "sendWhoisCmdInterval": 5000,
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
+    }]
+}
+```
+
+### autoRemoveAccessoryInterval configuration(自动删除配件检测间隔时间配置)
+If you want the plugin to help you automatically delete devices that have not received heartbeat for a long time, you can configure this item. The value is how often to detect. If you don't need to automatically delete accessories, you can not configure this configuration.   
+如果你希望插件帮你自动删除长时间收不到心跳的设备，则可以配置此项目，该值为多久检测一次。如果不需要自动删除配件功能，可以不配置此配置。    
+**note: long time is defined as: no heartbeat received in more than 7 days.**
+**注：长时间的定义为：超过7天未收到心跳。**
+```
+{
+    "platforms": [{
+        "platform": "MiAqaraPlatform",
+        "bindAddress": "10.0.1.1",
+        "autoRemoveAccessoryInterval": 3600000,
+        "gateways": {
+            "6409802da3b3": "02i44k56zrgg578b",
+            "f0b4299a5b2b": "2F92E7DA90C66B86",
+            "f0b4299a77dd": "syu3oasva3uqd5qd"
+        }
+    }]
+}
+```
+
 ### defaultValue configuration(默认值配置)
 If you want to specify the default value, such as specify the name of the accessory, hide the accessory, any other configs. You can add a defaultValue mapping table to your config.json.   
 如果你想要指定默认值，比如配件的名字，是否隐藏配件以及其他一些配置，你可以在你的配置文件config.json中增加defaultValue配置项。
@@ -278,12 +328,12 @@ The config supported are as follows:
 
 ||Name<br>名称|Value Type<br>数据类型|Description<br>描述|Default Value<br>默认值|Recommended Value<br>建议值|Value Example<br>值举例|
 |:-:|:-|:-|:-|:-|:-|:-|
-|1|[name](#defaultvalue-name-configuration)|String<br>字符串|set accessory name.<br>名字|DeviceAccessoryType_device SID last four bits<br>设备配件类型_设备SID的后四位||"living room temperature"<br>"卧室的温度"|
-|2|[serviceType](#defaultvalue-servicetype-configuration)|String<br>字符串|set accessory type for Switch or Lightbulb.<br>设置配件类型是开关或者灯。<br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.<br>当前只支持如下设备：单火线单键墙壁开关，单火线双键墙壁开关，零火单键墙壁开关，零火双键墙壁开关。|"Switch"|"Switch"|"Lightbulb"|
-|3|[disable](#defaultvalue-disable-configuration)|Boolean<br>布尔|disable accessory<br>隐藏设备|false|the accessories that do not need to be set to true, such as virtual press.<br>如果配件不需要时设置为true，如一些设备的虚拟按键。|true|
-|4|[syncValue](#defaultvalue-syncvalue-configuration)|Boolean<br>布尔|accessory will synchronization value when homebridge call the get function, if it's true.<br>如果设为true，配件会在HomeBridge每次调用get方法时同步一次值。|false|fasle|false|
-|5|[ignoreWriteResult](#defaultvalue-ignorewriteresult-configuration)|Boolean<br>布尔|if set to true, the result of control is not detected.<br>如果设为true，则忽略控制结果检测。|true|If your network is awful, it's recommended to be set true.<br>如果网络环境不是很好，建议设为true|false|
-|6|[disableNoResponse](#defaultvalue-disablenoresponse-configuration)|Boolean<br>布尔|use jump back the last value to replace show NoResponse, you can set it true.<br>如果设为true，当设备未响应时配件通过自动跳回上一个值的方式来替代显示未响应|false|false|true|
+|1|[name](#defaultvalue-name-configuration默认值-名称配置)|String<br>字符串|set accessory name.<br>名字|DeviceAccessoryType_device SID last four bits<br>设备配件类型_设备SID的后四位||"living room temperature"<br>"卧室的温度"|
+|2|[serviceType](#defaultvalue-servicetype-configuration默认值-类型配置)|String<br>字符串|set accessory type for Switch or Lightbulb.<br>设置配件类型是开关或者灯。<br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.<br>当前只支持如下设备：单火线单键墙壁开关，单火线双键墙壁开关，零火单键墙壁开关，零火双键墙壁开关。|"Switch"|"Switch"|"Lightbulb"|
+|3|[disable](#defaultvalue-disable-configuration默认值-隐藏配件配置)|Boolean<br>布尔|disable accessory<br>隐藏设备|false|the accessories that do not need to be set to true, such as virtual press.<br>如果配件不需要时设置为true，如一些设备的虚拟按键。|true|
+|4|[syncValue](#defaultvalue-syncvalue-configuration默认值-同步值配置)|Boolean<br>布尔|accessory will synchronization value when homebridge call the get function, if it's true.<br>如果设为true，配件会在HomeBridge每次调用get方法时同步一次值。|false|fasle|false|
+|5|[ignoreWriteResult](#defaultvalue-ignorewriteresult-configuration默认值-忽略控制反馈配置)|Boolean<br>布尔|if set to true, the result of control is not detected.<br>如果设为true，则忽略控制结果检测。|true|If your network is awful, it's recommended to be set true.<br>如果网络环境不是很好，建议设为true|false|
+|6|[disableNoResponse](#defaultvalue-disablenoresponse-configuration默认值-隐藏未响应状态配置)|Boolean<br>布尔|use jump back the last value to replace show NoResponse, you can set it true.<br>如果设为true，当设备未响应时配件通过自动跳回上一个值的方式来替代显示未响应|false|false|true|
 
 The rules are as follows:   
 配置规则如下：   
@@ -383,7 +433,7 @@ detail:
 |25|Button3(按钮第二代升级版)|Button3_StatelessProgrammableSwitch<br>Button3_StatelessProgrammableSwitch_Shake<br>Button3_Switch_VirtualSinglePress<br>Button3_Switch_VirtualDoublePress<br>Button3_Switch_VirtualShare|
 |26|DuplexButton862(86型无线双按钮开关升级版)|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
 |27|VibrationSensor(动静贴)|VibrationSensor_MotionSensor_Vibrate<br>VibrationSensor_MotionSensor_Tilt<br>VibrationSensor_MotionSensor_FreeFall|
-|28|ElectricCurtainHagl04(电动窗帘锂电池版)|ElectricCurtainHagl04_WindowCovering|
+|28|ElectricCurtainBattery(电动窗帘锂电池版)|ElectricCurtainBattery_WindowCovering|
    
 About Global:   
 有关全局配置方式：   

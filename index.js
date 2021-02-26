@@ -107,11 +107,14 @@ MiAqaraPlatform.prototype.doRestThings = function(api) {
 
             setInterval(() => {
                 that.sendWhoisCommand();
-            }, 1 * 60 * 60 * 1000);
+            }, that.ConfigUtil.getSendWhoisCmdInterval());
             
-            setInterval(() => {
-                that.autoRemoveAccessory();
-            }, 1 * 60 * 60 * 1000);
+            var autoRemoveAccessoryInterval = that.ConfigUtil.getAutoRemoveAccessoryInterval();
+            if(null != autoRemoveAccessoryInterval) {
+                setInterval(() => {
+                    that.autoRemoveAccessory();
+                }, autoRemoveAccessoryInterval);
+            }
         });
     } else {
         that.log.error("Homebridge's version is too old, please upgrade!");
