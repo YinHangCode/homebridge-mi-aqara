@@ -148,28 +148,28 @@ Please follow the steps in this thread: http://wiki.yinhh.com/Wiki.jsp?page=Home
 
 On iPhone:   
 步骤可参考：   
-* Open the app
-打开米家app
-* Select the gateway
-选择网关设备
-* Press the top right `(…)` Settings button
-点击右上角的`(…)`按钮
-* Select `About`
-选择`关于`
-* Tap five times in the blank area to reveal the hidden menu items
-在空白区域中点击五次以显示隐藏菜单项
-* Below the version numbers, choose the first: `LAN Communication Protocol`
-在版本号下面，选择第一个：`局域网通信协议`
-* Toggle the `LAN Communication Protocol` switch to on
-将“LAN通信协议”开关切换到开
-* Take note of the alphanumeric code beside `Password`
-记下`密码`旁边的字母数字代码
-* Press `OK`
-点击`OK`
-* Go back to the previous menu (About) and select the next option: `Gateway Information`
-返回上一个菜单（关于）并选择下一个选项：`网关信息`
-* Take note of the MAC address at `mac=`
-记下`mac=`上的MAC地址
+* Open the app   
+打开米家app   
+* Select the gateway   
+选择网关设备   
+* Press the top right `(…)` Settings button   
+点击右上角的`(…)`按钮   
+* Select `About`   
+选择`关于`   
+* Tap five times in the blank area to reveal the hidden menu items   
+在空白区域中点击五次以显示隐藏菜单项   
+* Below the version numbers, choose the first: `LAN Communication Protocol`   
+在版本号下面，选择第一个：`局域网通信协议`   
+* Toggle the `LAN Communication Protocol` switch to on   
+将“LAN通信协议”开关切换到开   
+* Take note of the alphanumeric code beside `Password`   
+记下`密码`旁边的字母数字代码   
+* Press `OK`   
+点击`OK`   
+* Go back to the previous menu (About) and select the next option: `Gateway Information`   
+返回上一个菜单（关于）并选择下一个选项：`网关信息`   
+* Take note of the MAC address at `mac=`   
+记下`mac=`上的MAC地址   
    
 To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
 将网关的mac地址(**小写字母 去掉冒号**)和密码(**保持原始 区分大小写**)写入到配置文件 ~/.homebridge/config.json。   
