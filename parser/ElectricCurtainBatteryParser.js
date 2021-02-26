@@ -1,21 +1,21 @@
 const DeviceParser = require('./DeviceParser');
 const AccessoryParser = require('./AccessoryParser');
 
-class ElectricCurtainHagl04Parser extends DeviceParser {
+class ElectricCurtainBatteryParser extends DeviceParser {
     constructor(platform) {
         super(platform);
     }
 
     getAccessoriesParserInfo() {
         return {
-            'ElectricCurtainHagl04_WindowCovering': ElectricCurtainHagl04WindowCoveringParser
+            'ElectricCurtainBattery_WindowCovering': ElectricCurtainBatteryWindowCoveringParser
         }
     }
 }
-ElectricCurtainHagl04Parser.modelName = ['curtain.hagl04'];
-module.exports = ElectricCurtainHagl04Parser;
+ElectricCurtainBatteryParser.modelName = ['curtain.hagl04'];
+module.exports = ElectricCurtainBatteryParser;
 
-class ElectricCurtainHagl04WindowCoveringParser extends AccessoryParser {
+class ElectricCurtainBatteryWindowCoveringParser extends AccessoryParser {
     constructor(platform, accessoryType) {
         super(platform, accessoryType)
     }
