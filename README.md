@@ -71,7 +71,7 @@ all other developer and testers.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Vibration.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtainHagl04.jpg)
 
-## Supported Devices<br>支持的设备
+## Supported Devices(支持的设备)
 ||Device Name<br>设备名称|Protocol Model Value<br>协议Model值|
 |:-:|:-|:-|
 |1|Gateway(网关)|gateway<br>gateway.v3|
@@ -104,16 +104,16 @@ all other developer and testers.
 |28|ElectricCurtainHagl04(电动窗帘锂电池版)|curtain.hagl04|
 
 
-## Pre-Requirements<br>要求
+## Pre-Requirements(前置要求)
 1. Make sure your IOS version is IOS11 or later.   
 确保你的IOS设备版本高于IOS11。   
 2. Make sure you have gateway v2 or acpartner v3. gateway v1 has limited space so can't support this feature.   
 确保你的小米网关是二代版本/空调伴侣是三代。小米网关一代不支持此插件。   
 3. Update gateway firmware to **1.4.1_155.0143(gateway v2)**, **1.4.1_148.019(acpartner v3)** or later.   
-确保你的网关的固件版本高于**1.4.1_155.0143(小米网关二代)**, **1.4.1_148.019(空调伴侣三代)**   
+确保你的网关的固件版本高于**1.4.1_155.0143(小米网关二代)**, **1.4.1_148.019(空调伴侣三代)。**   
    
    
-## Installation<br>安装
+## Installation(安装)
 1. Install HomeBridge, please follow it's [README](https://github.com/nfarina/homebridge/blob/master/README.md).   
 安装HomeBridge，请参考如下：[README](https://github.com/nfarina/homebridge/blob/master/README.md)。   
 If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
@@ -127,18 +127,19 @@ npm install -g homebridge-mi-aqara
 ```
    
 
-## Configuration<br>配置
-||Name|Required|Value Type|Description|Value Example|
+## Configuration(配置说明)
+||Name<br>名称|Required<br>是否必填|Value Type<br>值类型|Description<br>功能描述|Value Example<br>参考值|
 |:-:|:-|:-|:-|:-|:-|
-|1|platform|True|String||It must be 'MiAqaraPlatform'|
-|2|[gateways](#gateways-configuration)|True|Object|set gateway information.|{ "6409802da3b3": "02i44k56zrgg578b" }|
-|3|[bindAddress](#bindaddress-configuration)|False|String|specified network.|"10.0.1.1"|
-|4|[defaultValue](#defaultvalue-configuration)|False|Object|set device default value.||
-|5|[manage](#manage-configuration)|False|Object|open manage and manage configs.|{ "port": 11128, "password": "107927710" }|
-|6|[mqtt](#mqtt-configuration)|False|Object|open mqtt and mqtt configs.|{ "username": "mqtt", "password": "107927710" }|
-
+|1|platform|True<br>是|String<br>字符串||It must be 'MiAqaraPlatform'<br>必须写'MiAqaraPlatform'|
+|2|[gateways](#gateways-configuration)|True<br>是|Object<br>对象|set gateway information.<br>网关的信息|{ "6409802da3b3": "02i44k56zrgg578b" }|
+|3|[bindAddress](#bindaddress-configuration)|False<br>否|String<br>字符串|specified network.<br>指定工作网络|"10.0.1.1"|
+|4|[defaultValue](#defaultvalue-configuration)|False<br>否|Object<br>对象|set device default value.<br>默认值的配置||
+|5|[manage](#manage-configuration)|False<br>否|Object<br>对象|open manage and manage configs.<br>管理页面的配置|{ "port": 11128, "password": "107927710" }|
+|6|[mqtt](#mqtt-configuration)|False<br>否|Object<br>对象|open mqtt and mqtt configs.<br>mqtt相关配置|{ "username": "mqtt", "password": "107927710" }|
+   
 For more information about config, Please refer to file `sampleConfig.json`.   
-
+有关配置，可以参考配置文件 `sampleConfig.json`。   
+   
 ### gateways configuration
 Open aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
 Please follow the steps in this thread: http://wiki.yinhh.com/Wiki.jsp?page=Homebridge-mi-aqara or http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
