@@ -128,7 +128,7 @@ npm install -g homebridge-mi-aqara
    
 
 ## Configuration(配置说明)
-||Name<br>名称|Required<br>是否必填|Value Type<br>值类型|Description<br>功能描述|Value Example<br>参考值|
+||Name<br>名称|Required<br>是否必填|Value Type<br>值的数据类型|Description<br>功能描述|Value Example<br>参考值|
 |:-:|:-|:-|:-|:-|:-|
 |1|platform|True<br>是|String<br>字符串||It must be 'MiAqaraPlatform'<br>必须写'MiAqaraPlatform'|
 |2|[gateways](#gateways-configuration)|True<br>是|Object<br>对象|set gateway information.<br>网关的信息|{ "6409802da3b3": "02i44k56zrgg578b" }|
@@ -140,15 +140,48 @@ npm install -g homebridge-mi-aqara
 For more information about config, Please refer to file `sampleConfig.json`.   
 有关配置，可以参考配置文件 `sampleConfig.json`。   
    
-### gateways configuration
-Open aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).  
+### gateways configuration(网关配置)
+Open aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).   
+在网关的设置页面，打开 [局域网控制协议](https://github.com/louisZL/lumi-gateway-local-api)。   
 Please follow the steps in this thread: http://wiki.yinhh.com/Wiki.jsp?page=Homebridge-mi-aqara or http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
+可以参考如下教程：http://wiki.yinhh.com/Wiki.jsp?page=Homebridge-mi-aqara 或 http://bbs.xiaomi.cn/t-13198850   
+
+On iPhone:   
+步骤可参考：   
+* Open the app
+打开米家app
+* Select the gateway
+选择网关设备
+* Press the top right `(…)` Settings button
+点击右上角的`(…)`按钮
+* Select `About`
+选择`关于`
+* Tap five times in the blank area to reveal the hidden menu items
+在空白区域中点击五次以显示隐藏菜单项
+* Below the version numbers, choose the first: `LAN Communication Protocol`
+在版本号下面，选择第一个：`局域网通信协议`
+* Toggle the `LAN Communication Protocol` switch to on
+将“LAN通信协议”开关切换到开
+* Take note of the alphanumeric code beside `Password`
+记下`密码`旁边的字母数字代码
+* Press `OK`
+点击`OK`
+* Go back to the previous menu (About) and select the next option: `Gateway Information`
+返回上一个菜单（关于）并选择下一个选项：`网关信息`
+* Take note of the MAC address at `mac=`
+记下`mac=`上的MAC地址
+   
 To control the devices, put gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**) to ~/.homebridge/config.json.   
+将网关的mac地址(**小写字母 去掉冒号**)和密码(**保持原始 区分大小写**)写入到配置文件 ~/.homebridge/config.json。   
    
 Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
+警告: 网关的MAC地址 (**全部小写 去掉冒号**) 密码 (**保持原始 区分大小写**) 。   
 Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
+警告: 网关的MAC地址 (**全部小写 去掉冒号**) 密码 (**保持原始 区分大小写**) 。   
 Warning: gateway's MAC address (**lower case without colon**) and password (**keep original and case sensitive**).   
-Important things are to be repeated for 3 times.
+警告: 网关的MAC地址 (**全部小写 去掉冒号**) 密码 (**保持原始 区分大小写**) 。   
+Important things are to be repeated for 3 times.   
+重要的事情说三遍。   
    
 ```
 {
@@ -160,7 +193,8 @@ Important things are to be repeated for 3 times.
     }]
 }
 ```
-If you have more than one gateways, fill them in right order, like below.  
+If you have more than one gateways, fill them in right order, like below:   
+如果你有多个网关，可以这样填写：   
 ```
 {
     "platforms": [{
@@ -174,7 +208,9 @@ If you have more than one gateways, fill them in right order, like below.
 }
 ```
 Here is a way to search for gateways instead of multicast, because of some friends do not respond to information from gateway in their network environment.   
+有一些朋友的网络环境有一些问题，无法正常使用组播，这里提供一种配置方式来替代通过组播的方式寻找网关。   
 That is to say, we can config the IP address of the gateway to replace search gateway by multicast.   
+也就是说，可以通过配置网关的IP来替换通过组播的方式寻找网关。   
 ```
 {
     "platforms": [{
@@ -197,6 +233,7 @@ That is to say, we can config the IP address of the gateway to replace search ga
 }
 ```
 It can also be mixed config, but without full configuration of ip, multicast packets will still be sent to search for other gateways which do not config ip.   
+也可以混合配置，不过只要有一个网关没有配置IP，程序就会发送组播信息来寻找未配置IP的网关。若所有网关全部配置了IP，则程序不发送组播包寻找网关。
 ```
 {
     "platforms": [{
@@ -216,8 +253,9 @@ It can also be mixed config, but without full configuration of ip, multicast pac
 }
 ```
 
-### bindAddress configuration
-If your device(which running homebridge) has multiple network, please add the bindAddress configuration item to decide to listen which network, like below.   
+### bindAddress configuration(监听地址配置)
+If your device(which running homebridge) has multiple network, please add the bindAddress configuration item to decide to listen which network, like below:   
+如果你运行HomeBridge的设备有多块网卡并且在多个网络中，可以通过这个配置来指定使用哪一个网络，配置如下：   
 ```
 {
     "platforms": [{
@@ -232,20 +270,23 @@ If your device(which running homebridge) has multiple network, please add the bi
 }
 ```
 
-### defaultValue configuration
+### defaultValue configuration(默认值配置)
 If you want to specify the default value, such as specify the name of the accessory, hide the accessory, any other configs. You can add a defaultValue mapping table to your config.json.   
+如果你想要指定默认值，比如配件的名字，是否隐藏配件以及其他一些配置，你可以在你的配置文件config.json中增加defaultValue配置项。
 The config supported are as follows:   
+这个配置支持如下功能：   
 
-||Name|Value Type|Description|Default Value|Recommended Value|Value Example|
+||Name<br>名称|Value Type<br>数据类型|Description<br>描述|Default Value<br>默认值|Recommended Value<br>建议值|Value Example<br>值举例|
 |:-:|:-|:-|:-|:-|:-|:-|
-|1|[name](#defaultvalue-name-configuration)|String|set accessory name.|DeviceAccessoryType_device SID last four bits||"living room temperature"|
-|2|[serviceType](#defaultvalue-servicetype-configuration)|String|set accessory type for Switch or Lightbulb. <br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.|"Switch"|"Switch"|"Lightbulb"|
-|3|[disable](#defaultvalue-disable-configuration)|Boolean|disable accessory|false|the accessories that do not need to be set to true, such as virtual press.|true|
-|4|[syncValue](#defaultvalue-syncvalue-configuration)|Boolean|accessory will synchronization value when homebridge call the get function, if it's true.|false|fasle|false|
-|5|[ignoreWriteResult](#defaultvalue-ignorewriteresult-configuration)|Boolean|if set to true, the result of control is not detected.|true|If your network is awful, it's recommended to be set true.|false|
-|6|[disableNoResponse](#defaultvalue-disablenoresponse-configuration)|Boolean|use jump back the last value to replace show NoResponse, you can set it true.|false|false|true|
+|1|[name](#defaultvalue-name-configuration)|String<br>字符串|set accessory name.<br>名字|DeviceAccessoryType_device SID last four bits<br>设备配件类型_设备SID的后四位||"living room temperature"<br>"卧室的温度"|
+|2|[serviceType](#defaultvalue-servicetype-configuration)|String<br>字符串|set accessory type for Switch or Lightbulb.<br>设置配件类型是开关或者灯。<br>Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.<br>当前只支持如下设备：单火线单键墙壁开关，单火线双键墙壁开关，零火单键墙壁开关，零火双键墙壁开关。|"Switch"|"Switch"|"Lightbulb"|
+|3|[disable](#defaultvalue-disable-configuration)|Boolean<br>布尔|disable accessory<br>隐藏设备|false|the accessories that do not need to be set to true, such as virtual press.<br>如果配件不需要时设置为true，如一些设备的虚拟按键。|true|
+|4|[syncValue](#defaultvalue-syncvalue-configuration)|Boolean<br>布尔|accessory will synchronization value when homebridge call the get function, if it's true.<br>如果设为true，配件会在HomeBridge每次调用get方法时同步一次值。|false|fasle|false|
+|5|[ignoreWriteResult](#defaultvalue-ignorewriteresult-configuration)|Boolean<br>布尔|if set to true, the result of control is not detected.<br>如果设为true，则忽略控制结果检测。|true|If your network is awful, it's recommended to be set true.<br>如果网络环境不是很好，建议设为true|false|
+|6|[disableNoResponse](#defaultvalue-disablenoresponse-configuration)|Boolean<br>布尔|use jump back the last value to replace show NoResponse, you can set it true.<br>如果设为true，当设备未响应时配件通过自动跳回上一个值的方式来替代显示未响应|false|false|true|
 
-The rules are as follows:
+The rules are as follows:   
+配置规则如下：   
 ```
 {
     "platforms": [{
@@ -275,6 +316,7 @@ The rules are as follows:
 }
 ```
 examples:   
+例子:   
 ```
 {
     "platforms": [{
@@ -304,12 +346,15 @@ examples:
 ```
    
 The rules of A DeviceAccessoryType:   
+设备配件类型的规则如下：   
 ```
-DeviceName_HomeBridgeAccessoryType(_ExtraMessage)
+DeviceName_HomeBridgeAccessoryType(_ExtraMessage)   
+设备名称_HomeBridge的配件类型(_附加信息)
 ```
 detail:   
+具体如下：    
 
-||Device Name|DeviceAccessoryType|
+||Device Name<br>设备名称|DeviceAccessoryType<br>设备包含的设备配件类型|
 |:-:|:-|:-|
 |1|Gateway(网关)|Gateway_Lightbulb<br>Gateway_LightSensor<br>Gateway_Switch_JoinPermission|
 |2|ContactSensor(门磁感应)|ContactSensor_ContactSensor|
