@@ -30,9 +30,9 @@ all other developer and testers.
 [myriky](https://github.com/myriky), 
 以及所有的开发者和测试者.   
 
-**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
-**注意: 我只有一部分设备, 所以一些设备没有得到充分的测试。 如果你发现Bug，请提交到 [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 或 [QQ群: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)。**
-   
+**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**   
+**注意: 我只有一部分设备, 所以一些设备没有得到充分的测试。 如果你发现Bug，请提交到 [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 或 [QQ群: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)。**   
+
 **Note: According to aqara local network protocol use UDP port 9898, please notice the relevant configuration of firewall.**   
 **注意: 绿米的局域网协议使用的是UDP的9898端口，请配置好防火墙的相关配置。**   
    
@@ -42,7 +42,6 @@ all other developer and testers.
 **Note: About AcPartner, This project only provides gateway functionality. If you want the use air conditioning function, please refer to the project for [homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner).**   
 **注意: 有关空调伴侣，这个项目只提供网关的功能，如果你需要使用空调的功能，请参考项目[homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner)。**   
    
-
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Gateway.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ContactSensor.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/MotionSensor.jpg)
@@ -72,8 +71,8 @@ all other developer and testers.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Vibration.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtainHagl04.jpg)
 
-## Supported Devices
-||Device Name|Protocol Model Value|
+## Supported Devices 支持的设备
+||Device Name   设备名称|Protocol Model Value   协议Model值|
 |:-:|:-|:-|
 |1|Gateway(网关)|gateway<br>gateway.v3|
 |2|ContactSensor(门磁感应)|magnet<br>sensor_magnet|
