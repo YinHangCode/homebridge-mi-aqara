@@ -71,8 +71,8 @@ all other developer and testers.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Vibration.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtainHagl04.jpg)
 
-## Supported Devices 支持的设备
-||Device Name   设备名称|Protocol Model Value   协议Model值|
+## Supported Devices<br>支持的设备
+||Device Name<br>设备名称|Protocol Model Value<br>协议Model值|
 |:-:|:-|:-|
 |1|Gateway(网关)|gateway<br>gateway.v3|
 |2|ContactSensor(门磁感应)|magnet<br>sensor_magnet|
