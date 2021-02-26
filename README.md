@@ -7,6 +7,7 @@
 [![npm version](https://img.shields.io/badge/donate-PayPal-green.svg)](https://www.paypal.me/yhdeserteagle)
 
 homebridge plugin for XiaoMi Aqara plugin.   
+小米/绿米网关的HomeBridge插件。   
 
 Thanks for 
 [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), 
@@ -18,17 +19,29 @@ Thanks for
 [ileler](https://github.com/ileler), 
 [myriky](https://github.com/myriky), 
 all other developer and testers.   
+感谢 
+[nfarina](https://github.com/nfarina)([homebridge](https://github.com/nfarina/homebridge)的作者), 
+[snOOrz](https://github.com/snOOrz)([homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)的作者), 
+[licuhui](https://github.com/licuhui), 
+[攀旺智能](https://pwzn.taobao.com/), 
+[magaHH](https://github.com/magaHH), 
+[isundaylee](https://github.com/isundaylee), 
+[ileler](https://github.com/ileler), 
+[myriky](https://github.com/myriky), 
+以及所有的开发者和测试者.   
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**
+**注意: 我只有一部分设备, 所以一些设备没有得到充分的测试。 如果你发现Bug，请提交到 [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 或 [QQ群: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)。**
    
 **Note: According to aqara local network protocol use UDP port 9898, please notice the relevant configuration of firewall.**   
+**注意: 绿米的局域网协议使用的是UDP的9898端口，请配置好防火墙的相关配置。**   
    
 **Note: 0.5.x update to 0.6.x must be [clear register accessories](#clear-register-accessories) and update [configuration](#configuration) file content.**   
+**注意: 0.5.x版本升级到0.6.x版本必须[清空注册设备信息](#clear-register-accessories)并且更新[配置文件](#configuration)内容.**   
    
 **Note: About AcPartner, This project only provides gateway functionality. If you want the use air conditioning function, please refer to the project for [homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner).**   
+**注意: 有关空调伴侣，这个项目只提供网关的功能，如果你需要使用空调的功能，请参考项目[homebridge-mi-acPartner](https://github.com/LASER-Yi/homebridge-mi-acPartner)。**   
    
-This repository contains the Aqara plugin for homebridge.   
-Aqara is a ZigBee gateway with a few sensors.   
 
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Gateway.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ContactSensor.jpg)
@@ -57,6 +70,7 @@ Aqara is a ZigBee gateway with a few sensors.
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Button3.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/DuplexButton862.jpg)
 ![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/Vibration.jpg)
+![](https://raw.githubusercontent.com/YinHangCode/homebridge-mi-aqara/master/images/ElectricCurtainHagl04.jpg)
 
 ## Supported Devices
 ||Device Name|Protocol Model Value|
@@ -88,6 +102,7 @@ Aqara is a ZigBee gateway with a few sensors.
 |25|Button3(按钮第二代升级版)|sensor_switch.aq3|
 |26|DuplexButton862(86型无线双按钮开关升级版)|remote.b286acn01|
 |27|VibrationSensor(动静贴)|vibration|
+|28|ElectricCurtainHagl04(电动窗帘锂电池版)|curtain.hagl04|
 
 
 ## Pre-Requirements
@@ -315,7 +330,7 @@ detail:
 |25|Button3(按钮第二代升级版)|Button3_StatelessProgrammableSwitch<br>Button3_StatelessProgrammableSwitch_Shake<br>Button3_Switch_VirtualSinglePress<br>Button3_Switch_VirtualDoublePress<br>Button3_Switch_VirtualShare|
 |26|DuplexButton862(86型无线双按钮开关升级版)|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
 |27|VibrationSensor(动静贴)|VibrationSensor_MotionSensor_Vibrate<br>VibrationSensor_MotionSensor_Tilt<br>VibrationSensor_MotionSensor_FreeFall|
-
+|28|ElectricCurtainHagl04(电动窗帘锂电池版)|ElectricCurtainHagl04_WindowCovering|
 
 About Global:   
 Some similar configurations and repeated multiple copies are boring things. So I provided a global writing method.   
