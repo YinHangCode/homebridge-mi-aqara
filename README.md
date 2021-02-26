@@ -93,7 +93,7 @@ all other developer and testers.
 |17|ElectricCurtain(电动窗帘)|curtain|
 |18|ContactSensor2(门磁感应第二代)|sensor_magnet.aq2|
 |19|MotionSensor2(人体感应第二代)|sensor_motion.aq2|
-|20|Button2(按钮第二代)|sensor_switch.aq2|
+|20|Button2(按钮第二代)|sensor_switch.aq2<br>remote.b1acn01|
 |21|TemperatureAndHumiditySensor2(温度湿度传感器第二代)|weather.v1<br>weather|
 |22|WaterDetector(水浸传感器)|sensor_wleak.aq1|
 |23|Lock(门锁)|lock.aq1|
@@ -384,10 +384,13 @@ detail:
 |26|DuplexButton862(86型无线双按钮开关升级版)|DuplexButton862_StatelessProgrammableSwitch_Left<br>DuplexButton862_Switch_VirtualSinglePress_Left<br>DuplexButton862_Switch_VirtualDoublePress_Left<br>DuplexButton862_StatelessProgrammableSwitch_Right<br>DuplexButton862_Switch_VirtualSinglePress_Right<br>DuplexButton862_Switch_VirtualDoublePress_Right<br>DuplexButton862_StatelessProgrammableSwitch_Both<br>DuplexButton862_Switch_VirtualSinglePress_Both|
 |27|VibrationSensor(动静贴)|VibrationSensor_MotionSensor_Vibrate<br>VibrationSensor_MotionSensor_Tilt<br>VibrationSensor_MotionSensor_FreeFall|
 |28|ElectricCurtainHagl04(电动窗帘锂电池版)|ElectricCurtainHagl04_WindowCovering|
-
+   
 About Global:   
+有关全局配置方式：   
 Some similar configurations and repeated multiple copies are boring things. So I provided a global writing method.   
+一些类似的配置和重复的多次拷贝是件比较烦的事情，所以我提供了一个全局的功能：   
 The following two methods of writing are equivalent:   
+下面两段配置的效果是等同的：   
 ```
 ....
 "158d0001000008": {
@@ -418,6 +421,7 @@ The following two methods of writing are equivalent:
 ....
 ```
 In the same way, the following two kinds of writing are alse equivalent:   
+同样的方式，下面两段配置的效果也是等同的：   
 ```
 ....
 "158d0001000003": {
@@ -455,6 +459,7 @@ In the same way, the following two kinds of writing are alse equivalent:
 ....
 ```
 It also provides a higher level of way, the following three kinds of writing are alse equivalent:   
+更高层级的配置也可适用，如下三段配置的效果均是等同的：   
 ```
 {
     "platforms": [{
@@ -926,31 +931,59 @@ Button/Button2 StatelessProgrammableSwitch support SinglePress, DoublePress, Lon
 SingleButton86/DuplexButton86(Left, Right, Both) StatelessProgrammableSwitch only support SinglePress.   
 MagicSquare(Flip90, Flip180, Move, TapTwice, ShakeAir, Rotate) StatelessProgrammableSwitch only support SinglePress.   
    
-## Run it
-homebridge -D   
+## Run it(运行)
+```
+homebridge
+```
+
+run by debug   
+Debug模式运行   
+```
+homebridge -D
+```
    
-## Clear register accessories
+## Clear register accessories(清除注册配件)
+```
 cd ~/.homebridge/accessories/   
 mv cachedAccessories cachedAccessories_\`date '+%Y%m%d_%H%M%S'\`.bak   
 echo [] > cachedAccessories   
+```
 
-## Version Logs
+## Version Logs(版本更新日志)
+### 0.8.1 (2021-02-26)
+1. add support Button2(remote.b1acn01).   
+增加按钮二代(remote.b1acn01)的支持。   
+2. add support ElectricCurtainBattery.   
+增加电动窗帘锂电池版的支持。   
+3. Chinese README.MD coming.   
+期待已久的中文说明文件来了。因为绿米几乎不怎么更新局域网协议了，所以本插件未来也许也不会经常更新了。对于喜欢智能家居的朋友可以加QQ群多交流。   
 ### 0.8.0 (2018-11-04)
-1. add mqtt support.   
+1. add MQTT support.   
+增加MQTT的支持。   
 ### 0.7.3 (2018-10-27)
 1. add support for VibrationSensor.   
+增加动静贴的支持。   
 ### 0.7.2 (2018-10-09)
 1. fixed bug that move 'sensor_switch' type form Button2 to Button.   
+修复了sensor_switch类型应该对应按钮一代设备而不是按钮二代设备的问题。   
 2. add support for Button3(sensor_switch.aq3).   
+增加按钮三代的支持。   
 3. add support for DuplexButton862(remote.b286acn01).   
+增加双键86墙贴二代(remote.b286acn01)的支持。   
 ### 0.7.1 (2018-09-14)
 1. fixed bug that delete orphan accessory list item fail in http web manage.   
+修复了在web管理页面中删除孤儿附件项失败的问题。   
 ### 0.7.0 (2018-09-13)
 1. fixed bug that DuplexSwitchLN right switch not work.   
+修复了零火双键墙壁开关右键无法工作的问题。   
 2. fixed bug that sometimes Gateway, AcPartner and MotionSensor2 light senor no response.   
+修复了有时网关，空调伴侣，人体传感器二代的亮度传感器没响应的问题。   
 3. fixed bug that MagicSquare Rotate StatelessProgrammableSwitch not work.   
+修复了魔方旋转动作的一些问题。   
 4. fixed bug that crash when auto remove accessory.   
+修复了当自动删除配件可能会导致程序崩溃的问题。   
 5. add http web manage.   
+增加web管理功能。   
 ### 0.6.9 (2018-06-23)
 1. fixed bug that config 'defaultValue' can not support: Button2, MotionSensor2, ContactSensor2, PlugBase86.   
 2. fixed bug that MotionSensor not work in aqara local network protocol 2.x version.   
