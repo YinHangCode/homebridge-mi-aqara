@@ -303,8 +303,8 @@ If your network has some problems and you can't receive the heartbeat packet, yo
 ### autoRemoveAccessoryInterval configuration(自动删除配件检测间隔时间配置)
 If you want the plugin to help you automatically delete devices that have not received heartbeat for a long time, you can configure this item. The value is how often to detect. If you don't need to automatically delete accessories, you can not configure this configuration.   
 如果你希望插件帮你自动删除长时间收不到心跳的设备，则可以配置此项目，该值为多久检测一次。如果不需要自动删除配件功能，可以不配置此配置。    
-**note: long time is defined as: no heartbeat received in more than 7 days.**
-**注：长时间的定义为：超过7天未收到心跳。**
+**note: long time is defined as: no heartbeat received in more than 7 days.**   
+**注：长时间的定义为：超过7天未收到心跳。**   
 ```
 {
     "platforms": [{
