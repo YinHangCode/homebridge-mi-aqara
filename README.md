@@ -38,8 +38,16 @@ all other developer and testers.
 [BrianHenryIE](https://github.com/BrianHenryIE), 
 以及每一位开发者和测试者.   
 
-**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) or [QQ Group: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d).**   
-**注意: 我只有一部分设备, 所以一些设备没有得到充分的测试。 如果你发现Bug，请提交到 [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 或 [QQ群: 107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)。**   
+**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, 
+please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 
+or QQ Group: [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-MsiKCxLtoDAJ&jump_from=webapi) 
+(~~previous [107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)~~)
+.**   
+**注意: 我只有一部分设备, 所以一些设备没有得到充分的测试。 如果你发现Bug，
+请提交到 [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 
+或 QQ群: [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-MsiKCxLtoDAJ&jump_from=webapi) 
+(~~原 [107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)~~)
+。**   
 
 **Note: According to aqara local network protocol use UDP port 9898, please notice the relevant configuration of firewall.**   
 **注意: 绿米的局域网协议使用的是UDP的9898端口，请配置好防火墙的相关配置。**   
