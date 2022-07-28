@@ -9,6 +9,8 @@
 homebridge plugin for XiaoMi Aqara plugin.   
 小米/绿米网关的HomeBridge插件。   
 
+## Contributions
+
 Thanks for 
 [nfarina](https://github.com/nfarina)(the author of [homebridge](https://github.com/nfarina/homebridge)), 
 [snOOrz](https://github.com/snOOrz)(the author of [homebridge-aqara](https://github.com/snOOrz/homebridge-aqara)), 
@@ -38,7 +40,9 @@ all other developer and testers.
 [BrianHenryIE](https://github.com/BrianHenryIE), 
 以及每一位开发者和测试者.   
 
-**Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, 
+## FAQ
+
+**Note: I only have a part of these devices, so some devices are not tested. If you find bugs, 
 please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 
 or QQ Group: [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-MsiKCxLtoDAJ&jump_from=webapi) 
 (~~previous [107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)~~)
@@ -121,10 +125,13 @@ or QQ Group: [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-Ms
 
 
 ## Pre-Requirements(前置要求)
+
 1. Make sure your IOS version is IOS11 or later.   
 确保你的IOS设备版本高于IOS11。   
+
 2. Make sure you have gateway v2 or acpartner v3. gateway v1 has limited space so can't support this feature.   
 确保你的小米网关是二代版本/空调伴侣是三代。小米网关一代不支持此插件。   
+
 3. Update gateway firmware to **1.4.1_155.0143(gateway v2)**, **1.4.1_148.019(acpartner v3)** or later.   
 确保你的网关的固件版本高于**1.4.1_155.0143(小米网关二代)**, **1.4.1_148.019(空调伴侣三代)。**   
    
@@ -134,8 +141,10 @@ or QQ Group: [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-Ms
 安装HomeBridge，请参考如下：[README](https://github.com/nfarina/homebridge/blob/master/README.md)。   
 If you are using Raspberry Pi, please read [Running-HomeBridge-on-a-Raspberry-Pi](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
 如果你使用树莓派安装，可以参考文章：[在树莓派运行HomeBridge](https://github.com/nfarina/homebridge/wiki/Running-HomeBridge-on-a-Raspberry-Pi).   
+
 2. Make sure you can see HomeBridge in your iOS devices, if not, please go back to step 1.   
 确保在你的IOS设备的家挺app中添加设备里能看到HomeBridge的桥，如果看不到请重复第一步。   
+
 3. Download homebridge-mi-aqara to your HomeBridge path or installation through NPM:   
 下载homebridge-mi-aqara插件到你的HomeBridge上，使用如下NPM命令安装：   
 ```
@@ -158,7 +167,7 @@ npm install -g homebridge-mi-aqara
 For more information about config, Please refer to file `sampleConfig.json`.   
 有关配置，可以参考配置文件 `sampleConfig.json`。   
    
-### gateways configuration(网关配置)
+## Gateways configuration(网关配置)
 Open aqara gateway's settings, enable [local network protocol](https://github.com/louisZL/lumi-gateway-local-api).   
 在网关的设置页面，打开 [局域网控制协议](https://github.com/louisZL/lumi-gateway-local-api)。   
 Please follow the steps in this thread: http://wiki.yinhh.com/Wiki.jsp?page=Homebridge-mi-aqara or http://bbs.xiaomi.cn/t-13198850. It's in Chinese so you might need a translator to read it.  
@@ -650,10 +659,13 @@ If you want to specify the default name of the device, add a mapping table to yo
 ```
 
 ### defaultValue serviceType configuration(默认值 类型配置)
+
 If you like to use Light Bulb type for Light Switch to make grandma Siri happy, like snOOrz, you can set the following in the config:   
 如果你想用灯泡类型来替换开关类型使你的奶奶开心，就像snoorz那样，你可以像如下这样设置：   
+
 Currently only supported: SingleSwitch, DuplexSwitch, SingleSwitchLN, DuplexSwitchLN.   
 目前只支持：单火线单键墙壁开关，单火线双键墙壁开关，零火单键墙壁开关，零火双键墙壁开关。   
+
 **If you changed serviceType config, Please [clear register accessories](#clear-register-accessories).**   
 **如果你修改过配件类型配置, 请[清除注册配件](#clear-register-accessories).**   
 ```
