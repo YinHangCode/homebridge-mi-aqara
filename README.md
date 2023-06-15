@@ -40,12 +40,14 @@ all other developer and testers.
 
 **Note: I have only a part of these devices, so some devices don't have tested. If you find bugs, 
 please submit them to [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 
-or QQ Group: [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-MsiKCxLtoDAJ&jump_from=webapi) 
+or QQ Group: [245480](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=gZitewfJ7tC8UBPco-vHE-lWlQ2MSFj4&authKey=vM9HTpEBVpb6vVIHtwnRxFdsUKN0dh1A%2FUihq0BnOtLzEykzEaBZVQjbYINWucxd&noverify=0&group_code=245480) 
+(~~previous [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-MsiKCxLtoDAJ&jump_from=webapi)~~)
 (~~previous [107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)~~)
 .**   
 **注意: 我只有一部分设备, 所以一些设备没有得到充分的测试。 如果你发现Bug，
 请提交到 [issues](https://github.com/YinHangCode/homebridge-mi-aqara/issues) 
-或 QQ群: [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-MsiKCxLtoDAJ&jump_from=webapi) 
+或 QQ群: [245480](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=gZitewfJ7tC8UBPco-vHE-lWlQ2MSFj4&authKey=vM9HTpEBVpb6vVIHtwnRxFdsUKN0dh1A%2FUihq0BnOtLzEykzEaBZVQjbYINWucxd&noverify=0&group_code=245480) 
+(~~原 [15987618](https://qm.qq.com/cgi-bin/qm/qr?k=ZiAkKhlOCyjpSq94Xb6-MsiKCxLtoDAJ&jump_from=webapi)~~)
 (~~原 [107927710](//shang.qq.com/wpa/qunwpa?idkey=8b9566598f40dd68412065ada24184ef72c6bddaa11525ca26c4e1536a8f2a3d)~~)
 。**   
 
